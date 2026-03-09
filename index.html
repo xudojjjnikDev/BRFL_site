@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>БРФЛ — Бронницкая Футбольная Лига</title>
+<title>БФЛ — Бронницкая Футбольная Лига</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -1082,18 +1082,44 @@ footer span { color: var(--green); }
 
 /* Mobile */
 @media (max-width: 480px) {
-  /* Teams: 1 per row, large cards */
-  .teams-grid { grid-template-columns: 1fr; gap: 0.75rem; }
+  /* Teams: 1 per row, horizontal grid card */
+  .teams-grid { grid-template-columns: 1fr; gap: 0.6rem; }
   .team-card {
-    padding: 1.25rem 1.5rem;
-    display: flex; align-items: center; gap: 1.25rem;
+    padding: 0.9rem 1rem;
+    display: grid;
+    grid-template-columns: 52px 1fr auto;
+    grid-template-rows: auto auto;
+    column-gap: 0.9rem;
+    row-gap: 0;
+    align-items: center;
     text-align: left;
+    overflow: visible;
+    min-height: 0;
   }
   .team-card::after { display: none; }
-  .team-emblem { width: 56px; height: 56px; font-size: 1.6rem; margin: 0; flex-shrink: 0; }
-  .team-name { font-size: 1.1rem; white-space: normal; word-break: break-word; }
-  .team-info { margin-top: 3px; }
-  .team-arrow { margin-top: 4px; }
+  .team-emblem {
+    grid-column: 1; grid-row: 1 / 3;
+    width: 48px; height: 48px; font-size: 1.4rem;
+    margin: 0;
+  }
+  .team-name {
+    grid-column: 2; grid-row: 1;
+    font-size: 0.95rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    letter-spacing: 0.02em;
+    min-width: 0;
+  }
+  .team-info {
+    grid-column: 2; grid-row: 2;
+    margin-top: 2px; font-size: 0.72rem;
+  }
+  .team-arrow {
+    grid-column: 3; grid-row: 1 / 3;
+    margin-top: 0; font-size: 0.7rem;
+    white-space: nowrap;
+  }
 
   /* Schedule */
   .matches-grid { grid-template-columns: 1fr; }
@@ -1106,45 +1132,44 @@ footer span { color: var(--green); }
   /* Stats stack */
   .stats-layout { grid-template-columns: 1fr !important; gap: 1.5rem; }
 
-  /* Standings: hide W/D/L columns, show only #/Team/G/Pts */
+  /* Standings: hide W/D/L */
   #standings-table thead th:nth-child(4),
   #standings-table thead th:nth-child(5),
   #standings-table thead th:nth-child(6),
   #standings-table tbody td:nth-child(4),
   #standings-table tbody td:nth-child(5),
   #standings-table tbody td:nth-child(6) { display: none; }
-  table { font-size: 0.95rem; }
-  thead th { padding: 0.85rem 0.6rem; font-size: 0.75rem; }
-  tbody td { padding: 0.85rem 0.6rem; }
+  table { font-size: 0.9rem; }
+  thead th { padding: 0.8rem 0.5rem; font-size: 0.7rem; }
+  tbody td { padding: 0.75rem 0.5rem; }
 
   /* Result cards */
-  .result-card { padding: 0.85rem 1rem; gap: 0.75rem; }
-  .result-date-col { min-width: 46px; font-size: 0.68rem; }
-  .result-teams-col { font-size: 0.85rem; }
-  .result-team-name { font-size: 0.85rem; }
-  .result-score { font-size: 1.2rem; }
-  .result-details-btn { font-size: 0.62rem; padding: 0.3rem 0.55rem; }
+  .result-card { padding: 0.8rem 0.9rem; gap: 0.6rem; }
+  .result-date-col { min-width: 44px; font-size: 0.65rem; }
+  .result-teams-col { font-size: 0.82rem; min-width: 0; }
+  .result-team-name { font-size: 0.82rem; white-space: nowrap; }
+  .result-score { font-size: 1.15rem; }
+  .result-details-btn { font-size: 0.6rem; padding: 0.28rem 0.5rem; }
 
-  /* Stat boxes: 3 per row */
+  /* Stat boxes 3 per row */
   .stat-boxes { grid-template-columns: repeat(3, 1fr) !important; }
-  .stat-box-num { font-size: 1.6rem; }
-  .stat-box-label { font-size: 0.6rem; }
+  .stat-box-num { font-size: 1.55rem; }
+  .stat-box-label { font-size: 0.58rem; }
 
-  /* Modals: bottom sheet */
+  /* Modals bottom sheet */
   .modal { border-radius: 16px 16px 0 0; margin-top: auto; max-height: 88vh; }
   .modal-overlay { align-items: flex-end; padding: 0; }
 
-  /* Section padding */
   section { padding: 3rem 1rem; }
   .section-title { font-size: 1.8rem; }
 
   /* Scorers */
-  .scorer-row { padding: 0.65rem 0.85rem; gap: 0.6rem; }
+  .scorer-row { padding: 0.65rem 0.85rem; gap: 0.5rem; }
   .scorer-rank { font-size: 1rem; min-width: 22px; }
   .scorer-photo { width: 32px; height: 32px; font-size: 0.9rem; }
   .scorer-name { font-size: 0.82rem; }
-  .scorer-team { font-size: 0.68rem; }
-  .scorer-stat { font-size: 1.15rem; }
+  .scorer-team { font-size: 0.65rem; }
+  .scorer-stat { font-size: 1.1rem; }
 
   /* Players grid in modal */
   .players-grid { grid-template-columns: repeat(2, 1fr); gap: 0.6rem; }
@@ -1152,7 +1177,6 @@ footer span { color: var(--green); }
   .player-avatar { width: 44px; height: 44px; font-size: 1.2rem; }
   .player-name-card { font-size: 0.78rem; }
 
-  /* Hero section */
   h1 { font-size: clamp(2.2rem, 10vw, 3.5rem); }
   .hero-sub { font-size: 0.95rem; }
   .btn-primary { padding: 0.8rem 1.5rem; font-size: 0.85rem; }
