@@ -19,6 +19,9 @@
   --grey-light: #c8d4f0;
   --card: rgba(15,22,40,0.9);
   --border: rgba(0,229,102,0.2);
+  --gold: #f5c518;
+  --gold-dim: rgba(245,197,24,0.15);
+  --border-gold: rgba(245,197,24,0.3);
 }
 
 * { margin:0; padding:0; box-sizing:border-box; }
@@ -33,6 +36,7 @@ body {
   width: 100%;
   max-width: 100vw;
 }
+
 
 /* ========= SCROLLBAR ========= */
 ::-webkit-scrollbar { width: 6px; }
@@ -64,6 +68,7 @@ header {
   font-size: 20px;
   box-shadow: 0 0 20px rgba(0,229,102,0.4);
   flex-shrink: 0;
+  overflow: hidden;
 }
 
 .logo-text {
@@ -136,7 +141,6 @@ nav a:hover, nav a.active { color: var(--green); background: var(--green-dim); }
   position: absolute; inset: 0;
   background:
     radial-gradient(ellipse 80% 60% at 50% 120%, rgba(0,229,102,0.18) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 80% 20%, rgba(0,100,255,0.12) 0%, transparent 50%),
     linear-gradient(180deg, #0a0e1a 0%, #0d1530 50%, #0a0e1a 100%);
 }
 
@@ -1036,7 +1040,7 @@ footer span { color: var(--green); }
   transition: background 0.15s;
   cursor: pointer;
 }
-.scorer-row:hover { background: var(--green-dim); border-radius: 8px; }
+.scorer-row:hover { background: rgba(0,229,102,0.1); border-radius: 8px; }
 .scorer-rank {
   font-family: 'Barlow Condensed', sans-serif;
   font-weight: 900; font-size: 1.2rem;
@@ -1199,7 +1203,7 @@ section, #admin-section { width: 100%; max-width: 100%; }
 <!-- ===================== HEADER ===================== -->
 <header id="main-header">
   <a class="logo" href="#hero">
-    <div class="logo-icon">⚽</div>
+    <div class="logo-icon" id="logo-icon-wrap"><img id="logo-img" src="" alt="БРФЛ" style="display:none;width:100%;height:100%;object-fit:contain;border-radius:50%"><span id="logo-emoji">⚽</span></div>
     <div class="logo-text">БРФЛ<span>Бронницкая Футбольная Лига</span></div>
   </a>
   <nav id="main-nav">
@@ -1229,19 +1233,19 @@ section, #admin-section { width: 100%; max-width: 100%; }
       <a href="#schedule" class="btn-primary">⚽ Расписание матчей</a>
       <div class="hero-stats">
         <div>
-          <div class="hero-stat-num">10</div>
+          <div class="hero-stat-num" id="hstat-teams">10</div>
           <div class="hero-stat-label">Команд</div>
         </div>
         <div>
-          <div class="hero-stat-num">38</div>
+          <div class="hero-stat-num" id="hstat-matches">38</div>
           <div class="hero-stat-label">Матчей</div>
         </div>
         <div>
-          <div class="hero-stat-num">127</div>
+          <div class="hero-stat-num" id="hstat-players">127</div>
           <div class="hero-stat-label">Игроков</div>
         </div>
         <div>
-          <div class="hero-stat-num">84</div>
+          <div class="hero-stat-num" id="hstat-goals">84</div>
           <div class="hero-stat-label">Голов</div>
         </div>
       </div>
@@ -1355,6 +1359,9 @@ section, #admin-section { width: 100%; max-width: 100%; }
         <button class="admin-tab" onclick="showAdminTab('tab-results')">Результаты</button>
         <button class="admin-tab" onclick="showAdminTab('tab-table')">Таблица</button>
         <button class="admin-tab" onclick="showAdminTab('tab-players')">Игроки</button>
+        <button class="admin-tab" onclick="showAdminTab('tab-teams')">Команды</button>
+        <button class="admin-tab" onclick="showAdminTab('tab-settings')">Настройки</button>
+        <button class="admin-tab" onclick="showAdminTab('tab-log')">📋 Журнал</button>
       </div>
 
       <!-- TAB: Matches -->
@@ -1590,6 +1597,100 @@ section, #admin-section { width: 100%; max-width: 100%; }
           </div>
         </div>
       </div>
+
+      <!-- TAB: Teams -->
+      <div class="admin-content" id="tab-teams">
+        <div class="admin-grid">
+          <div class="admin-card">
+            <h3 id="team-edit-title">Добавить команду</h3>
+            <div class="form-group">
+              <label>Название команды</label>
+              <input type="text" id="nt-name" placeholder="Название">
+            </div>
+            <div class="form-group">
+              <label>Логотип команды (URL или загрузить)</label>
+              <input type="text" id="nt-logo-url" placeholder="https://... или оставь пустым">
+              <input type="file" id="nt-logo-file" accept="image/*" style="margin-top:6px;color:var(--grey);font-size:0.8rem;width:100%">
+              <div id="nt-logo-preview" style="margin-top:8px;display:none">
+                <img id="nt-logo-img" style="width:56px;height:56px;border-radius:50%;object-fit:contain;border:2px solid var(--border)">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Эмодзи (если нет логотипа)</label>
+              <input type="text" id="nt-emoji" placeholder="⚽" maxlength="2">
+            </div>
+            <input type="hidden" id="nt-edit-id">
+            <div style="display:flex;gap:0.75rem">
+              <button class="btn-admin" onclick="saveTeam()">💾 Сохранить</button>
+              <button class="btn-admin" id="nt-cancel-btn" style="background:var(--navy-light);color:var(--grey);display:none" onclick="cancelTeamEdit()">Отмена</button>
+            </div>
+          </div>
+          <div class="admin-card" style="display:flex;flex-direction:column">
+            <h3>Список команд</h3>
+            <ul class="admin-list" id="admin-teams-list" style="max-height:none;flex:1"></ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: Settings -->
+      <div class="admin-content" id="tab-settings">
+        <div class="admin-grid">
+          <div class="admin-card">
+            <h3>Логотип лиги</h3>
+            <div class="form-group">
+              <label>URL логотипа</label>
+              <input type="text" id="league-logo-url" placeholder="https://...">
+            </div>
+            <div class="form-group">
+              <label>или загрузить файл</label>
+              <input type="file" id="league-logo-file" accept="image/*" style="color:var(--grey);font-size:0.8rem;width:100%">
+            </div>
+            <div id="league-logo-preview" style="margin:0.75rem 0;display:none">
+              <img id="league-logo-img" style="width:64px;height:64px;border-radius:50%;object-fit:contain;border:2px solid var(--border)">
+            </div>
+            <button class="btn-admin" onclick="saveLeagueLogo()">💾 Сохранить логотип</button>
+            <button class="btn-admin" style="margin-top:0.5rem;background:var(--navy-light);color:var(--grey)" onclick="resetLeagueLogo()">Сбросить логотип</button>
+          </div>
+          <div class="admin-card">
+            <h3>Статистика на главной</h3>
+            <p style="font-size:0.78rem;color:var(--grey);margin-bottom:1rem">Цифры под кнопкой «Расписание матчей»</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem">
+              <div class="form-group">
+                <label>Команд</label>
+                <input type="number" id="hs-teams" min="0">
+              </div>
+              <div class="form-group">
+                <label>Матчей</label>
+                <input type="number" id="hs-matches" min="0">
+              </div>
+              <div class="form-group">
+                <label>Игроков</label>
+                <input type="number" id="hs-players" min="0">
+              </div>
+              <div class="form-group">
+                <label>Голов</label>
+                <input type="number" id="hs-goals" min="0">
+              </div>
+            </div>
+            <button class="btn-admin" onclick="saveHeroStats()">💾 Сохранить</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: Log -->
+      <div class="admin-content" id="tab-log">
+        <div class="admin-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+            <h3>📋 Журнал изменений</h3>
+            <div style="display:flex;gap:0.5rem">
+              <button class="btn-admin" style="max-width:160px" onclick="undoLastAction()">↩ Отменить</button>
+              <button class="btn-admin" style="max-width:160px;background:var(--navy-light);color:var(--grey)" onclick="clearLog()">Очистить журнал</button>
+            </div>
+          </div>
+          <div id="action-log-list" style="display:flex;flex-direction:column;gap:0.5rem;max-height:500px;overflow-y:auto"></div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -1597,7 +1698,9 @@ section, #admin-section { width: 100%; max-width: 100%; }
 <!-- ===================== FOOTER ===================== -->
 <footer>
   <p>© 2026 <span>Бронницкая Футбольная Лига</span>. Сезон 2026. Все права защищены.</p>
-  <p style="margin-top:0.5rem;font-size:0.7rem;color:#4a5876">Для входа в панель администратора перейдите на /admin</p>
+  <p style="margin-top:1rem;font-size:0.75rem;color:var(--grey);letter-spacing:0.05em">
+    Основатели лиги — <span style="color:var(--grey-light)">Абдуллин Константин</span> &amp; <span style="color:var(--grey-light)">Ежова Карина</span>
+  </p>
 </footer>
 
 <!-- ===================== MODALS ===================== -->
@@ -1812,6 +1915,10 @@ let teams = loadData('bfl_teams', DEFAULT_TEAMS);
 let upcoming = loadData('bfl_upcoming', DEFAULT_UPCOMING);
 let results = loadData('bfl_results', DEFAULT_RESULTS);
 let standings = loadData('bfl_standings', DEFAULT_STANDINGS);
+let heroStats = loadData('bfl_hero_stats', {teams:10,matches:38,players:127,goals:84});
+let leagueLogo = loadData('bfl_league_logo', null);
+let actionLog = loadData('bfl_action_log', []);
+let actionHistory = loadData('bfl_action_history', []); // for undo
 
 // ===================== RENDER =====================
 function formatDate(str) {
@@ -1838,14 +1945,18 @@ function renderSchedule() {
 
 function renderTeams() {
   const g = document.getElementById('teams-grid');
-  const colors = ['#1a3a6b','#3a1a1a','#1a3a2a','#3a2a1a','#2a1a3a','#3a3a1a','#1a2a3a','#3a1a2a','#2a3a1a','#1a1a3a'];
-  g.innerHTML = teams.map((t,i) => `
-    <div class="team-card" onclick="openTeamModal(${t.id})">
-      <div class="team-emblem" style="background:${colors[i]}">${t.emoji}</div>
+  const colors = ['#1a3a2b','#2b1a1a','#1a2b1a','#2b2a1a','#1a1a2b','#2b2a1a','#1a2a2b','#2b1a2a','#1a2b1a','#1a1a2b'];
+  g.innerHTML = teams.map((t,i) => {
+    const emblemContent = t.logo
+      ? `<img src="${t.logo}" style="width:100%;height:100%;object-fit:contain;border-radius:50%">`
+      : (t.emoji||'⚽');
+    return `<div class="team-card" onclick="openTeamModal(${t.id})">
+      <div class="team-emblem" style="background:${colors[i%colors.length]}">${emblemContent}</div>
       <div class="team-name">${t.name}</div>
       <div class="team-info">${t.players.length} игроков</div>
       <div class="team-arrow">Состав →</div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
 function renderStandings() {
@@ -1935,7 +2046,7 @@ function openPlayerModal(teamId, playerId) {
       <h4>История матчей</h4>
       ${matchHistory.map(m => {
         const badges = [];
-        if(m.goals) badges.push(`<span style="color:#00e566;font-weight:700">${m.goals>1?m.goals+'×':''}⚽${m.goalMins.map(mn=>`<span style="font-size:0.65rem;color:var(--grey)"> ${mn}'</span>`).join('')}</span>`);
+        if(m.goals) badges.push(`<span style="color:var(--green);font-weight:700">${m.goals>1?m.goals+'×':''}⚽${m.goalMins.map(mn=>`<span style="font-size:0.65rem;color:var(--grey)"> ${mn}'</span>`).join('')}</span>`);
         if(m.assists) badges.push(`<span style="color:#60a5fa;font-weight:700">${m.assists>1?m.assists+'×':''}🎯</span>`);
         if(m.yellow) badges.push(`<span style="color:#FFD700">🟨</span>`);
         if(m.red) badges.push(`<span style="color:#ff4d4d">🟥</span>`);
@@ -1962,7 +2073,7 @@ function openPlayerModal(teamId, playerId) {
     </div>
     <div class="stat-boxes" style="grid-template-columns:repeat(5,1fr)">
       <div class="stat-box"><div class="stat-box-num">${p.matches}</div><div class="stat-box-label">Матчей</div></div>
-      <div class="stat-box"><div class="stat-box-num" style="color:#00e566">${goals}</div><div class="stat-box-label">Голов</div></div>
+      <div class="stat-box"><div class="stat-box-num" style="color:var(--green)">${goals}</div><div class="stat-box-label">Голов</div></div>
       <div class="stat-box"><div class="stat-box-num" style="color:#60a5fa">${assists}</div><div class="stat-box-label">Пасов</div></div>
       <div class="stat-box"><div class="stat-box-num" style="color:#FFD700">${yellow}</div><div class="stat-box-label">ЖК</div></div>
       <div class="stat-box"><div class="stat-box-num" style="color:#ff4d4d">${red}</div><div class="stat-box-label">КК</div></div>
@@ -2075,7 +2186,7 @@ function adminLogin() {
   const u = document.getElementById('admin-user').value;
   const p = document.getElementById('admin-pass').value;
   const err = document.getElementById('login-error');
-  if(u==='admin' && p==='bfl2025') {
+  if(u==='admin' && p==='brfl2026') {
     sessionStorage.setItem('bfl_admin','1');
     err.style.display='none';
     showAdminPanel();
@@ -2107,12 +2218,20 @@ function showAdminTab(id) {
   document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   event.target.classList.add('active');
+  if(id==='tab-teams') renderAdminTeamsList();
+  if(id==='tab-settings') initSettingsTab();
+  if(id==='tab-log') renderActionLog();
 }
 
-function populateAdminSelects() {
+function populateTeamSelects() {
   const opts = teams.map(t=>`<option value="${t.name}">${t.name}</option>`).join('');
-  ['a-t1','a-t2','r-t1','r-t2'].forEach(id => { document.getElementById(id).innerHTML = opts; });
+  ['a-t1','a-t2','r-t1','r-t2'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.innerHTML = opts;
+  });
 }
+
+function populateAdminSelects() { populateTeamSelects(); }
 
 function renderAdminUpcoming() {
   const list = document.getElementById('admin-upcoming-list');
@@ -2153,6 +2272,7 @@ function updateStanding(i, field, val) {
 function saveStandings() {
   saveData('bfl_standings', standings);
   renderStandings();
+  logAction('edit','Сохранена турнирная таблица');
   alert('Таблица сохранена!');
 }
 
@@ -2163,17 +2283,22 @@ function addMatch() {
   const time = document.getElementById('a-time').value;
   const venue = document.getElementById('a-venue').value;
   if(!date || t1===t2) { alert('Заполните все поля и выберите разные команды'); return; }
+  const snap = JSON.parse(JSON.stringify(upcoming));
   upcoming.push({id:'u'+Date.now(),team1:t1,team2:t2,date,time,venue});
   saveData('bfl_upcoming', upcoming);
   renderSchedule();
   renderAdminUpcoming();
+  logAction('match',`Добавлен матч: ${t1} vs ${t2} (${date})`,{type:'upcoming',data:snap});
 }
 
 function deleteUpcoming(id) {
+  const m = upcoming.find(x=>x.id===id);
+  const snap = JSON.parse(JSON.stringify(upcoming));
   upcoming = upcoming.filter(m=>m.id!==id);
   saveData('bfl_upcoming', upcoming);
   renderSchedule();
   renderAdminUpcoming();
+  if(m) logAction('delete',`Удалён матч: ${m.team1} vs ${m.team2}`,{type:'upcoming',data:snap});
 }
 
 function addResult() {
@@ -2183,21 +2308,26 @@ function addResult() {
   const g1 = parseInt(document.getElementById('r-g1').value)||0;
   const g2 = parseInt(document.getElementById('r-g2').value)||0;
   if(!date || t1===t2) { alert('Заполните все поля и выберите разные команды'); return; }
+  const snap = JSON.parse(JSON.stringify(results));
   const id = 'r'+Date.now();
   results.unshift({id, team1:t1, team2:t2, date, g1, g2, events:[]});
   saveData('bfl_results', results);
   renderResults();
   renderAdminResults();
   openProtocolEditor(id);
+  logAction('result',`Добавлен результат: ${t1} ${g1}:${g2} ${t2} (${date})`,{type:'results',data:snap});
 }
 
 function deleteResult(id) {
+  const r = results.find(x=>x.id===id);
   if(!confirm('Удалить матч и все его события?')) return;
+  const snap = JSON.parse(JSON.stringify(results));
   results = results.filter(r=>r.id!==id);
   saveData('bfl_results', results);
   renderResults();
   renderAdminResults();
   document.getElementById('protocol-editor').style.display='none';
+  if(r) logAction('delete',`Удалён результат: ${r.team1} ${r.g1}:${r.g2} ${r.team2}`,{type:'results',data:snap});
 }
 
 // ===================== PROTOCOL EDITOR =====================
@@ -2347,6 +2477,7 @@ async function addPlayer() {
   if(!name) { alert('Введите имя игрока'); return; }
   const t = teams.find(x=>x.id===teamId);
   if(!t) return;
+  const snap = JSON.parse(JSON.stringify(teams));
 
   let photo = document.getElementById('p-photo-url').value.trim();
   const file = document.getElementById('p-photo-file').files[0];
@@ -2364,18 +2495,22 @@ async function addPlayer() {
   document.getElementById('p-goals').value = '0';
   document.getElementById('p-yellow').value = '0';
   document.getElementById('p-red').value = '0';
+  logAction('add',`Добавлен игрок: ${name} (${t.name}, ${pos})`,{type:'teams',data:snap});
 }
 
 function deletePlayer(teamId, playerId) {
   if(!confirm('Удалить игрока?')) return;
   const t = teams.find(x=>x.id===teamId);
   if(!t) return;
+  const snap = JSON.parse(JSON.stringify(teams));
+  const p = t.players.find(x=>x.id===playerId);
   t.players = t.players.filter(p=>p.id!==playerId);
   saveData('bfl_teams', teams);
   renderAdminPlayersList(teamId);
   renderTeams();
   renderScorers(); renderDiscipline();
   document.getElementById('edit-player-card').style.display='none';
+  if(p) logAction('delete',`Удалён игрок: ${p.name} (${t.name})`,{type:'teams',data:snap});
 }
 
 function openEditPlayer(teamId, playerId) {
@@ -2407,6 +2542,8 @@ async function savePlayer() {
   const t = teams.find(x=>x.id===teamId);
   const p = t && t.players.find(x=>x.id===playerId);
   if(!p) return;
+  const snap = JSON.parse(JSON.stringify(teams));
+  const oldName = p.name;
   p.name = document.getElementById('ep-name').value.trim() || p.name;
   p.pos = document.getElementById('ep-pos').value;
   p.matches = parseInt(document.getElementById('ep-matches').value)||0;
@@ -2426,6 +2563,7 @@ async function savePlayer() {
   document.getElementById('edit-player-label').textContent = p.name;
   document.getElementById('edit-player-card').style.display='none';
   document.getElementById('ep-photo-file').value='';
+  logAction('edit',`Изменён игрок: ${oldName} (${t.name})`,{type:'teams',data:snap});
 }
 
 // ===================== SEARCH =====================
@@ -2539,6 +2677,7 @@ function fileToBase64(file) {
 
 // Photo preview in edit form
 document.addEventListener('change', async e => {
+  // Player photo preview
   if(e.target.id === 'ep-photo-file') {
     const file = e.target.files[0];
     if(!file) return;
@@ -2546,6 +2685,30 @@ document.addEventListener('change', async e => {
     document.getElementById('ep-photo-url').value = '';
     document.getElementById('ep-photo-img').src = b64;
     document.getElementById('ep-photo-preview').style.display = 'block';
+  }
+  // Team logo preview
+  if(e.target.id === 'nt-logo-file') {
+    const file = e.target.files[0];
+    if(!file) return;
+    const b64 = await fileToBase64(file);
+    document.getElementById('nt-logo-url').value = '';
+    document.getElementById('nt-logo-img').src = b64;
+    document.getElementById('nt-logo-preview').style.display = 'block';
+  }
+  // League logo preview
+  if(e.target.id === 'league-logo-file') {
+    const file = e.target.files[0];
+    if(!file) return;
+    const b64 = await fileToBase64(file);
+    document.getElementById('league-logo-url').value = '';
+    document.getElementById('league-logo-img').src = b64;
+    document.getElementById('league-logo-preview').style.display = 'block';
+  }
+  // Position → auto emoji for new player form
+  if(e.target.id === 'p-pos') {
+    const icons = {Вратарь:'🧤',Защитник:'🛡️',Полузащитник:'🎯',Нападающий:'⚡'};
+    // clear photo URL so icon shows by default
+    document.getElementById('p-photo-url').value = '';
   }
 });
 
@@ -2555,13 +2718,238 @@ window.addEventListener('hashchange', () => {
   else if(window.location.hash==='#home' || window.location.hash==='') showMain();
 });
 
-// ===================== INIT =====================
+// ===================== ACTION LOG =====================
+function logAction(type, description, undoData) {
+  const entry = {
+    id: Date.now(),
+    time: new Date().toLocaleString('ru-RU'),
+    type, description,
+    undoData: undoData || null
+  };
+  actionLog.unshift(entry);
+  if(actionLog.length > 50) actionLog = actionLog.slice(0, 50);
+  actionHistory.unshift(entry);
+  if(actionHistory.length > 20) actionHistory = actionHistory.slice(0, 20);
+  saveData('bfl_action_log', actionLog);
+  saveData('bfl_action_history', actionHistory);
+  renderActionLog();
+}
+
+function renderActionLog() {
+  const el = document.getElementById('action-log-list');
+  if(!el) return;
+  if(!actionLog.length) {
+    el.innerHTML = '<p style="color:var(--grey);font-size:0.82rem">Журнал пуст</p>';
+    return;
+  }
+  const icons = {add:'➕',edit:'✏️',delete:'🗑️',result:'⚽',match:'📅',team:'🏟️',settings:'⚙️',logo:'🖼️'};
+  el.innerHTML = actionLog.map(e => `
+    <div style="display:flex;align-items:flex-start;gap:0.75rem;padding:0.6rem 0.75rem;background:var(--navy-light);border:1px solid var(--border);border-radius:8px">
+      <span style="font-size:1.1rem;flex-shrink:0">${icons[e.type]||'•'}</span>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:0.82rem">${e.description}</div>
+        <div style="font-size:0.65rem;color:var(--grey);margin-top:2px">${e.time}</div>
+      </div>
+    </div>`).join('');
+}
+
+function undoLastAction() {
+  if(!actionHistory.length) { alert('Нет действий для отмены'); return; }
+  const last = actionHistory[0];
+  if(!last.undoData) { alert('Это действие нельзя отменить'); return; }
+  const u = last.undoData;
+  if(u.type === 'teams') { teams = u.data; saveData('bfl_teams', teams); renderTeams(); renderScorers(); renderDiscipline(); renderAdminPlayersList(); renderAdminTeamsList(); }
+  if(u.type === 'upcoming') { upcoming = u.data; saveData('bfl_upcoming', upcoming); renderSchedule(); renderAdminUpcoming(); }
+  if(u.type === 'results') { results = u.data; saveData('bfl_results', results); renderResults(); renderAdminResults(); }
+  if(u.type === 'standings') { standings = u.data; saveData('bfl_standings', standings); renderStandings(); renderAdminStandings(); }
+  actionHistory.shift();
+  actionLog.unshift({id:Date.now(),time:new Date().toLocaleString('ru-RU'),type:'edit',description:`↩ Отменено: ${last.description}`,undoData:null});
+  saveData('bfl_action_history', actionHistory);
+  saveData('bfl_action_log', actionLog);
+  renderActionLog();
+  alert(`Отменено: ${last.description}`);
+}
+
+function clearLog() {
+  if(!confirm('Очистить журнал?')) return;
+  actionLog = []; actionHistory = [];
+  saveData('bfl_action_log', []); saveData('bfl_action_history', []);
+  renderActionLog();
+}
+
+// ===================== HERO STATS =====================
+function renderHeroStats() {
+  document.getElementById('hstat-teams').textContent = heroStats.teams;
+  document.getElementById('hstat-matches').textContent = heroStats.matches;
+  document.getElementById('hstat-players').textContent = heroStats.players;
+  document.getElementById('hstat-goals').textContent = heroStats.goals;
+}
+
+function initHeroStatsForm() {
+  document.getElementById('hs-teams').value = heroStats.teams;
+  document.getElementById('hs-matches').value = heroStats.matches;
+  document.getElementById('hs-players').value = heroStats.players;
+  document.getElementById('hs-goals').value = heroStats.goals;
+}
+
+function saveHeroStats() {
+  heroStats = {
+    teams: parseInt(document.getElementById('hs-teams').value)||0,
+    matches: parseInt(document.getElementById('hs-matches').value)||0,
+    players: parseInt(document.getElementById('hs-players').value)||0,
+    goals: parseInt(document.getElementById('hs-goals').value)||0,
+  };
+  saveData('bfl_hero_stats', heroStats);
+  renderHeroStats();
+  logAction('settings','Обновлена статистика на главной');
+  alert('Сохранено!');
+}
+
+// ===================== LEAGUE LOGO =====================
+function applyLeagueLogo() {
+  const img = document.getElementById('logo-img');
+  const em = document.getElementById('logo-emoji');
+  if(leagueLogo) {
+    img.src = leagueLogo; img.style.display='block'; em.style.display='none';
+    document.getElementById('league-logo-img').src = leagueLogo;
+    document.getElementById('league-logo-preview').style.display='block';
+  } else {
+    img.style.display='none'; em.style.display='block';
+  }
+}
+
+function saveLeagueLogo() {
+  const urlVal = document.getElementById('league-logo-url').value.trim();
+  if(urlVal) {
+    leagueLogo = urlVal;
+    saveData('bfl_league_logo', leagueLogo);
+    applyLeagueLogo();
+    logAction('logo','Обновлён логотип лиги (URL)');
+    alert('Логотип сохранён!');
+    return;
+  }
+  const file = document.getElementById('league-logo-file').files[0];
+  if(file) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      leagueLogo = e.target.result;
+      saveData('bfl_league_logo', leagueLogo);
+      applyLeagueLogo();
+      logAction('logo','Обновлён логотип лиги (файл)');
+      alert('Логотип сохранён!');
+    };
+    reader.readAsDataURL(file);
+    return;
+  }
+  alert('Укажите URL или загрузите файл');
+}
+
+function resetLeagueLogo() {
+  leagueLogo = null;
+  saveData('bfl_league_logo', null);
+  applyLeagueLogo();
+  logAction('logo','Логотип лиги сброшен');
+}
+
+// ===================== TEAMS ADMIN =====================
+function renderAdminTeamsList() {
+  const list = document.getElementById('admin-teams-list');
+  if(!list) return;
+  list.innerHTML = teams.map(t => {
+    const logoHtml = t.logo
+      ? `<img src="${t.logo}" style="width:32px;height:32px;border-radius:50%;object-fit:contain;border:1px solid var(--border)">`
+      : `<span style="font-size:1.4rem">${t.emoji||'⚽'}</span>`;
+    return `<li>
+      <span style="display:flex;align-items:center;gap:0.6rem;flex:1">${logoHtml}<span>${t.name}</span></span>
+      <button class="btn-sm btn-sm-green" onclick="editTeam(${t.id})">✏️</button>
+      <button class="btn-sm" onclick="deleteTeam(${t.id})">✕</button>
+    </li>`;
+  }).join('') || '<li style="color:var(--grey)">Нет команд</li>';
+}
+
+function editTeam(id) {
+  const t = teams.find(x=>x.id===id);
+  if(!t) return;
+  document.getElementById('nt-name').value = t.name;
+  document.getElementById('nt-emoji').value = t.emoji||'';
+  document.getElementById('nt-logo-url').value = t.logo||'';
+  document.getElementById('nt-edit-id').value = id;
+  document.getElementById('team-edit-title').textContent = 'Редактировать команду';
+  document.getElementById('nt-cancel-btn').style.display='block';
+  if(t.logo) {
+    document.getElementById('nt-logo-img').src = t.logo;
+    document.getElementById('nt-logo-preview').style.display='block';
+  }
+}
+
+function cancelTeamEdit() {
+  document.getElementById('nt-name').value='';
+  document.getElementById('nt-emoji').value='';
+  document.getElementById('nt-logo-url').value='';
+  document.getElementById('nt-edit-id').value='';
+  document.getElementById('team-edit-title').textContent='Добавить команду';
+  document.getElementById('nt-cancel-btn').style.display='none';
+  document.getElementById('nt-logo-preview').style.display='none';
+}
+
+function saveTeam() {
+  const name = document.getElementById('nt-name').value.trim();
+  const emoji = document.getElementById('nt-emoji').value.trim() || '⚽';
+  const logoUrl = document.getElementById('nt-logo-url').value.trim();
+  const editId = parseInt(document.getElementById('nt-edit-id').value);
+  if(!name) { alert('Введите название'); return; }
+  const file = document.getElementById('nt-logo-file').files[0];
+  const undoSnapshot = JSON.parse(JSON.stringify(teams));
+  const doSave = (logo) => {
+    if(editId) {
+      const t = teams.find(x=>x.id===editId);
+      if(t) { const old=t.name; t.name=name; t.emoji=emoji; if(logo!==undefined) t.logo=logo; logAction('edit',`Изменена команда: ${old} → ${name}`,{type:'teams',data:undoSnapshot}); }
+    } else {
+      const newId = Math.max(...teams.map(t=>t.id),0)+1;
+      teams.push({id:newId,name,emoji,logo:logo||null,players:[]});
+      logAction('add',`Добавлена команда: ${name}`,{type:'teams',data:undoSnapshot});
+    }
+    saveData('bfl_teams', teams);
+    renderTeams(); renderAdminTeamsList();
+    populateTeamSelects();
+    cancelTeamEdit();
+  };
+  if(file) {
+    const reader = new FileReader();
+    reader.onload = e => doSave(e.target.result);
+    reader.readAsDataURL(file);
+  } else {
+    doSave(logoUrl || undefined);
+  }
+}
+
+function deleteTeam(id) {
+  const t = teams.find(x=>x.id===id);
+  if(!t || !confirm(`Удалить команду «${t.name}»? Все игроки будут удалены.`)) return;
+  const undoSnapshot = JSON.parse(JSON.stringify(teams));
+  logAction('delete',`Удалена команда: ${t.name}`,{type:'teams',data:undoSnapshot});
+  teams = teams.filter(x=>x.id!==id);
+  saveData('bfl_teams', teams);
+  renderTeams(); renderAdminTeamsList(); populateTeamSelects();
+}
+
+// ===================== INIT SETTINGS TAB =====================
+function initSettingsTab() {
+  initHeroStatsForm();
+  applyLeagueLogo();
+}
+
+// ===================== EXTENDED renderTeams with logo support =====================
+
 renderSchedule();
 renderTeams();
 renderStandings();
 renderResults();
 renderScorers();
 renderDiscipline();
+renderHeroStats();
+applyLeagueLogo();
+renderActionLog();
 initNavigation();
 </script>
 </body>
