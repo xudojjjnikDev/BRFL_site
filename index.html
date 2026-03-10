@@ -1075,126 +1075,230 @@ footer span { color: var(--green); }
 
 /* ========= RESPONSIVE ========= */
 
-/* --- GLOBAL: prevent horizontal overflow on all devices --- */
+/* --- GLOBAL OVERFLOW FIX --- */
 html { width: 100%; overflow-x: hidden; }
 body { width: 100%; max-width: 100vw; overflow-x: hidden; }
 *, *::before, *::after { box-sizing: border-box; }
 section, #admin-section { width: 100%; max-width: 100%; }
 
-/* Tablet */
-@media (max-width: 768px) {
-  header { padding: 0 1rem; width: 100%; }
-  #admin-section { padding: 80px 0 4rem; }
+/* ========= TABLET ≤ 900px ========= */
+@media (max-width: 900px) {
+  .container { padding: 0 1.25rem; }
 
+  /* Header */
+  header { padding: 0 1rem; }
+  .burger { display: flex; }
   nav {
     position: fixed; top: 64px; left: 0; right: 0; width: 100%;
     background: var(--navy-mid);
     border-bottom: 1px solid var(--border);
     flex-direction: column; align-items: stretch;
-    padding: 0.75rem; gap: 0.15rem;
+    padding: 0.75rem; gap: 0.25rem;
     display: none; z-index: 999;
   }
   nav.open { display: flex; }
   nav a {
-    padding: 1rem 1.25rem; font-size: 1.1rem;
+    padding: 0.9rem 1.25rem; font-size: 1rem;
     border-radius: 8px;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
   }
   nav a:last-child { border-bottom: none; }
-  .burger { display: flex; }
 
-  .hero-stats { gap: 1.5rem; }
-  .hero-stat-num { font-size: 1.8rem; }
-  section { padding: 3.5rem 0; }
-  .container { width: 100%; padding: 0 1rem; }
-  .admin-grid { grid-template-columns: 1fr; }
-  .stat-boxes { grid-template-columns: repeat(3, 1fr); }
-  .players-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
-  .protocol-teams { gap: 1rem; font-size: 0.85rem; }
-  .stat-block { max-width: 100%; }
-}
+  /* Hero */
+  .hero-stats { gap: 2rem; }
+  .hero-stat-num { font-size: 2.2rem; }
+  section { padding: 4rem 0; }
 
-/* Mobile */
-@media (max-width: 480px) {
-  section { padding: 2.5rem 0; }
-  .container { width: 100%; padding: 0 0.9rem; }
-  #admin-section { padding: 80px 0 3rem; }
+  /* Schedule */
+  .matches-grid { grid-template-columns: repeat(2, 1fr); }
 
   /* Teams */
-  .teams-grid { grid-template-columns: 1fr; gap: 0.6rem; }
+  .teams-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* Stat layout */
+  .stat-block { max-width: 100%; }
+
+  /* Admin */
+  #admin-section { padding: 80px 1.25rem 4rem; }
+  .admin-grid { grid-template-columns: 1fr; }
+  .admin-tabs { flex-wrap: wrap; gap: 0.3rem; }
+  .admin-tab { font-size: 0.78rem; padding: 0.4rem 0.75rem; }
+  .stat-boxes { grid-template-columns: repeat(3, 1fr); }
+  .players-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+  .protocol-teams { flex-direction: column; gap: 0.75rem; }
+}
+
+/* ========= MOBILE ≤ 600px ========= */
+@media (max-width: 600px) {
+  /* Global */
+  section { padding: 2.75rem 0; }
+  .container { padding: 0 1rem; }
+  #admin-section { padding: 80px 0.75rem 3rem; }
+
+  /* Header */
+  header { padding: 0 0.75rem; height: 56px; }
+  .logo-text { font-size: 0.95rem; }
+  .logo-text span { font-size: 0.58rem; }
+  .logo-icon { width: 34px; height: 34px; font-size: 16px; }
+
+  /* Nav */
+  nav { top: 56px; }
+
+  /* Hero */
+  .hero { padding: 5rem 0 3rem; }
+  .hero-content { padding: 0 1rem; width: 100%; }
+  h1 { font-size: clamp(1.9rem, 9vw, 3rem); }
+  .hero-sub { font-size: 0.88rem; margin-bottom: 1.75rem; }
+  .btn-primary { padding: 0.75rem 1.25rem; font-size: 0.82rem; width: 100%; justify-content: center; }
+  .hero-stats {
+    flex-wrap: wrap; gap: 1rem 1.5rem;
+    justify-content: center; margin-top: 2rem;
+  }
+  .hero-stat-num { font-size: 2rem; }
+  .hero-stat-label { font-size: 0.72rem; }
+
+  /* Section headers */
+  .section-header { flex-direction: column; align-items: flex-start; gap: 0.4rem; margin-bottom: 1.5rem; }
+  .section-title { font-size: 1.6rem; }
+
+  /* Schedule */
+  .matches-grid { grid-template-columns: 1fr; gap: 0.75rem; }
+  .match-card { padding: 1rem; }
+  .match-teams { gap: 0.5rem; }
+  .match-team { font-size: 0.85rem; }
+  .match-vs { font-size: 0.75rem; }
+
+  /* Teams */
+  .teams-grid { grid-template-columns: 1fr; gap: 0.55rem; }
   .team-card {
-    padding: 0.85rem 1rem;
+    padding: 0.8rem 1rem;
     display: grid;
-    grid-template-columns: 48px 1fr auto;
+    grid-template-columns: 46px 1fr auto;
     grid-template-rows: auto auto;
     column-gap: 0.85rem; row-gap: 0;
     align-items: center; text-align: left; overflow: visible;
   }
   .team-card::after { display: none; }
-  .team-emblem { grid-column:1; grid-row:1/3; width:44px; height:44px; font-size:1.3rem; margin:0; }
-  .team-name { grid-column:2; grid-row:1; font-size:0.95rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; letter-spacing:0.02em; min-width:0; }
-  .team-info { grid-column:2; grid-row:2; margin-top:2px; font-size:0.72rem; }
-  .team-arrow { grid-column:3; grid-row:1/3; margin-top:0; font-size:0.7rem; white-space:nowrap; }
-
-  /* Schedule */
-  .matches-grid { grid-template-columns: 1fr; }
-
-  /* Hero */
-  .hero { padding-left: 0; padding-right: 0; }
-  .hero-content { padding: 0 1rem; width: 100%; }
-  .hero-stats { flex-wrap: wrap; gap: 1.25rem 2rem; justify-content: center; }
-  .hero-stat-num { font-size: 2rem; }
-  h1 { font-size: clamp(1.9rem, 8vw, 2.8rem); }
-  .hero-sub { font-size: 0.9rem; }
-  .btn-primary { padding: 0.8rem 1.25rem; font-size: 0.85rem; }
+  .team-emblem { grid-column:1; grid-row:1/3; width:42px; height:42px; font-size:1.2rem; margin:0; }
+  .team-name { grid-column:2; grid-row:1; font-size:0.9rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0; letter-spacing:0.02em; }
+  .team-info { grid-column:2; grid-row:2; font-size:0.7rem; margin-top:2px; }
+  .team-arrow { grid-column:3; grid-row:1/3; font-size:0.7rem; white-space:nowrap; }
 
   /* Stats */
-  .stat-block { max-width: 100%; margin-bottom: 1.75rem; }
-
-  /* Standings: hide В/Н/П */
+  .stat-block { margin-bottom: 1.5rem; }
   #standings-table thead th:nth-child(4),
   #standings-table thead th:nth-child(5),
   #standings-table thead th:nth-child(6),
   #standings-table tbody td:nth-child(4),
   #standings-table tbody td:nth-child(5),
   #standings-table tbody td:nth-child(6) { display: none; }
-  table { font-size: 0.9rem; }
-  thead th { padding: 0.8rem 0.5rem; font-size: 0.7rem; }
-  tbody td { padding: 0.75rem 0.5rem; }
+  table { font-size: 0.82rem; }
+  thead th { padding: 0.7rem 0.4rem; font-size: 0.68rem; }
+  tbody td { padding: 0.65rem 0.4rem; }
 
-  /* Result cards */
-  .result-card { padding: 0.8rem 0.75rem; gap: 0.5rem; }
-  .result-date-col { min-width: 42px; font-size: 0.65rem; }
-  .result-teams-col { font-size: 0.8rem; min-width: 0; flex: 1; }
-  .result-team-name { font-size: 0.8rem; }
-  .result-score { font-size: 1.1rem; }
-  .result-details-btn { font-size: 0.6rem; padding: 0.28rem 0.45rem; }
-
-  /* Stat boxes */
-  .stat-boxes { grid-template-columns: repeat(3, 1fr) !important; }
-  .stat-box-num { font-size: 1.5rem; }
-  .stat-box-label { font-size: 0.58rem; }
-
-  /* Modals */
-  .modal { border-radius: 16px 16px 0 0; max-height: 88vh; }
-  .modal-overlay { align-items: flex-end; padding: 0; }
+  /* Results */
+  .result-card { padding: 0.75rem; gap: 0.5rem; }
+  .result-date-col { min-width: 38px; font-size: 0.62rem; }
+  .result-teams-col { font-size: 0.78rem; flex: 1; min-width: 0; }
+  .result-team-name { font-size: 0.78rem; }
+  .result-score { font-size: 1.05rem; }
+  .result-details-btn { font-size: 0.58rem; padding: 0.25rem 0.4rem; }
 
   /* Scorers */
   .scorer-row { padding: 0.6rem 0.75rem; gap: 0.5rem; }
-  .scorer-rank { font-size: 0.95rem; min-width: 20px; }
-  .scorer-photo { width: 30px; height: 30px; font-size: 0.85rem; }
-  .scorer-name { font-size: 0.8rem; }
-  .scorer-team { font-size: 0.65rem; }
-  .scorer-stat { font-size: 1.05rem; }
+  .scorer-rank { font-size: 0.9rem; min-width: 18px; }
+  .scorer-photo { width: 30px; height: 30px; font-size: 0.8rem; }
+  .scorer-name { font-size: 0.78rem; }
+  .scorer-team { font-size: 0.62rem; }
+  .scorer-stat { font-size: 1rem; }
 
-  /* Players */
+  /* Modals */
+  .modal { border-radius: 16px 16px 0 0; max-height: 90vh; width: 100% !important; }
+  .modal-overlay { align-items: flex-end; padding: 0; }
+  .modal-header { padding: 1rem 1rem 0.75rem; }
+  .modal-body { padding: 0 1rem 1rem; }
+
+  /* Player cards in modal */
   .players-grid { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
-  .player-card { padding: 0.8rem 0.5rem; }
-  .player-avatar { width: 42px; height: 42px; font-size: 1.1rem; }
-  .player-name-card { font-size: 0.75rem; }
+  .player-card { padding: 0.75rem 0.5rem; }
+  .player-avatar { width: 40px; height: 40px; font-size: 1rem; }
+  .player-name-card { font-size: 0.72rem; }
 
-  .section-title { font-size: 1.7rem; }
+  /* Stat boxes */
+  .stat-boxes { grid-template-columns: repeat(3, 1fr) !important; gap: 0.5rem; }
+  .stat-box { padding: 0.6rem 0.4rem; }
+  .stat-box-num { font-size: 1.4rem; }
+  .stat-box-label { font-size: 0.55rem; }
+
+  /* Admin */
+  .admin-tabs { gap: 0.25rem; }
+  .admin-tab { font-size: 0.72rem; padding: 0.35rem 0.6rem; border-radius: 6px; }
+  .admin-card { padding: 1rem; }
+  .admin-card h3 { font-size: 1rem; margin-bottom: 0.75rem; }
+  .form-group { margin-bottom: 1rem; }
+  .form-group label { font-size: 0.68rem; }
+  .form-group input, .form-group select, .form-group textarea {
+    padding: 0.6rem 0.75rem; font-size: 0.85rem;
+  }
+  .btn-admin { padding: 0.75rem; font-size: 0.82rem; }
+  .btn-sm { font-size: 0.72rem; padding: 0.25rem 0.45rem; }
+  .admin-list li { padding: 0.5rem 0.6rem; font-size: 0.8rem; gap: 0.4rem; }
+
+  /* Protocol */
+  .protocol-teams { flex-direction: column; gap: 0.5rem; font-size: 0.8rem; }
+  .protocol-score { font-size: 1.4rem; }
+  .event-row { flex-wrap: wrap; gap: 0.4rem; }
+  .event-row select, .event-row input { font-size: 0.78rem; padding: 0.35rem 0.5rem; }
+
+  /* Players grid in admin */
+  .players-grid { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
+
+  /* Standings edit table */
+  #admin-standings-edit input[type="number"] { width: 38px !important; padding: 2px 3px !important; }
+  #admin-standings-edit input[type="text"] { width: 100px !important; }
+
+  /* Footer */
+  footer { padding: 1.5rem 1rem; font-size: 0.75rem; }
 }
+
+/* ========= SMALL MOBILE ≤ 380px ========= */
+@media (max-width: 380px) {
+  h1 { font-size: 1.7rem; }
+  .hero-stat-num { font-size: 1.7rem; }
+  .admin-tab { font-size: 0.65rem; padding: 0.3rem 0.5rem; }
+  .teams-grid { gap: 0.4rem; }
+  .stat-boxes { gap: 0.35rem; }
+  .stat-box-num { font-size: 1.25rem; }
+}
+
+/* ========= CROP MODAL ========= */
+#crop-modal .modal-body { overflow: hidden; }
+#crop-container { touch-action: none; position: relative; overflow: hidden; }
+#crop-box { border-radius: 4px; pointer-events: none; }
+#crop-img { cursor: grab; }
+#crop-img:active { cursor: grabbing; }
+
+/* ========= ALIGNMENT FIXES ========= */
+/* All sections centered */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  box-sizing: border-box;
+}
+/* Section headers consistent */
+.section-header {
+  display: flex; align-items: baseline; gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+/* Admin panel consistent padding */
+.admin-panel { width: 100%; }
+.admin-tabs { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 1.5rem; }
+/* Form groups consistent */
+.form-group input, .form-group select, .form-group textarea { width: 100%; }
+/* Stat block centered */
+.stat-block { width: 100%; max-width: 720px; margin: 0 auto 2.5rem; }
 
 </style>
 </head>
@@ -1504,6 +1608,9 @@ section, #admin-section { width: 100%; max-width: 100%; }
                 <option>Защитник</option>
                 <option>Полузащитник</option>
                 <option>Нападающий</option>
+                <option disabled>──────────</option>
+                <option>Президент</option>
+                <option>Тренер</option>
               </select>
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem">
@@ -1552,26 +1659,29 @@ section, #admin-section { width: 100%; max-width: 100%; }
             </div>
             <div class="form-group">
               <label>Позиция</label>
-              <select id="ep-pos">
+              <select id="ep-pos" onchange="toggleStatFields(this.value)">
                 <option>Вратарь</option>
                 <option>Защитник</option>
                 <option>Полузащитник</option>
                 <option>Нападающий</option>
+                <option disabled>──────────</option>
+                <option>Президент</option>
+                <option>Тренер</option>
               </select>
             </div>
-            <div class="form-group">
+            <div class="form-group stat-only-field">
               <label>Матчей</label>
               <input type="number" id="ep-matches" min="0">
             </div>
-            <div class="form-group">
+            <div class="form-group stat-only-field">
               <label>Голов</label>
               <input type="number" id="ep-goals" min="0">
             </div>
-            <div class="form-group">
+            <div class="form-group stat-only-field">
               <label>ЖК</label>
               <input type="number" id="ep-yellow" min="0">
             </div>
-            <div class="form-group">
+            <div class="form-group stat-only-field">
               <label>КК</label>
               <input type="number" id="ep-red" min="0">
             </div>
@@ -1586,11 +1696,15 @@ section, #admin-section { width: 100%; max-width: 100%; }
       <!-- TAB: Table -->
       <div class="admin-content" id="tab-table">
         <div class="admin-card">
-          <h3>Редактировать турнирную таблицу</h3>
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;margin-bottom:1.25rem">
+            <h3 style="margin:0">Турнирная таблица</h3>
+            <button class="btn-admin" style="max-width:260px;gap:0.5rem" onclick="recalcStandings()">🔄 Пересчитать по результатам</button>
+          </div>
+          <p style="font-size:0.75rem;color:var(--grey);margin-bottom:1rem">Нажми 🔄 чтобы автоматически посчитать В/Н/П/Очки из результатов матчей. Или редактируй вручную и жми 💾 у каждой строки.</p>
           <div class="table-wrap">
             <table>
               <thead>
-                <tr><th>Команда</th><th>И</th><th>В</th><th>Н</th><th>П</th><th>Очки</th><th>Действие</th></tr>
+                <tr><th>Команда</th><th>И</th><th>В</th><th>Н</th><th>П</th><th>Очки</th><th></th></tr>
               </thead>
               <tbody id="admin-standings-edit"></tbody>
             </table>
@@ -1610,7 +1724,7 @@ section, #admin-section { width: 100%; max-width: 100%; }
             <div class="form-group">
               <label>Логотип команды (URL или загрузить)</label>
               <input type="text" id="nt-logo-url" placeholder="https://... или оставь пустым">
-              <input type="file" id="nt-logo-file" accept="image/*" style="margin-top:6px;color:var(--grey);font-size:0.8rem;width:100%">
+              <input type="file" id="nt-logo-file" accept="image/*" style="margin-top:6px;color:var(--grey);font-size:0.8rem;width:100%" onchange="openCropModal('nt-logo')">
               <div id="nt-logo-preview" style="margin-top:8px;display:none">
                 <img id="nt-logo-img" style="width:56px;height:56px;border-radius:50%;object-fit:contain;border:2px solid var(--border)">
               </div>
@@ -1643,7 +1757,7 @@ section, #admin-section { width: 100%; max-width: 100%; }
             </div>
             <div class="form-group">
               <label>или загрузить файл</label>
-              <input type="file" id="league-logo-file" accept="image/*" style="color:var(--grey);font-size:0.8rem;width:100%">
+              <input type="file" id="league-logo-file" accept="image/*" style="color:var(--grey);font-size:0.8rem;width:100%" onchange="openCropModal('league-logo')">
             </div>
             <div id="league-logo-preview" style="margin:0.75rem 0;display:none">
               <img id="league-logo-img" style="width:64px;height:64px;border-radius:50%;object-fit:contain;border:2px solid var(--border)">
@@ -1683,7 +1797,7 @@ section, #admin-section { width: 100%; max-width: 100%; }
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
             <h3>📋 Журнал изменений</h3>
             <div style="display:flex;gap:0.5rem">
-              <button class="btn-admin" style="max-width:160px" onclick="undoLastAction()">↩ Отменить</button>
+              
               <button class="btn-admin" style="max-width:160px;background:var(--navy-light);color:var(--grey)" onclick="clearLog()">Очистить журнал</button>
             </div>
           </div>
@@ -1905,20 +2019,158 @@ const DEFAULT_STANDINGS = [
   {team:"Цементник",p:9,w:1,d:1,l:7,pts:4},
 ];
 
-// ===================== STATE =====================
-function loadData(key, def) {
-  try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : def; } catch { return def; }
-}
-function saveData(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
+// ===================== SUPABASE =====================
+const SB_URL = 'https://rqjgqsdofvvigqsoiglx.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJxamdxc2RvZnZ2aWdxc29pZ2x4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxNzI4NDMsImV4cCI6MjA4ODc0ODg0M30.qfIIBtDooO5zzFBHqYZ7Y-9qK_ldO2a3XspfjY1VP7o';
+const SB_HEADERS = { 'Content-Type': 'application/json', 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY };
 
-let teams = loadData('bfl_teams', DEFAULT_TEAMS);
-let upcoming = loadData('bfl_upcoming', DEFAULT_UPCOMING);
-let results = loadData('bfl_results', DEFAULT_RESULTS);
-let standings = loadData('bfl_standings', DEFAULT_STANDINGS);
-let heroStats = loadData('bfl_hero_stats', {teams:10,matches:38,players:127,goals:84});
-let leagueLogo = loadData('bfl_league_logo', null);
-let actionLog = loadData('bfl_action_log', []);
-let actionHistory = loadData('bfl_action_history', []); // for undo
+async function sbGet(table, params='') {
+  const r = await fetch(`${SB_URL}/rest/v1/${table}?${params}`, { headers: SB_HEADERS });
+  if(!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+async function sbPost(table, body) {
+  const r = await fetch(`${SB_URL}/rest/v1/${table}`, {
+    method:'POST', headers:{...SB_HEADERS,'Prefer':'return=representation'}, body:JSON.stringify(body)
+  });
+  if(!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+async function sbPatch(table, match, body) {
+  const q = Object.entries(match).map(([k,v])=>`${k}=eq.${encodeURIComponent(v)}`).join('&');
+  const r = await fetch(`${SB_URL}/rest/v1/${table}?${q}`, {
+    method:'PATCH', headers:{...SB_HEADERS,'Prefer':'return=representation'}, body:JSON.stringify(body)
+  });
+  if(!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+async function sbDelete(table, match) {
+  const q = Object.entries(match).map(([k,v])=>`${k}=eq.${encodeURIComponent(v)}`).join('&');
+  const r = await fetch(`${SB_URL}/rest/v1/${table}?${q}`, { method:'DELETE', headers:SB_HEADERS });
+  if(!r.ok) throw new Error(await r.text());
+}
+async function sbUpsert(table, body) {
+  const r = await fetch(`${SB_URL}/rest/v1/${table}`, {
+    method:'POST', headers:{...SB_HEADERS,'Prefer':'resolution=merge-duplicates,return=representation'}, body:JSON.stringify(body)
+  });
+  if(!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+async function sbSetting(key) {
+  const rows = await sbGet('settings', `key=eq.${key}&select=value`);
+  return rows.length ? rows[0].value : null;
+}
+async function sbSetSetting(key, value) {
+  await sbUpsert('settings', {key, value: typeof value === 'string' ? value : JSON.stringify(value)});
+}
+
+// Upload image to Supabase Storage, returns public URL
+async function uploadToStorage(bucket, path, base64DataUrl) {
+  const arr = base64DataUrl.split(',');
+  const mime = arr[0].match(/:(.*?);/)[1];
+  const bstr = atob(arr[1]);
+  const bytes = new Uint8Array(bstr.length);
+  for(let i=0;i<bstr.length;i++) bytes[i]=bstr.charCodeAt(i);
+  const blob = new Blob([bytes], {type:mime});
+  const ext = mime.split('/')[1].replace('jpeg','jpg');
+  const fullPath = `${path}.${ext}?t=${Date.now()}`;
+  const r = await fetch(`${SB_URL}/storage/v1/object/${bucket}/${fullPath}`, {
+    method:'POST',
+    headers:{ 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': mime, 'x-upsert': 'true' },
+    body: blob
+  });
+  if(!r.ok) { const e = await r.text(); throw new Error(e); }
+  return `${SB_URL}/storage/v1/object/public/${bucket}/${fullPath}`;
+}
+
+// ===================== STATE =====================
+let teams = [];
+let upcoming = [];
+let results = [];
+let standings = [];
+let heroStats = {teams:0,matches:0,players:0,goals:0};
+let leagueLogo = null;
+let actionLog = [];
+let actionHistory = [];
+
+function showLoader(msg='Загрузка...') {
+  let el = document.getElementById('sb-loader');
+  if(!el) {
+    el = document.createElement('div');
+    el.id = 'sb-loader';
+    el.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:9999;background:var(--green);color:#000;font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:0.85rem;padding:6px 1rem;text-align:center;letter-spacing:0.05em;transition:opacity 0.3s';
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.style.opacity = '1';
+}
+function hideLoader() {
+  const el = document.getElementById('sb-loader');
+  if(el) { el.style.opacity='0'; setTimeout(()=>el.remove(),300); }
+}
+
+async function loadAllData() {
+  showLoader('⏳ Загрузка данных...');
+  try {
+    // Load teams with players
+    const teamsRaw = await sbGet('teams', 'order=id.asc');
+    const playersRaw = await sbGet('players', 'order=id.asc');
+    teams = teamsRaw.map(t => ({
+      ...t,
+      players: playersRaw.filter(p => p.team_id === t.id).map(p => ({
+        id: p.id, name: p.name, pos: p.pos||'Нападающий',
+        matches: p.matches||0, goals: p.goals||0,
+        yellow: p.yellow||0, red: p.red||0, photo: p.photo||'',
+        recentMatches: []
+      }))
+    }));
+
+    // Load upcoming
+    const upRaw = await sbGet('upcoming', 'order=date.asc');
+    upcoming = upRaw.map(u => ({id:u.id,team1:u.team1,team2:u.team2,date:u.date,time:u.time,venue:u.venue}));
+
+    // Load results
+    const resRaw = await sbGet('results', 'order=date.desc');
+    results = resRaw.map(r => ({
+      id: r.id, team1: r.team1, team2: r.team2,
+      date: r.date, g1: r.g1||0, g2: r.g2||0,
+      events: Array.isArray(r.events) ? r.events : (r.events ? JSON.parse(r.events) : [])
+    }));
+
+    // Load standings
+    const stRaw = await sbGet('standings', 'order=pts.desc');
+    standings = stRaw.map(s => ({id:s.id,team:s.team,p:s.p||0,w:s.w||0,d:s.d||0,l:s.l||0,pts:s.pts||0}));
+
+    // Load settings
+    const heroRaw = await sbSetting('hero_stats');
+    heroStats = heroRaw ? JSON.parse(heroRaw) : {teams:0,matches:0,players:0,goals:0};
+    leagueLogo = await sbSetting('league_logo');
+    const logRaw = await sbSetting('action_log');
+    actionLog = logRaw ? JSON.parse(logRaw) : [];
+    actionHistory = [];
+
+    hideLoader();
+  } catch(e) {
+    hideLoader();
+    console.error('Supabase load error:', e);
+    showError('Ошибка загрузки данных: ' + e.message);
+  }
+}
+
+function showError(msg) {
+  const el = document.createElement('div');
+  el.style.cssText = 'position:fixed;bottom:1rem;left:50%;transform:translateX(-50%);background:#ff4d4d;color:#fff;padding:0.75rem 1.25rem;border-radius:8px;font-size:0.85rem;z-index:9999;max-width:90vw;text-align:center';
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(), 5000);
+}
+function showSuccess(msg) {
+  const el = document.createElement('div');
+  el.style.cssText = 'position:fixed;bottom:1rem;left:50%;transform:translateX(-50%);background:var(--green);color:#000;padding:0.75rem 1.25rem;border-radius:8px;font-size:0.85rem;font-weight:600;z-index:9999;max-width:90vw;text-align:center';
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(), 3000);
+}
 
 // ===================== RENDER =====================
 function formatDate(str) {
@@ -2007,7 +2259,7 @@ function openTeamModal(teamId) {
   document.getElementById('team-modal-title').textContent = t.emoji + ' ' + t.name;
   document.getElementById('team-modal-sub').textContent = `Состав команды · ${t.players.length} игроков`;
   const posColor = {Вратарь:'#4a90d9',Защитник:'#7b68ee',Полузащитник:'#50c878',Нападающий:'#ff7043'};
-  const posEmoji = {Вратарь:'🧤',Защитник:'🛡️',Нападающий:'⚡',Полузащитник:'🎯'};
+  const posEmoji = {Вратарь:'🧤',Защитник:'🛡️',Нападающий:'⚡',Полузащитник:'🎯',Президент:'👑',Тренер:'📋'};
   document.getElementById('team-players-grid').innerHTML = t.players.map(p => `
     <div class="player-card" onclick="openPlayerModal(${t.id},${p.id})">
       <div class="player-avatar">${p.photo ? `<img src="${p.photo}">` : (posEmoji[p.pos]||'👤')}</div>
@@ -2021,7 +2273,7 @@ function openPlayerModal(teamId, playerId) {
   const t = teams.find(x=>x.id===teamId);
   const p = t && t.players.find(x=>x.id===playerId);
   if(!p) return;
-  const posEmoji = {Вратарь:'🧤',Защитник:'🛡️',Нападающий:'⚡',Полузащитник:'🎯'};
+  const posEmoji = {Вратарь:'🧤',Защитник:'🛡️',Нападающий:'⚡',Полузащитник:'🎯',Президент:'👑',Тренер:'📋'};
   document.getElementById('player-modal-title').textContent = p.name;
 
   // Build per-match history from results
@@ -2071,13 +2323,17 @@ function openPlayerModal(teamId, playerId) {
         <div class="player-detail-pos">${p.pos} · ${t.name}</div>
       </div>
     </div>
+    ${['Президент','Тренер'].includes(p.pos) ? `
+    <div style="padding:0.75rem 1rem;background:var(--navy-light);border:1px solid var(--border);border-radius:8px;text-align:center;color:var(--grey);font-size:0.82rem">
+      ${p.pos === 'Президент' ? '👑 Президент клуба' : '📋 Тренер команды'} — статистика не ведётся
+    </div>` : `
     <div class="stat-boxes" style="grid-template-columns:repeat(5,1fr)">
       <div class="stat-box"><div class="stat-box-num">${p.matches}</div><div class="stat-box-label">Матчей</div></div>
       <div class="stat-box"><div class="stat-box-num" style="color:var(--green)">${goals}</div><div class="stat-box-label">Голов</div></div>
       <div class="stat-box"><div class="stat-box-num" style="color:#60a5fa">${assists}</div><div class="stat-box-label">Пасов</div></div>
       <div class="stat-box"><div class="stat-box-num" style="color:#FFD700">${yellow}</div><div class="stat-box-label">ЖК</div></div>
       <div class="stat-box"><div class="stat-box-num" style="color:#ff4d4d">${red}</div><div class="stat-box-label">КК</div></div>
-    </div>
+    </div>`}
     ${matchHistoryHtml}`;
   openModal('player-modal');
 }
@@ -2149,12 +2405,24 @@ function openProtocol(resultId) {
 // ===================== NAVIGATION =====================
 function initNavigation() {
   const hash = window.location.hash;
-  const path = window.location.pathname;
-
-  if(path.endsWith('/admin') || hash === '#admin') {
+  if(hash === '#admin') {
     showAdmin();
   }
 }
+
+// Check hash immediately on script load (before Supabase data)
+(function() {
+  if(window.location.hash === '#admin') {
+    document.getElementById('main-site').style.display = 'none';
+    document.getElementById('admin-section').style.display = 'block';
+    document.getElementById('main-header').style.display = 'flex';
+    const loggedIn = sessionStorage.getItem('bfl_admin');
+    if(loggedIn) {
+      document.getElementById('admin-login').style.display = 'none';
+      document.getElementById('admin-panel').style.display = 'block';
+    }
+  }
+})();
 
 function showAdmin() {
   document.getElementById('main-site').style.display='none';
@@ -2255,7 +2523,7 @@ function renderAdminStandingsEdit() {
   const tb = document.getElementById('admin-standings-edit');
   tb.innerHTML = standings.map((s,i) => `
     <tr>
-      <td>${s.team}</td>
+      <td><input type="text" value="${s.team}" style="background:var(--navy);border:1px solid var(--border);color:var(--white);border-radius:4px;padding:3px 6px;width:130px;font-size:0.85rem" onchange="updateStanding(${i},'team',this.value)"></td>
       <td><input type="number" value="${s.p}" min="0" style="width:50px;background:var(--navy);border:1px solid var(--border);color:var(--white);border-radius:4px;padding:2px 4px" onchange="updateStanding(${i},'p',this.value)"></td>
       <td><input type="number" value="${s.w}" min="0" style="width:50px;background:var(--navy);border:1px solid var(--border);color:var(--white);border-radius:4px;padding:2px 4px" onchange="updateStanding(${i},'w',this.value)"></td>
       <td><input type="number" value="${s.d}" min="0" style="width:50px;background:var(--navy);border:1px solid var(--border);color:var(--white);border-radius:4px;padding:2px 4px" onchange="updateStanding(${i},'d',this.value)"></td>
@@ -2266,68 +2534,135 @@ function renderAdminStandingsEdit() {
 }
 
 function updateStanding(i, field, val) {
-  standings[i][field] = parseInt(val)||0;
+  if(field === 'team') standings[i][field] = val;
+  else standings[i][field] = parseInt(val)||0;
 }
 
-function saveStandings() {
-  saveData('bfl_standings', standings);
-  renderStandings();
-  logAction('edit','Сохранена турнирная таблица');
-  alert('Таблица сохранена!');
+async function saveStandings() {
+  showLoader('Сохранение таблицы...');
+  try {
+    for(const s of standings) {
+      await sbPatch('standings', {id:s.id}, {team:s.team,p:s.p,w:s.w,d:s.d,l:s.l,pts:s.pts});
+    }
+    renderStandings();
+    logAction('edit','Сохранена турнирная таблица');
+    showSuccess('Таблица сохранена!');
+  } catch(e) { showError('Ошибка: '+e.message); }
+  hideLoader();
 }
 
-function addMatch() {
+async function recalcStandings() {
+  if(!confirm('Пересчитать таблицу автоматически по результатам матчей? Текущие данные будут заменены.')) return;
+  showLoader('Пересчёт...');
+  try {
+    // Build map from team name -> stats
+    const map = {};
+    const ensureTeam = name => {
+      if(!map[name]) map[name] = {team:name,p:0,w:0,d:0,l:0,pts:0};
+    };
+    results.forEach(r => {
+      ensureTeam(r.team1); ensureTeam(r.team2);
+      const s1 = map[r.team1], s2 = map[r.team2];
+      s1.p++; s2.p++;
+      if(r.g1 > r.g2) { s1.w++; s1.pts+=3; s2.l++; }
+      else if(r.g1 < r.g2) { s2.w++; s2.pts+=3; s1.l++; }
+      else { s1.d++; s2.d++; s1.pts++; s2.pts++; }
+    });
+
+    // For teams already in standings — update them; for new — insert
+    const newRows = Object.values(map);
+    for(const row of newRows) {
+      const existing = standings.find(s => s.team === row.team);
+      if(existing) {
+        existing.p=row.p; existing.w=row.w; existing.d=row.d; existing.l=row.l; existing.pts=row.pts;
+        await sbPatch('standings', {id:existing.id}, {p:row.p,w:row.w,d:row.d,l:row.l,pts:row.pts});
+      } else {
+        const [inserted] = await sbPost('standings', row);
+        standings.push({...row, id:inserted.id});
+      }
+    }
+    // Also add teams from teams list that have no results yet
+    for(const t of teams) {
+      if(!map[t.name] && !standings.find(s=>s.team===t.name)) {
+        const [inserted] = await sbPost('standings', {team:t.name,p:0,w:0,d:0,l:0,pts:0});
+        standings.push({team:t.name,p:0,w:0,d:0,l:0,pts:0,id:inserted.id});
+      }
+    }
+    renderStandings();
+    renderAdminStandingsEdit();
+    logAction('edit','Таблица пересчитана автоматически');
+    showSuccess('Таблица обновлена!');
+  } catch(e) { showError('Ошибка: '+e.message); }
+  hideLoader();
+}
+
+async function addMatch() {
   const t1 = document.getElementById('a-t1').value;
   const t2 = document.getElementById('a-t2').value;
   const date = document.getElementById('a-date').value;
   const time = document.getElementById('a-time').value;
   const venue = document.getElementById('a-venue').value;
   if(!date || t1===t2) { alert('Заполните все поля и выберите разные команды'); return; }
-  const snap = JSON.parse(JSON.stringify(upcoming));
-  upcoming.push({id:'u'+Date.now(),team1:t1,team2:t2,date,time,venue});
-  saveData('bfl_upcoming', upcoming);
-  renderSchedule();
-  renderAdminUpcoming();
-  logAction('match',`Добавлен матч: ${t1} vs ${t2} (${date})`,{type:'upcoming',data:snap});
+  showLoader('Сохранение...');
+  try {
+    const id = 'u'+Date.now();
+    await sbPost('upcoming', {id,team1:t1,team2:t2,date,time,venue});
+    upcoming.push({id,team1:t1,team2:t2,date,time,venue});
+    renderSchedule(); renderAdminUpcoming();
+    logAction('match',`Добавлен матч: ${t1} vs ${t2} (${date})`, {entity:'match',id});
+    showSuccess('Матч добавлен!');
+  } catch(e) { showError('Ошибка: '+e.message); }
+  hideLoader();
 }
 
-function deleteUpcoming(id) {
+async function deleteUpcoming(id) {
   const m = upcoming.find(x=>x.id===id);
-  const snap = JSON.parse(JSON.stringify(upcoming));
-  upcoming = upcoming.filter(m=>m.id!==id);
-  saveData('bfl_upcoming', upcoming);
-  renderSchedule();
-  renderAdminUpcoming();
-  if(m) logAction('delete',`Удалён матч: ${m.team1} vs ${m.team2}`,{type:'upcoming',data:snap});
+  showLoader('Удаление...');
+  try {
+    await sbDelete('upcoming', {id});
+    upcoming = upcoming.filter(x=>x.id!==id);
+    renderSchedule(); renderAdminUpcoming();
+    if(m) logAction('delete',`Удалён матч: ${m.team1} vs ${m.team2}`);
+    showSuccess('Удалено!');
+  } catch(e) { showError('Ошибка: '+e.message); }
+  hideLoader();
 }
 
-function addResult() {
+async function addResult() {
   const t1 = document.getElementById('r-t1').value;
   const t2 = document.getElementById('r-t2').value;
   const date = document.getElementById('r-date').value;
   const g1 = parseInt(document.getElementById('r-g1').value)||0;
   const g2 = parseInt(document.getElementById('r-g2').value)||0;
   if(!date || t1===t2) { alert('Заполните все поля и выберите разные команды'); return; }
-  const snap = JSON.parse(JSON.stringify(results));
-  const id = 'r'+Date.now();
-  results.unshift({id, team1:t1, team2:t2, date, g1, g2, events:[]});
-  saveData('bfl_results', results);
-  renderResults();
-  renderAdminResults();
-  openProtocolEditor(id);
-  logAction('result',`Добавлен результат: ${t1} ${g1}:${g2} ${t2} (${date})`,{type:'results',data:snap});
+  showLoader('Сохранение...');
+  try {
+    const id = 'r'+Date.now();
+    await sbPost('results', {id,team1:t1,team2:t2,date,g1,g2,events:[]});
+    results.unshift({id,team1:t1,team2:t2,date,g1,g2,events:[]});
+    renderResults(); renderAdminResults();
+    openProtocolEditor(id);
+    logAction('result',`Добавлен результат: ${t1} ${g1}:${g2} ${t2} (${date})`, {entity:'result',id});
+    autoSyncStats();
+    showSuccess('Результат добавлен!');
+  } catch(e) { showError('Ошибка: '+e.message); }
+  hideLoader();
 }
 
-function deleteResult(id) {
+async function deleteResult(id) {
   const r = results.find(x=>x.id===id);
   if(!confirm('Удалить матч и все его события?')) return;
-  const snap = JSON.parse(JSON.stringify(results));
-  results = results.filter(r=>r.id!==id);
-  saveData('bfl_results', results);
-  renderResults();
-  renderAdminResults();
-  document.getElementById('protocol-editor').style.display='none';
-  if(r) logAction('delete',`Удалён результат: ${r.team1} ${r.g1}:${r.g2} ${r.team2}`,{type:'results',data:snap});
+  showLoader('Удаление...');
+  try {
+    await sbDelete('results', {id});
+    results = results.filter(x=>x.id!==id);
+    renderResults(); renderAdminResults();
+    document.getElementById('protocol-editor').style.display='none';
+    if(r) logAction('delete',`Удалён результат: ${r.team1} ${r.g1}:${r.g2} ${r.team2}`);
+    autoSyncStats();
+    showSuccess('Удалено!');
+  } catch(e) { showError('Ошибка: '+e.message); }
+  hideLoader();
 }
 
 // ===================== PROTOCOL EDITOR =====================
@@ -2378,7 +2713,7 @@ function onEvTypeChange() {
   document.getElementById('ev-player-label').textContent = type==='sub' ? 'Выходит на поле' : 'Игрок';
 }
 
-function addProtocolEvent() {
+async function addProtocolEvent() {
   const resultId = document.getElementById('proto-result-id').value;
   const r = results.find(x=>x.id===resultId);
   if(!r) return;
@@ -2398,18 +2733,24 @@ function addProtocolEvent() {
   if(!r.events) r.events = [];
   r.events.push(evt);
   r.events.sort((a,b)=>a.min-b.min);
-  saveData('bfl_results', results);
+  try {
+    await sbPatch('results', {id:r.id}, {events: r.events, g1:r.g1, g2:r.g2});
+  } catch(e) { showError('Ошибка сохранения: '+e.message); }
   renderProtoEventsList(r);
   renderResults();
+  autoSyncStats();
 }
 
-function deleteProtocolEvent(resultId, idx) {
+async function deleteProtocolEvent(resultId, idx) {
   const r = results.find(x=>x.id===resultId);
   if(!r) return;
   r.events.splice(idx,1);
-  saveData('bfl_results', results);
+  try {
+    await sbPatch('results', {id:r.id}, {events: r.events});
+  } catch(e) { showError('Ошибка: '+e.message); }
   renderProtoEventsList(r);
   renderResults();
+  autoSyncStats();
 }
 
 function renderProtoEventsList(r) {
@@ -2447,7 +2788,7 @@ function renderAdminPlayersList(forceTeamId) {
   if(!t) { list.innerHTML='<li style="color:var(--grey)">Выберите команду</li>'; return; }
   const countEl = document.getElementById('players-count');
   if(countEl) countEl.textContent = `· ${t.players.length} чел.`;
-  const posEmoji = {Вратарь:'🧤',Защитник:'🛡️',Полузащитник:'🎯',Нападающий:'⚡'};
+  const posEmoji = {Вратарь:'🧤',Защитник:'🛡️',Нападающий:'⚡',Полузащитник:'🎯',Президент:'👑',Тренер:'📋'};
   list.innerHTML = t.players.map(p => `
     <li>
       <span style="display:flex;align-items:center;gap:8px;min-width:0">
@@ -2477,40 +2818,49 @@ async function addPlayer() {
   if(!name) { alert('Введите имя игрока'); return; }
   const t = teams.find(x=>x.id===teamId);
   if(!t) return;
-  const snap = JSON.parse(JSON.stringify(teams));
-
-  let photo = document.getElementById('p-photo-url').value.trim();
-  const file = document.getElementById('p-photo-file').files[0];
-  if(file) photo = await fileToBase64(file);
-
-  t.players.push({ id: Date.now(), name, pos, matches, goals, yellow, red, photo: photo||'', recentMatches:[] });
-  saveData('bfl_teams', teams);
-  renderAdminPlayersList(teamId);
-  renderTeams();
-  renderScorers(); renderDiscipline();
-  document.getElementById('p-name').value = '';
-  document.getElementById('p-photo-url').value = '';
-  document.getElementById('p-photo-file').value = '';
-  document.getElementById('p-matches').value = '0';
-  document.getElementById('p-goals').value = '0';
-  document.getElementById('p-yellow').value = '0';
-  document.getElementById('p-red').value = '0';
-  logAction('add',`Добавлен игрок: ${name} (${t.name}, ${pos})`,{type:'teams',data:snap});
+  showLoader('Добавление игрока...');
+  try {
+    let photo = document.getElementById('p-photo-url').value.trim();
+    const fileEl = document.getElementById('p-photo-file');
+    if(fileEl._croppedData) {
+      photo = await uploadToStorage('logos', `players/p_${Date.now()}`, fileEl._croppedData);
+      fileEl._croppedData = null;
+    } else if(fileEl.files[0]) {
+      const b64 = await fileToBase64(fileEl.files[0]);
+      photo = await uploadToStorage('logos', `players/p_${Date.now()}`, b64);
+    }
+    const [row] = await sbPost('players', {team_id:teamId,name,pos,matches,goals,yellow,red,photo:photo||''});
+    const newPlayer = {id:row.id,name,pos,matches,goals,yellow,red,photo:photo||'',recentMatches:[]};
+    t.players.push(newPlayer);
+    renderAdminPlayersList(teamId); renderTeams(); renderScorers(); renderDiscipline();
+    document.getElementById('p-name').value='';
+    document.getElementById('p-photo-url').value='';
+    fileEl.value='';
+    document.getElementById('p-matches').value='0';
+    document.getElementById('p-goals').value='0';
+    document.getElementById('p-yellow').value='0';
+    document.getElementById('p-red').value='0';
+    logAction('add',`Добавлен игрок: ${name} (${t.name}, ${pos})`, {entity:'player',id:row.id,teamId});
+    showSuccess('Игрок добавлен!');
+  } catch(e) { showError('Ошибка: '+e.message); }
+  hideLoader();
 }
 
-function deletePlayer(teamId, playerId) {
+async function deletePlayer(teamId, playerId) {
   if(!confirm('Удалить игрока?')) return;
   const t = teams.find(x=>x.id===teamId);
   if(!t) return;
-  const snap = JSON.parse(JSON.stringify(teams));
   const p = t.players.find(x=>x.id===playerId);
-  t.players = t.players.filter(p=>p.id!==playerId);
-  saveData('bfl_teams', teams);
-  renderAdminPlayersList(teamId);
-  renderTeams();
-  renderScorers(); renderDiscipline();
-  document.getElementById('edit-player-card').style.display='none';
-  if(p) logAction('delete',`Удалён игрок: ${p.name} (${t.name})`,{type:'teams',data:snap});
+  showLoader('Удаление...');
+  try {
+    await sbDelete('players', {id:playerId});
+    t.players = t.players.filter(x=>x.id!==playerId);
+    renderAdminPlayersList(teamId); renderTeams(); renderScorers(); renderDiscipline();
+    document.getElementById('edit-player-card').style.display='none';
+    if(p) logAction('delete',`Удалён игрок: ${p.name} (${t.name})`);
+    showSuccess('Игрок удалён!');
+  } catch(e) { showError('Ошибка: '+e.message); }
+  hideLoader();
 }
 
 function openEditPlayer(teamId, playerId) {
@@ -2531,6 +2881,7 @@ function openEditPlayer(teamId, playerId) {
   const img = document.getElementById('ep-photo-img');
   if(p.photo) { img.src=p.photo; preview.style.display='block'; } else { preview.style.display='none'; }
   document.getElementById('edit-player-label').textContent = p.name;
+  toggleStatFields(p.pos);
   const card = document.getElementById('edit-player-card');
   card.style.display = 'block';
   card.scrollIntoView({behavior:'smooth', block:'nearest'});
@@ -2542,28 +2893,35 @@ async function savePlayer() {
   const t = teams.find(x=>x.id===teamId);
   const p = t && t.players.find(x=>x.id===playerId);
   if(!p) return;
-  const snap = JSON.parse(JSON.stringify(teams));
-  const oldName = p.name;
-  p.name = document.getElementById('ep-name').value.trim() || p.name;
-  p.pos = document.getElementById('ep-pos').value;
-  p.matches = parseInt(document.getElementById('ep-matches').value)||0;
-  p.goals = parseInt(document.getElementById('ep-goals').value)||0;
-  p.yellow = parseInt(document.getElementById('ep-yellow').value)||0;
-  p.red = parseInt(document.getElementById('ep-red').value)||0;
+  showLoader('Сохранение...');
+  try {
+    const oldName = p.name;
+    p.name = document.getElementById('ep-name').value.trim() || p.name;
+    p.pos = document.getElementById('ep-pos').value;
+    p.matches = parseInt(document.getElementById('ep-matches').value)||0;
+    p.goals = parseInt(document.getElementById('ep-goals').value)||0;
+    p.yellow = parseInt(document.getElementById('ep-yellow').value)||0;
+    p.red = parseInt(document.getElementById('ep-red').value)||0;
 
-  const urlVal = document.getElementById('ep-photo-url').value.trim();
-  const file = document.getElementById('ep-photo-file').files[0];
-  if(file) p.photo = await fileToBase64(file);
-  else if(urlVal) p.photo = urlVal;
+    const urlVal = document.getElementById('ep-photo-url').value.trim();
+    const fileEl = document.getElementById('ep-photo-file');
+    if(fileEl._croppedData) {
+      p.photo = await uploadToStorage('logos', `players/p_${playerId}`, fileEl._croppedData);
+      fileEl._croppedData = null;
+    } else if(fileEl.files[0]) {
+      const b64 = await fileToBase64(fileEl.files[0]);
+      p.photo = await uploadToStorage('logos', `players/p_${playerId}`, b64);
+    } else if(urlVal) p.photo = urlVal;
 
-  saveData('bfl_teams', teams);
-  renderAdminPlayersList(teamId);
-  renderTeams();
-  renderScorers(); renderDiscipline();
-  document.getElementById('edit-player-label').textContent = p.name;
-  document.getElementById('edit-player-card').style.display='none';
-  document.getElementById('ep-photo-file').value='';
-  logAction('edit',`Изменён игрок: ${oldName} (${t.name})`,{type:'teams',data:snap});
+    await sbPatch('players', {id:playerId}, {name:p.name,pos:p.pos,matches:p.matches,goals:p.goals,yellow:p.yellow,red:p.red,photo:p.photo});
+    renderAdminPlayersList(teamId); renderTeams(); renderScorers(); renderDiscipline();
+    document.getElementById('edit-player-label').textContent = p.name;
+    document.getElementById('edit-player-card').style.display='none';
+    fileEl.value='';
+    logAction('edit',`Изменён игрок: ${oldName} (${t.name})`, {entity:'player',id:playerId,teamId});
+    showSuccess('Игрок сохранён!');
+  } catch(e) { showError('Ошибка: '+e.message); }
+  hideLoader();
 }
 
 // ===================== SEARCH =====================
@@ -2580,7 +2938,7 @@ function onPlayerSearch(q) {
   if(!results.length) {
     drop.innerHTML = '<div class="search-result-item"><span class="search-result-meta">Ничего не найдено</span></div>';
   } else {
-    const posEmoji = {Вратарь:'🧤',Защитник:'🛡️',Полузащитник:'🎯',Нападающий:'⚡'};
+    const posEmoji = {Вратарь:'🧤',Защитник:'🛡️',Нападающий:'⚡',Полузащитник:'🎯',Президент:'👑',Тренер:'📋'};
     drop.innerHTML = results.slice(0,8).map(({t,p}) => `
       <div class="search-result-item" onclick="openTeamModal(${t.id});setTimeout(()=>openPlayerModal(${t.id},${p.id}),120);document.getElementById('player-search').value='';document.getElementById('search-drop').classList.remove('open')">
         <div class="scorer-photo">${p.photo ? `<img src="${p.photo}">` : (posEmoji[p.pos]||'👤')}</div>
@@ -2607,8 +2965,28 @@ function getAllPlayers() {
 }
 
 function renderScorers() {
-  const all = getAllPlayers().filter(p => p.goals > 0).sort((a,b) => b.goals - a.goals || b.assists - a.assists);
-  const posEmoji = {Вратарь:'🧤',Защитник:'🛡️',Полузащитник:'🎯',Нападающий:'⚡'};
+  // Compute live stats from all result events
+  const pMap = {}; // key: playerId
+  teams.forEach(t => t.players.forEach(p => {
+    pMap[`${p.name}||${t.name}`] = {...p, teamName:t.name, teamId:t.id, liveGoals:0, liveAssists:0};
+  }));
+  results.forEach(r => {
+    (r.events||[]).forEach(e => {
+      const key = `${e.playerName}||${e.teamName}`;
+      if(pMap[key]) {
+        if(e.type==='goal') pMap[key].liveGoals++;
+        if(e.assistName) {
+          const aKey = `${e.assistName}||${e.teamName}`;
+          if(pMap[aKey]) pMap[aKey].liveAssists++;
+        }
+      }
+    });
+  });
+  const all = Object.values(pMap)
+    .map(p => ({...p, goals: results.length ? p.liveGoals : p.goals, assists: results.length ? p.liveAssists : (p.assists||0)}))
+    .filter(p => p.goals > 0)
+    .sort((a,b) => b.goals - a.goals || b.assists - a.assists);
+  const posEmoji = {Вратарь:'🧤',Защитник:'🛡️',Нападающий:'⚡',Полузащитник:'🎯',Президент:'👑',Тренер:'📋'};
   const el = document.getElementById('scorers-list');
   if(!el) return;
   el.innerHTML = all.slice(0,10).map((p,i) => {
@@ -2633,10 +3011,24 @@ function renderScorers() {
 }
 
 function renderDiscipline() {
-  const all = getAllPlayers()
+  const pMap = {};
+  teams.forEach(t => t.players.forEach(p => {
+    pMap[`${p.name}||${t.name}`] = {...p, teamName:t.name, teamId:t.id, liveYellow:0, liveRed:0};
+  }));
+  results.forEach(r => {
+    (r.events||[]).forEach(e => {
+      const key = `${e.playerName}||${e.teamName}`;
+      if(pMap[key]) {
+        if(e.type==='yellow') pMap[key].liveYellow++;
+        if(e.type==='red')    pMap[key].liveRed++;
+      }
+    });
+  });
+  const all = Object.values(pMap)
+    .map(p => ({...p, yellow: results.length ? p.liveYellow : p.yellow, red: results.length ? p.liveRed : p.red}))
     .filter(p => p.yellow > 0 || p.red > 0)
-    .sort((a,b) => (b.red*3 + b.yellow) - (a.red*3 + a.yellow));
-  const posEmoji = {Вратарь:'🧤',Защитник:'🛡️',Полузащитник:'🎯',Нападающий:'⚡'};
+    .sort((a,b) => (b.red*3+b.yellow) - (a.red*3+a.yellow));
+  const posEmoji = {Вратарь:'🧤',Защитник:'🛡️',Нападающий:'⚡',Полузащитник:'🎯',Президент:'👑',Тренер:'📋'};
   const el = document.getElementById('discipline-list');
   if(!el) return;
   el.innerHTML = all.slice(0,10).map((p,i) => `
@@ -2665,7 +3057,120 @@ function switchStatsTab(tab, btn) {
   }
 }
 
-// ===================== PHOTO HELPERS =====================
+// ===================== AUTO STATS SYNC =====================
+// Called after any protocol change — recalculates everything from results
+async function autoSyncStats() {
+  // 1. Build stats map from ALL results/events
+  // map: playerName+teamName -> {goals, assists, yellow, red, matches (set of resultIds)}
+  const pStats = {}; // key: `${playerName}||${teamName}`
+  const teamGoals = {}; // teamName -> total goals scored
+
+  results.forEach(r => {
+    const matchPlayers = new Set(); // players who appeared in this match
+
+    (r.events || []).forEach(e => {
+      const key = `${e.playerName}||${e.teamName}`;
+      if(!pStats[key]) pStats[key] = {goals:0,assists:0,yellow:0,red:0,matches:new Set()};
+      pStats[key].matches.add(r.id);
+      matchPlayers.add(key);
+
+      if(e.type === 'goal') {
+        pStats[key].goals++;
+        teamGoals[e.teamName] = (teamGoals[e.teamName]||0) + 1;
+        if(e.assistName) {
+          const aKey = `${e.assistName}||${e.teamName}`;
+          if(!pStats[aKey]) pStats[aKey] = {goals:0,assists:0,yellow:0,red:0,matches:new Set()};
+          pStats[aKey].assists++;
+          pStats[aKey].matches.add(r.id);
+        }
+      }
+      if(e.type === 'yellow') pStats[key].yellow++;
+      if(e.type === 'red')    pStats[key].red++;
+      if(e.type === 'sub' && e.subOutName) {
+        const outKey = `${e.subOutName}||${e.teamName}`;
+        if(!pStats[outKey]) pStats[outKey] = {goals:0,assists:0,yellow:0,red:0,matches:new Set()};
+        pStats[outKey].matches.add(r.id);
+      }
+    });
+  });
+
+  // 2. Update player stats in teams array + DB
+  const updatePromises = [];
+  teams.forEach(t => {
+    t.players.forEach(p => {
+      if(['Президент','Тренер'].includes(p.pos)) return;
+      const key = `${p.name}||${t.name}`;
+      const s = pStats[key];
+      if(!s) return; // no events for this player yet
+      const newMatches = s.matches.size;
+      const newGoals   = s.goals;
+      const newAssists = s.assists;
+      const newYellow  = s.yellow;
+      const newRed     = s.red;
+      // Only update if changed
+      if(p.matches !== newMatches || p.goals !== newGoals ||
+         (p.assists||0) !== newAssists || p.yellow !== newYellow || p.red !== newRed) {
+        p.matches = newMatches;
+        p.goals   = newGoals;
+        p.assists = newAssists;
+        p.yellow  = newYellow;
+        p.red     = newRed;
+        updatePromises.push(
+          sbPatch('players', {id:p.id}, {
+            matches:newMatches, goals:newGoals,
+            yellow:newYellow, red:newRed
+          }).catch(()=>{})
+        );
+      }
+    });
+  });
+
+  // 3. Update standings (W/D/L/Pts) from results
+  const standMap = {};
+  const ensureSt = name => {
+    if(!standMap[name]) standMap[name] = {team:name,p:0,w:0,d:0,l:0,pts:0};
+  };
+  results.forEach(r => {
+    ensureSt(r.team1); ensureSt(r.team2);
+    const s1 = standMap[r.team1], s2 = standMap[r.team2];
+    s1.p++; s2.p++;
+    if(r.g1 > r.g2)      { s1.w++; s1.pts+=3; s2.l++; }
+    else if(r.g1 < r.g2) { s2.w++; s2.pts+=3; s1.l++; }
+    else                  { s1.d++; s2.d++; s1.pts++; s2.pts++; }
+  });
+
+  for(const row of Object.values(standMap)) {
+    const existing = standings.find(s => s.team === row.team);
+    if(existing) {
+      existing.p=row.p; existing.w=row.w; existing.d=row.d; existing.l=row.l; existing.pts=row.pts;
+      updatePromises.push(
+        sbPatch('standings', {id:existing.id}, {p:row.p,w:row.w,d:row.d,l:row.l,pts:row.pts}).catch(()=>{})
+      );
+    }
+  }
+
+  // 4. Update hero stats on main page
+  const totalGoals   = results.reduce((s,r) => s + (r.g1||0) + (r.g2||0), 0);
+  const totalMatches = results.length;
+  const totalPlayers = teams.reduce((s,t) => s + t.players.length, 0);
+  const totalTeams   = teams.length;
+  heroStats = {teams:totalTeams, matches:totalMatches, players:totalPlayers, goals:totalGoals};
+  updatePromises.push(
+    sbSetSetting('hero_stats', JSON.stringify(heroStats)).catch(()=>{})
+  );
+
+  await Promise.all(updatePromises);
+
+  // 5. Re-render everything
+  renderHeroStats();
+  renderStandings();
+  renderAdminStandingsEdit();
+  renderScorers();
+  renderDiscipline();
+  renderTeams();
+}
+
+
 function fileToBase64(file) {
   return new Promise((res,rej) => {
     const r = new FileReader();
@@ -2719,19 +3224,19 @@ window.addEventListener('hashchange', () => {
 });
 
 // ===================== ACTION LOG =====================
-function logAction(type, description, undoData) {
+// ref: { entity: 'player'|'team'|'match'|'result', id, teamId? }
+function logAction(type, description, ref) {
   const entry = {
     id: Date.now(),
     time: new Date().toLocaleString('ru-RU'),
     type, description,
-    undoData: undoData || null
+    ref: ref || null
   };
   actionLog.unshift(entry);
   if(actionLog.length > 50) actionLog = actionLog.slice(0, 50);
   actionHistory.unshift(entry);
   if(actionHistory.length > 20) actionHistory = actionHistory.slice(0, 20);
-  saveData('bfl_action_log', actionLog);
-  saveData('bfl_action_history', actionHistory);
+  sbSetSetting('action_log', JSON.stringify(actionLog)).catch(()=>{});
   renderActionLog();
 }
 
@@ -2743,46 +3248,108 @@ function renderActionLog() {
     return;
   }
   const icons = {add:'➕',edit:'✏️',delete:'🗑️',result:'⚽',match:'📅',team:'🏟️',settings:'⚙️',logo:'🖼️'};
-  el.innerHTML = actionLog.map(e => `
-    <div style="display:flex;align-items:flex-start;gap:0.75rem;padding:0.6rem 0.75rem;background:var(--navy-light);border:1px solid var(--border);border-radius:8px">
+  el.innerHTML = actionLog.map(e => {
+    const ref = e.ref;
+    let editBtn = '', delBtn = '';
+    if(ref && e.type !== 'delete') {
+      if(ref.entity === 'player' && ref.teamId && ref.id) {
+        editBtn = `<button class="btn-sm btn-sm-green" onclick="logEditPlayer(${ref.teamId},${ref.id})" title="Редактировать">✏️</button>`;
+        delBtn  = `<button class="btn-sm" onclick="logDeletePlayer(${ref.teamId},${ref.id},${e.id})" title="Удалить">🗑️</button>`;
+      } else if(ref.entity === 'team' && ref.id) {
+        editBtn = `<button class="btn-sm btn-sm-green" onclick="logEditTeam(${ref.id})" title="Редактировать">✏️</button>`;
+        delBtn  = `<button class="btn-sm" onclick="deleteTeam(${ref.id})" title="Удалить">🗑️</button>`;
+      } else if(ref.entity === 'match' && ref.id) {
+        delBtn  = `<button class="btn-sm" onclick="logDeleteMatch('${ref.id}',${e.id})" title="Удалить матч">🗑️</button>`;
+      } else if(ref.entity === 'result' && ref.id) {
+        editBtn = `<button class="btn-sm btn-sm-green" onclick="logEditResult('${ref.id}')" title="Открыть протокол">✏️</button>`;
+        delBtn  = `<button class="btn-sm" onclick="deleteResult('${ref.id}')" title="Удалить">🗑️</button>`;
+      }
+    }
+    const hasActions = editBtn || delBtn;
+    return `
+    <div style="display:flex;align-items:center;gap:0.75rem;padding:0.6rem 0.75rem;background:var(--navy-light);border:1px solid var(--border);border-radius:8px">
       <span style="font-size:1.1rem;flex-shrink:0">${icons[e.type]||'•'}</span>
       <div style="flex:1;min-width:0">
         <div style="font-size:0.82rem">${e.description}</div>
         <div style="font-size:0.65rem;color:var(--grey);margin-top:2px">${e.time}</div>
       </div>
-    </div>`).join('');
+      ${hasActions ? `<div style="display:flex;gap:4px;flex-shrink:0">${editBtn}${delBtn}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+// Journal action helpers
+function logEditPlayer(teamId, playerId) {
+  showAdminTab_byId('tab-players');
+  setTimeout(() => {
+    const sel = document.getElementById('p-team');
+    if(sel) { sel.value = teamId; renderAdminPlayersList(teamId); }
+    setTimeout(() => openEditPlayer(teamId, playerId), 150);
+  }, 100);
+}
+
+function logEditTeam(teamId) {
+  showAdminTab_byId('tab-teams');
+  setTimeout(() => editTeam(teamId), 100);
+}
+
+function logEditResult(resultId) {
+  showAdminTab_byId('tab-results');
+  setTimeout(() => openProtocolEditor(resultId), 100);
+}
+
+async function logDeletePlayer(teamId, playerId, logEntryId) {
+  await deletePlayer(teamId, playerId);
+  // remove from log
+  actionLog = actionLog.filter(e => e.id !== logEntryId);
+  sbSetSetting('action_log', JSON.stringify(actionLog)).catch(()=>{});
+  renderActionLog();
+}
+
+async function logDeleteMatch(matchId, logEntryId) {
+  await deleteUpcoming(matchId);
+  actionLog = actionLog.filter(e => e.id !== logEntryId);
+  sbSetSetting('action_log', JSON.stringify(actionLog)).catch(()=>{});
+  renderActionLog();
+}
+
+function showAdminTab_byId(tabId) {
+  document.querySelectorAll('.admin-content').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+  const tab = document.getElementById(tabId);
+  if(tab) tab.classList.add('active');
+  document.querySelectorAll('.admin-tab').forEach(btn => {
+    if(btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(tabId)) {
+      btn.classList.add('active');
+    }
+  });
+  if(tabId === 'tab-teams') renderAdminTeamsList();
+  if(tabId === 'tab-settings') initSettingsTab();
 }
 
 function undoLastAction() {
-  if(!actionHistory.length) { alert('Нет действий для отмены'); return; }
-  const last = actionHistory[0];
-  if(!last.undoData) { alert('Это действие нельзя отменить'); return; }
-  const u = last.undoData;
-  if(u.type === 'teams') { teams = u.data; saveData('bfl_teams', teams); renderTeams(); renderScorers(); renderDiscipline(); renderAdminPlayersList(); renderAdminTeamsList(); }
-  if(u.type === 'upcoming') { upcoming = u.data; saveData('bfl_upcoming', upcoming); renderSchedule(); renderAdminUpcoming(); }
-  if(u.type === 'results') { results = u.data; saveData('bfl_results', results); renderResults(); renderAdminResults(); }
-  if(u.type === 'standings') { standings = u.data; saveData('bfl_standings', standings); renderStandings(); renderAdminStandings(); }
-  actionHistory.shift();
-  actionLog.unshift({id:Date.now(),time:new Date().toLocaleString('ru-RU'),type:'edit',description:`↩ Отменено: ${last.description}`,undoData:null});
-  saveData('bfl_action_history', actionHistory);
-  saveData('bfl_action_log', actionLog);
-  renderActionLog();
-  alert(`Отменено: ${last.description}`);
+  alert('Функция отмены недоступна при работе с облачной базой данных.\nДля исправления ошибок используйте редактирование данных напрямую.');
 }
 
 function clearLog() {
   if(!confirm('Очистить журнал?')) return;
   actionLog = []; actionHistory = [];
-  saveData('bfl_action_log', []); saveData('bfl_action_history', []);
+  sbSetSetting('action_log', '[]').catch(()=>{});
   renderActionLog();
 }
 
 // ===================== HERO STATS =====================
 function renderHeroStats() {
-  document.getElementById('hstat-teams').textContent = heroStats.teams;
-  document.getElementById('hstat-matches').textContent = heroStats.matches;
-  document.getElementById('hstat-players').textContent = heroStats.players;
-  document.getElementById('hstat-goals').textContent = heroStats.goals;
+  // Always compute from real data if available
+  const totalGoals   = results.reduce((s,r) => s+(r.g1||0)+(r.g2||0), 0);
+  const totalMatches = results.length;
+  const totalPlayers = teams.reduce((s,t) => s+t.players.length, 0);
+  const totalTeams   = teams.length;
+  // Use computed if data exists, otherwise fall back to heroStats setting
+  document.getElementById('hstat-teams').textContent   = totalTeams   || heroStats.teams;
+  document.getElementById('hstat-matches').textContent = totalMatches || heroStats.matches;
+  document.getElementById('hstat-players').textContent = totalPlayers || heroStats.players;
+  document.getElementById('hstat-goals').textContent   = totalGoals   || heroStats.goals;
 }
 
 function initHeroStatsForm() {
@@ -2792,17 +3359,21 @@ function initHeroStatsForm() {
   document.getElementById('hs-goals').value = heroStats.goals;
 }
 
-function saveHeroStats() {
+async function saveHeroStats() {
   heroStats = {
     teams: parseInt(document.getElementById('hs-teams').value)||0,
     matches: parseInt(document.getElementById('hs-matches').value)||0,
     players: parseInt(document.getElementById('hs-players').value)||0,
     goals: parseInt(document.getElementById('hs-goals').value)||0,
   };
-  saveData('bfl_hero_stats', heroStats);
-  renderHeroStats();
-  logAction('settings','Обновлена статистика на главной');
-  alert('Сохранено!');
+  showLoader('Сохранение...');
+  try {
+    await sbSetSetting('hero_stats', JSON.stringify(heroStats));
+    renderHeroStats();
+    logAction('settings','Обновлена статистика на главной');
+    showSuccess('Сохранено!');
+  } catch(e) { showError('Ошибка: '+e.message); }
+  hideLoader();
 }
 
 // ===================== LEAGUE LOGO =====================
@@ -2818,37 +3389,42 @@ function applyLeagueLogo() {
   }
 }
 
-function saveLeagueLogo() {
+async function saveLeagueLogo() {
   const urlVal = document.getElementById('league-logo-url').value.trim();
-  if(urlVal) {
-    leagueLogo = urlVal;
-    saveData('bfl_league_logo', leagueLogo);
+  const fileEl = document.getElementById('league-logo-file');
+  showLoader('Загрузка логотипа...');
+  try {
+    if(urlVal) {
+      leagueLogo = urlVal;
+    } else if(fileEl._croppedData) {
+      leagueLogo = await uploadToStorage('logos', 'league/logo', fileEl._croppedData);
+      fileEl._croppedData = null;
+    } else if(fileEl.files[0]) {
+      const b64 = await fileToBase64(fileEl.files[0]);
+      leagueLogo = await uploadToStorage('logos', 'league/logo', b64);
+    } else {
+      hideLoader();
+      alert('Укажите URL или загрузите файл');
+      return;
+    }
+    await sbSetSetting('league_logo', leagueLogo);
     applyLeagueLogo();
-    logAction('logo','Обновлён логотип лиги (URL)');
-    alert('Логотип сохранён!');
-    return;
-  }
-  const file = document.getElementById('league-logo-file').files[0];
-  if(file) {
-    const reader = new FileReader();
-    reader.onload = e => {
-      leagueLogo = e.target.result;
-      saveData('bfl_league_logo', leagueLogo);
-      applyLeagueLogo();
-      logAction('logo','Обновлён логотип лиги (файл)');
-      alert('Логотип сохранён!');
-    };
-    reader.readAsDataURL(file);
-    return;
-  }
-  alert('Укажите URL или загрузите файл');
+    logAction('logo','Обновлён логотип лиги');
+    showSuccess('Логотип сохранён!');
+  } catch(e) { showError('Ошибка: '+e.message); }
+  hideLoader();
 }
 
-function resetLeagueLogo() {
-  leagueLogo = null;
-  saveData('bfl_league_logo', null);
-  applyLeagueLogo();
-  logAction('logo','Логотип лиги сброшен');
+async function resetLeagueLogo() {
+  showLoader('Сброс...');
+  try {
+    leagueLogo = null;
+    await sbSetSetting('league_logo', '');
+    applyLeagueLogo();
+    logAction('logo','Логотип лиги сброшен');
+    showSuccess('Логотип сброшен');
+  } catch(e) { showError('Ошибка: '+e.message); }
+  hideLoader();
 }
 
 // ===================== TEAMS ADMIN =====================
@@ -2898,39 +3474,56 @@ function saveTeam() {
   const logoUrl = document.getElementById('nt-logo-url').value.trim();
   const editId = parseInt(document.getElementById('nt-edit-id').value);
   if(!name) { alert('Введите название'); return; }
-  const file = document.getElementById('nt-logo-file').files[0];
-  const undoSnapshot = JSON.parse(JSON.stringify(teams));
-  const doSave = (logo) => {
-    if(editId) {
-      const t = teams.find(x=>x.id===editId);
-      if(t) { const old=t.name; t.name=name; t.emoji=emoji; if(logo!==undefined) t.logo=logo; logAction('edit',`Изменена команда: ${old} → ${name}`,{type:'teams',data:undoSnapshot}); }
-    } else {
-      const newId = Math.max(...teams.map(t=>t.id),0)+1;
-      teams.push({id:newId,name,emoji,logo:logo||null,players:[]});
-      logAction('add',`Добавлена команда: ${name}`,{type:'teams',data:undoSnapshot});
-    }
-    saveData('bfl_teams', teams);
-    renderTeams(); renderAdminTeamsList();
-    populateTeamSelects();
-    cancelTeamEdit();
+  const fileEl = document.getElementById('nt-logo-file');
+  showLoader('Сохранение команды...');
+  const doSave = async (logoData) => {
+    try {
+      let logo = logoUrl || null;
+      if(logoData) {
+        // upload to storage
+        logo = await uploadToStorage('logos', `teams/t_${editId||Date.now()}`, logoData);
+      }
+      if(editId) {
+        const t = teams.find(x=>x.id===editId);
+        if(t) {
+          const old=t.name; t.name=name; t.emoji=emoji;
+          if(logo !== null) t.logo = logo;
+          await sbPatch('teams', {id:editId}, {name, emoji, logo: t.logo});
+          logAction('edit',`Изменена команда: ${old} → ${name}`, {entity:'team',id:editId});
+        }
+      } else {
+        const [row] = await sbPost('teams', {name, emoji, logo});
+        teams.push({id:row.id,name,emoji,logo:logo||null,players:[]});
+        logAction('add',`Добавлена команда: ${name}`, {entity:'team',id:row.id});
+      }
+      renderTeams(); renderAdminTeamsList(); populateTeamSelects();
+      cancelTeamEdit();
+      showSuccess(editId ? 'Команда обновлена!' : 'Команда добавлена!');
+    } catch(e) { showError('Ошибка: '+e.message); }
+    hideLoader();
   };
-  if(file) {
-    const reader = new FileReader();
-    reader.onload = e => doSave(e.target.result);
-    reader.readAsDataURL(file);
+  if(fileEl._croppedData) {
+    const d = fileEl._croppedData; fileEl._croppedData = null;
+    doSave(d);
+  } else if(fileEl.files[0]) {
+    fileToBase64(fileEl.files[0]).then(b64 => doSave(b64));
   } else {
-    doSave(logoUrl || undefined);
+    doSave(null);
   }
 }
 
-function deleteTeam(id) {
+async function deleteTeam(id) {
   const t = teams.find(x=>x.id===id);
   if(!t || !confirm(`Удалить команду «${t.name}»? Все игроки будут удалены.`)) return;
-  const undoSnapshot = JSON.parse(JSON.stringify(teams));
-  logAction('delete',`Удалена команда: ${t.name}`,{type:'teams',data:undoSnapshot});
-  teams = teams.filter(x=>x.id!==id);
-  saveData('bfl_teams', teams);
-  renderTeams(); renderAdminTeamsList(); populateTeamSelects();
+  showLoader('Удаление...');
+  try {
+    await sbDelete('teams', {id});
+    logAction('delete',`Удалена команда: ${t.name}`);
+    teams = teams.filter(x=>x.id!==id);
+    renderTeams(); renderAdminTeamsList(); populateTeamSelects();
+    showSuccess('Команда удалена!');
+  } catch(e) { showError('Ошибка: '+e.message); }
+  hideLoader();
 }
 
 // ===================== INIT SETTINGS TAB =====================
@@ -2939,18 +3532,238 @@ function initSettingsTab() {
   applyLeagueLogo();
 }
 
+// ===================== ROLE STAT TOGGLE =====================
+function toggleStatFields(pos) {
+  const isNonPlaying = ['Президент','Тренер'].includes(pos);
+  document.querySelectorAll('.stat-only-field').forEach(el => {
+    el.style.display = isNonPlaying ? 'none' : '';
+  });
+}
+
+// ===================== IMAGE CROP =====================
+// New approach: fixed crop box in center, IMAGE moves/scales under it
+let _cropTarget = null;
+let _cropScale = 1;
+let _cropMinScale = 1;
+let _cropImgOffset = {x:0, y:0}; // offset of image top-left from container
+let _cropDrag = false;
+let _cropDragStart = {x:0,y:0};
+let _cropOffsetStart = {x:0,y:0};
+const CROP_SIZE = 220;
+
+function openCropModal(target) {
+  const fileInput = document.getElementById(target === 'league-logo' ? 'league-logo-file' : 'nt-logo-file');
+  const file = fileInput.files[0];
+  if(!file) return;
+  _cropTarget = target;
+
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = document.getElementById('crop-img');
+    img.onload = () => {
+      const containerW = Math.min(420, window.innerWidth - 48);
+      const containerH = containerW;
+      const container = document.getElementById('crop-container');
+      container.style.width = containerW + 'px';
+      container.style.height = containerH + 'px';
+
+      // Fixed crop box in center
+      const box = document.getElementById('crop-box');
+      box.style.width = CROP_SIZE + 'px';
+      box.style.height = CROP_SIZE + 'px';
+      box.style.left = ((containerW - CROP_SIZE) / 2) + 'px';
+      box.style.top = ((containerH - CROP_SIZE) / 2) + 'px';
+      box.style.cursor = 'default';
+
+      // Scale image to cover the crop box fully
+      const minScale = Math.max(CROP_SIZE / img.naturalWidth, CROP_SIZE / img.naturalHeight);
+      _cropMinScale = minScale;
+      _cropScale = minScale;
+
+      // Set slider
+      const slider = document.getElementById('crop-scale');
+      slider.min = minScale;
+      slider.max = minScale * 4;
+      slider.step = minScale * 0.01;
+      slider.value = minScale;
+
+      // Center image over crop box
+      _applyCropTransform(img, containerW, containerH);
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+  document.getElementById('crop-modal').classList.add('open');
+}
+
+function _applyCropTransform(img, containerW, containerH) {
+  img = img || document.getElementById('crop-img');
+  containerW = containerW || document.getElementById('crop-container').clientWidth;
+  containerH = containerH || document.getElementById('crop-container').clientHeight;
+  const iw = img.naturalWidth * _cropScale;
+  const ih = img.naturalHeight * _cropScale;
+  // Clamp offset so image always covers the crop box
+  const boxLeft = (containerW - CROP_SIZE) / 2;
+  const boxTop = (containerH - CROP_SIZE) / 2;
+  const minX = boxLeft + CROP_SIZE - iw;
+  const maxX = boxLeft;
+  const minY = boxTop + CROP_SIZE - ih;
+  const maxY = boxTop;
+  _cropImgOffset.x = Math.max(minX, Math.min(maxX, _cropImgOffset.x));
+  _cropImgOffset.y = Math.max(minY, Math.min(maxY, _cropImgOffset.y));
+  // On first render, center image
+  if(!img._cropInitDone) {
+    _cropImgOffset.x = boxLeft - (iw - CROP_SIZE) / 2;
+    _cropImgOffset.y = boxTop - (ih - CROP_SIZE) / 2;
+    img._cropInitDone = true;
+  }
+  img.style.position = 'absolute';
+  img.style.left = _cropImgOffset.x + 'px';
+  img.style.top = _cropImgOffset.y + 'px';
+  img.style.width = iw + 'px';
+  img.style.height = ih + 'px';
+}
+
+function updateCropScale() {
+  _cropScale = parseFloat(document.getElementById('crop-scale').value);
+  const img = document.getElementById('crop-img');
+  img._cropInitDone = true; // keep position, just re-clamp
+  _applyCropTransform(img);
+}
+
+// Image drag
+(function() {
+  function getXY(e) {
+    const t = e.touches ? e.touches[0] : e;
+    return {x: t.clientX, y: t.clientY};
+  }
+  document.addEventListener('mousedown', e => {
+    if(e.target.id === 'crop-img') {
+      _cropDrag = true;
+      const p = getXY(e);
+      _cropDragStart = p;
+      _cropOffsetStart = {..._cropImgOffset};
+      e.preventDefault();
+    }
+  });
+  document.addEventListener('touchstart', e => {
+    if(e.target.id === 'crop-img') {
+      _cropDrag = true;
+      const p = getXY(e);
+      _cropDragStart = p;
+      _cropOffsetStart = {..._cropImgOffset};
+    }
+  }, {passive:true});
+  function onMove(e) {
+    if(!_cropDrag) return;
+    const p = getXY(e);
+    _cropImgOffset.x = _cropOffsetStart.x + (p.x - _cropDragStart.x);
+    _cropImgOffset.y = _cropOffsetStart.y + (p.y - _cropDragStart.y);
+    _applyCropTransform();
+  }
+  document.addEventListener('mousemove', onMove);
+  document.addEventListener('touchmove', onMove, {passive:true});
+  document.addEventListener('mouseup', () => _cropDrag = false);
+  document.addEventListener('touchend', () => _cropDrag = false);
+})();
+
+function applyCrop() {
+  const img = document.getElementById('crop-img');
+  const box = document.getElementById('crop-box');
+  const container = document.getElementById('crop-container');
+
+  // box is fixed center; img offset is in _cropImgOffset
+  const boxLeft = parseFloat(box.style.left);
+  const boxTop = parseFloat(box.style.top);
+  const boxSize = CROP_SIZE;
+
+  // Source coords in natural image pixels
+  const scaleX = img.naturalWidth / (img.naturalWidth * _cropScale);
+  const scaleY = img.naturalHeight / (img.naturalHeight * _cropScale);
+  const sx = (boxLeft - _cropImgOffset.x) / _cropScale * (img.naturalWidth / img.naturalWidth);
+  const sy = (boxTop - _cropImgOffset.y) / _cropScale * (img.naturalHeight / img.naturalHeight);
+  // simpler:
+  const srcX = (boxLeft - _cropImgOffset.x) / _cropScale;
+  const srcY = (boxTop - _cropImgOffset.y) / _cropScale;
+  const srcW = boxSize / _cropScale;
+  const srcH = boxSize / _cropScale;
+
+  const canvas = document.createElement('canvas');
+  canvas.width = 300; canvas.height = 300;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(img, srcX, srcY, srcW, srcH, 0, 0, 300, 300);
+  const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
+
+  if(_cropTarget === 'league-logo') {
+    document.getElementById('league-logo-img').src = dataUrl;
+    document.getElementById('league-logo-preview').style.display = 'block';
+    document.getElementById('league-logo-url').value = '';
+    // store for saveLeagueLogo
+    document.getElementById('league-logo-file')._croppedData = dataUrl;
+  } else {
+    document.getElementById('nt-logo-img').src = dataUrl;
+    document.getElementById('nt-logo-preview').style.display = 'block';
+    document.getElementById('nt-logo-url').value = '';
+    document.getElementById('nt-logo-file')._croppedData = dataUrl;
+  }
+  closeCropModal();
+}
+
+function closeCropModal() {
+  document.getElementById('crop-modal').classList.remove('open');
+  const img = document.getElementById('crop-img');
+  if(img) img._cropInitDone = false;
+}
+
 // ===================== EXTENDED renderTeams with logo support =====================
 
-renderSchedule();
-renderTeams();
-renderStandings();
-renderResults();
-renderScorers();
-renderDiscipline();
-renderHeroStats();
-applyLeagueLogo();
-renderActionLog();
-initNavigation();
+
+// ===================== INIT =====================
+async function init() {
+  await loadAllData();
+  renderSchedule();
+  renderTeams();
+  renderStandings();
+  renderResults();
+  renderScorers();
+  renderDiscipline();
+  renderHeroStats();
+  applyLeagueLogo();
+  renderActionLog();
+  initNavigation();
+  // If admin is already shown (fast hash routing), refresh its data
+  if(window.location.hash === '#admin' && sessionStorage.getItem('bfl_admin')) {
+    showAdminPanel();
+  }
+}
+
+init();
 </script>
+
+<!-- ===== IMAGE CROP MODAL ===== -->
+<div class="modal-overlay" id="crop-modal" style="z-index:2000">
+  <div class="modal" style="max-width:500px;width:95vw">
+    <div class="modal-header">
+      <div class="modal-title">✂️ Обрезать изображение</div>
+      <button class="modal-close" onclick="closeCropModal()">✕</button>
+    </div>
+    <div class="modal-body" style="padding:1rem">
+      <div style="position:relative;overflow:hidden;background:#000;border-radius:8px;user-select:none;touch-action:none" id="crop-container">
+        <img id="crop-img" style="display:block;max-width:100%;transform-origin:top left" draggable="false">
+        <div id="crop-overlay" style="position:absolute;inset:0;pointer-events:none">
+          <div id="crop-box" style="position:absolute;border:2px solid var(--green);box-shadow:0 0 0 9999px rgba(0,0,0,0.55);cursor:move"></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:0.5rem;margin-top:1rem;align-items:center">
+        <label style="font-size:0.75rem;color:var(--grey);flex-shrink:0">Масштаб</label>
+        <input type="range" id="crop-scale" min="0.5" max="3" step="0.01" value="1" style="flex:1" oninput="updateCropScale()">
+      </div>
+      <div style="display:flex;gap:0.75rem;margin-top:1rem">
+        <button class="btn-admin" onclick="applyCrop()">✅ Применить</button>
+        <button class="btn-admin" style="background:var(--navy-light);color:var(--grey)" onclick="closeCropModal()">Отмена</button>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
