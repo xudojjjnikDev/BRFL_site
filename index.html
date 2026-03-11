@@ -1,3769 +1,634 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>БРФЛ — Бронницкая Футбольная Лига</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-:root {
-  --navy: #0a0e1a;
-  --navy-mid: #0f1628;
-  --navy-light: #1a2444;
-  --green: #00e566;
-  --green-dark: #00b84d;
-  --green-dim: rgba(0,229,102,0.12);
-  --white: #ffffff;
-  --grey: #8b9ab8;
-  --grey-light: #c8d4f0;
-  --card: rgba(15,22,40,0.9);
-  --border: rgba(0,229,102,0.2);
-  --gold: #f5c518;
-  --gold-dim: rgba(245,197,24,0.15);
-  --border-gold: rgba(245,197,24,0.3);
-}
-
-* { margin:0; padding:0; box-sizing:border-box; }
-
-html { scroll-behavior: smooth; width: 100%; }
-
-body {
-  font-family: 'Barlow', sans-serif;
-  background: var(--navy);
-  color: var(--white);
-  overflow-x: hidden;
-  width: 100%;
-  max-width: 100vw;
-}
-
-
-/* ========= SCROLLBAR ========= */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--navy); }
-::-webkit-scrollbar-thumb { background: var(--green-dark); border-radius: 3px; }
-
-/* ========= HEADER ========= */
-header {
-  position: fixed; top: 0; left: 0; right: 0;
-  z-index: 1000;
-  background: rgba(10,14,26,0.95);
-  backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--border);
-  padding: 0 1rem;
-  height: 64px;
-  display: flex; align-items: center; justify-content: space-between;
-}
-
-.logo {
-  display: flex; align-items: center; gap: 12px;
-  text-decoration: none;
-}
-
-.logo-icon {
-  width: 40px; height: 40px;
-  background: linear-gradient(135deg, var(--green), var(--green-dark));
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 20px;
-  box-shadow: 0 0 20px rgba(0,229,102,0.4);
-  flex-shrink: 0;
-  overflow: hidden;
-}
-
-.logo-text {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 800;
-  font-size: 1.1rem;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  line-height: 1.2;
-  color: var(--white);
-}
-
-.logo-text span { color: var(--green); display: block; font-size: 0.65rem; font-weight: 600; letter-spacing: 0.15em; }
-
-nav { display: flex; align-items: center; gap: 0.25rem; }
-
-nav a {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 700; font-size: 0.85rem;
-  letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--grey-light);
-  text-decoration: none;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  transition: all 0.2s;
-  position: relative;
-}
-
-nav a:hover, nav a.active { color: var(--green); background: var(--green-dim); }
-
-.burger {
-  display: none;
-  flex-direction: column; justify-content: center; gap: 5px;
-  cursor: pointer;
-  padding: 8px 10px;
-  background: var(--green-dim);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  transition: background 0.2s, border-color 0.2s;
-}
-
-.burger:hover {
-  background: rgba(0,229,102,0.22);
-  border-color: rgba(0,229,102,0.5);
-}
-
-.burger span {
-  width: 22px; height: 2px;
-  background: var(--green);
-  border-radius: 2px;
-  transition: all 0.3s;
-  display: block;
-}
-
-.burger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-.burger.open span:nth-child(2) { opacity: 0; }
-.burger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
-
-/* ========= HERO ========= */
-.hero {
-  min-height: 100vh;
-  display: flex; align-items: center; justify-content: center;
-  position: relative;
-  overflow: hidden;
-  padding: 7rem 1rem 4rem;
-  width: 100%; box-sizing: border-box;
-}
-
-.hero-bg {
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(ellipse 80% 60% at 50% 120%, rgba(0,229,102,0.18) 0%, transparent 60%),
-    linear-gradient(180deg, #0a0e1a 0%, #0d1530 50%, #0a0e1a 100%);
-}
-
-.field-lines {
-  position: absolute; inset: 0;
-  background-image:
-    repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(0,229,102,0.04) 59px, rgba(0,229,102,0.04) 60px),
-    repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(0,229,102,0.04) 59px, rgba(0,229,102,0.04) 60px);
-}
-
-.hero-circle {
-  position: absolute;
-  width: 600px; height: 600px;
-  border: 1px solid rgba(0,229,102,0.08);
-  border-radius: 50%;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-}
-.hero-circle2 {
-  position: absolute;
-  width: 300px; height: 300px;
-  border: 1px solid rgba(0,229,102,0.06);
-  border-radius: 50%;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.hero-content {
-  position: relative; z-index: 2;
-  text-align: center;
-  max-width: 800px;
-}
-
-.hero-badge {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: var(--green-dim);
-  border: 1px solid var(--border);
-  border-radius: 100px;
-  padding: 0.35rem 1rem;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 700; font-size: 0.75rem;
-  letter-spacing: 0.15em; text-transform: uppercase;
-  color: var(--green);
-  margin-bottom: 1.5rem;
-}
-
-.hero-badge::before { content: '●'; font-size: 8px; animation: blink 1.5s infinite; }
-
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
-
-h1 {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 900;
-  font-size: clamp(2.8rem, 8vw, 6rem);
-  line-height: 0.95;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-  margin-bottom: 1.5rem;
-}
-
-h1 em {
-  font-style: normal;
-  color: var(--green);
-  display: block;
-  text-shadow: 0 0 60px rgba(0,229,102,0.5);
-}
-
-.hero-sub {
-  font-size: 1.1rem;
-  color: var(--grey);
-  margin-bottom: 2.5rem;
-  max-width: 480px; margin-left: auto; margin-right: auto;
-}
-
-.btn-primary {
-  display: inline-flex; align-items: center; gap: 10px;
-  background: var(--green);
-  color: var(--navy);
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 800; font-size: 0.9rem;
-  letter-spacing: 0.1em; text-transform: uppercase;
-  padding: 0.85rem 2rem;
-  border-radius: 8px;
-  text-decoration: none;
-  border: none; cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: 0 4px 30px rgba(0,229,102,0.35);
-}
-
-.btn-primary:hover {
-  background: var(--white);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 40px rgba(0,229,102,0.4);
-}
-
-.hero-stats {
-  display: flex; justify-content: center; gap: 3rem;
-  margin-top: 3.5rem;
-}
-
-.hero-stat-num {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 900; font-size: 2.5rem;
-  color: var(--green); line-height: 1;
-}
-
-.hero-stat-label {
-  font-size: 0.75rem; color: var(--grey);
-  letter-spacing: 0.1em; text-transform: uppercase;
-  margin-top: 4px;
-}
-
-/* ========= SECTIONS ========= */
-section { padding: 5rem 0; width: 100%; box-sizing: border-box; }
-
-.section-header {
-  display: flex; align-items: baseline; gap: 1rem;
-  margin-bottom: 2.5rem;
-}
-
-.section-tag {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 700; font-size: 0.7rem;
-  letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--green);
-  background: var(--green-dim);
-  border: 1px solid var(--border);
-  padding: 0.25rem 0.75rem;
-  border-radius: 4px;
-}
-
-.section-title {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 900; font-size: clamp(1.8rem, 4vw, 2.8rem);
-  text-transform: uppercase; letter-spacing: -0.01em;
-  line-height: 1;
-}
-
-.container { max-width: 1200px; width: 100%; margin: 0 auto; padding: 0 1rem; box-sizing: border-box; }
-.main-site, #admin-section > * { width: 100%; max-width: 100%; }
-
-/* ========= SCHEDULE ========= */
-#schedule { background: var(--navy-mid); }
-
-.matches-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 1rem;
-}
-
-.match-card {
-  background: var(--navy-light);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 1.5rem;
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.2s, border-color 0.2s;
-}
-
-.match-card::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--green), var(--green-dark));
-}
-
-.match-card:hover { transform: translateY(-3px); border-color: rgba(0,229,102,0.5); }
-
-.match-date-row {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 1rem;
-}
-
-.match-date {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 0.75rem; font-weight: 700;
-  letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--green);
-}
-
-.match-venue {
-  font-size: 0.7rem; color: var(--grey);
-}
-
-.match-teams {
-  display: flex; align-items: center;
-  gap: 1rem;
-}
-
-.match-team {
-  flex: 1;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 800; font-size: 1.1rem;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-  line-height: 1.2;
-}
-
-.match-team.away { text-align: right; }
-
-.match-vs {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 900; font-size: 1.4rem;
-  color: var(--green);
-  flex-shrink: 0;
-}
-
-.match-time {
-  display: flex; align-items: center; gap: 6px;
-  margin-top: 1rem;
-  font-size: 0.8rem; color: var(--grey);
-}
-
-/* ========= TEAMS ========= */
-#teams { background: var(--navy); }
-
-.teams-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1rem;
-}
-
-.team-card {
-  background: var(--navy-light);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 1.5rem 1.25rem;
-  cursor: pointer;
-  transition: all 0.2s;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.team-card::after {
-  content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(135deg, var(--green-dim), transparent);
-  opacity: 0;
-  transition: opacity 0.2s;
-}
-
-.team-card:hover {
-  border-color: rgba(0,229,102,0.6);
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
-}
-
-.team-card:hover::after { opacity: 1; }
-
-.team-emblem {
-  width: 64px; height: 64px;
-  border-radius: 50%;
-  margin: 0 auto 1rem;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.8rem;
-  position: relative; z-index: 1;
-}
-
-.team-name {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 800; font-size: 1rem;
-  text-transform: uppercase; letter-spacing: 0.05em;
-  position: relative; z-index: 1;
-}
-
-.team-info {
-  font-size: 0.75rem; color: var(--grey);
-  margin-top: 0.5rem;
-  position: relative; z-index: 1;
-}
-
-.team-arrow {
-  position: relative; z-index: 1;
-  margin-top: 1rem;
-  font-size: 0.7rem; color: var(--green);
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 700; letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-/* ========= TABLE ========= */
-#statistics { background: var(--navy-mid); }
-
-.stat-block {
-  max-width: 720px;
-  margin: 0 auto 2.5rem;
-  width: 100%;
-}
-
-.stat-block-label {
-  font-size: 0.75rem; color: var(--grey);
-  letter-spacing: 0.12em; text-transform: uppercase;
-  margin-bottom: 1rem;
-}
-
-/* keep old stats-layout for scorers panel compatibility */
-.stats-layout { display: block; }
-
-.table-wrap {
-  overflow-x: auto;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  background: var(--navy-light);
-}
-
-table {
-  width: 100%; border-collapse: collapse;
-  font-size: 0.85rem;
-}
-
-thead th {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 700; font-size: 0.7rem;
-  letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--green);
-  padding: 1rem 0.75rem;
-  text-align: left;
-  border-bottom: 1px solid var(--border);
-  white-space: nowrap;
-}
-
-tbody tr {
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-  transition: background 0.15s;
-  cursor: default;
-}
-
-tbody tr:hover { background: var(--green-dim); }
-
-tbody td {
-  padding: 0.85rem 0.75rem;
-  color: var(--grey-light);
-}
-
-tbody td:first-child { color: var(--grey); font-size: 0.8rem; }
-
-.team-rank-1 td:nth-child(2) { color: var(--green); font-weight: 600; }
-
-.pts-col {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 800; font-size: 1rem;
-  color: var(--white) !important;
-}
-
-.pos-badge {
-  width: 24px; height: 24px;
-  border-radius: 50%;
-  display: inline-flex; align-items: center; justify-content: center;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 800; font-size: 0.8rem;
-}
-
-.pos-1 { background: #FFD700; color: #000; }
-.pos-2 { background: #C0C0C0; color: #000; }
-.pos-3 { background: #CD7F32; color: #fff; }
-
-/* ========= RESULTS ========= */
-.results-list { display: flex; flex-direction: column; gap: 0.75rem; }
-
-.result-card {
-  background: var(--navy-light);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 1rem 1.25rem;
-  display: flex; align-items: center; gap: 1rem;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.result-card:hover { border-color: rgba(0,229,102,0.5); background: var(--green-dim); }
-
-.result-date-col {
-  font-size: 0.7rem; color: var(--grey);
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 700; letter-spacing: 0.08em;
-  text-transform: uppercase;
-  min-width: 70px;
-}
-
-.result-teams-col { flex: 1; font-size: 0.85rem; font-weight: 500; }
-
-.result-score {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 900; font-size: 1.3rem;
-  color: var(--green); white-space: nowrap;
-}
-
-.result-details-btn {
-  font-size: 0.65rem; color: var(--green);
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 700; letter-spacing: 0.1em;
-  text-transform: uppercase;
-  border: 1px solid var(--border);
-  padding: 0.3rem 0.6rem; border-radius: 4px;
-  white-space: nowrap;
-}
-
-.result-team-name {
-  display: inline;
-  font-size: 0.82rem;
-  white-space: nowrap;
-  font-weight: 500;
-}
-
-/* ========= MODALS ========= */
-.modal-overlay {
-  position: fixed; inset: 0;
-  background: rgba(5,8,18,0.92);
-  backdrop-filter: blur(8px);
-  z-index: 2000;
-  display: none;
-  align-items: center; justify-content: center;
-  padding: 1rem;
-  overflow-y: auto;
-}
-
-.modal-overlay.open { display: flex; }
-
-.modal {
-  background: var(--navy-mid);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  max-width: 640px; width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
-  position: relative;
-  animation: slideUp 0.25s ease;
-}
-
-.modal-wide { max-width: 760px; }
-
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.modal-header {
-  padding: 1.5rem;
-  border-bottom: 1px solid var(--border);
-  display: flex; justify-content: space-between; align-items: flex-start;
-  position: sticky; top: 0;
-  background: var(--navy-mid);
-  z-index: 10;
-}
-
-.modal-title {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 900; font-size: 1.5rem;
-  text-transform: uppercase; letter-spacing: 0.02em;
-}
-
-.modal-close {
-  width: 32px; height: 32px;
-  border-radius: 6px;
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--grey);
-  cursor: pointer;
-  font-size: 1.2rem;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.15s;
-}
-
-.modal-close:hover { background: var(--green-dim); color: var(--green); border-color: var(--green); }
-
-.modal-body { padding: 1.5rem; }
-
-.players-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 0.75rem;
-}
-
-.player-card {
-  background: var(--navy-light);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 1rem 0.75rem;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.player-card:hover { border-color: rgba(0,229,102,0.6); transform: scale(1.02); }
-
-.player-avatar {
-  width: 52px; height: 52px;
-  border-radius: 50%;
-  margin: 0 auto 0.75rem;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.4rem;
-  background: var(--navy);
-  border: 2px solid var(--border);
-}
-
-.player-name-card {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 700; font-size: 0.85rem;
-  text-transform: uppercase;
-}
-
-.player-pos-card {
-  font-size: 0.7rem; color: var(--grey); margin-top: 3px;
-}
-
-/* Player detail */
-.player-detail-header {
-  display: flex; align-items: center; gap: 1.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.player-detail-avatar {
-  width: 80px; height: 80px;
-  border-radius: 50%;
-  background: var(--navy);
-  border: 2px solid var(--border);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 2.5rem;
-  flex-shrink: 0;
-}
-
-.player-detail-name {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 900; font-size: 1.8rem;
-  text-transform: uppercase; line-height: 1;
-}
-
-.player-detail-pos {
-  font-size: 0.85rem; color: var(--green); margin-top: 4px;
-  font-weight: 500;
-}
-
-.stat-boxes {
-  display: grid; grid-template-columns: repeat(4,1fr);
-  gap: 0.75rem; margin-bottom: 1.5rem;
-}
-
-.stat-box {
-  background: var(--navy-light);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 1rem 0.5rem;
-  text-align: center;
-}
-
-.stat-box-num {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 900; font-size: 2rem;
-  color: var(--green); line-height: 1;
-}
-
-.stat-box-label {
-  font-size: 0.65rem; color: var(--grey);
-  text-transform: uppercase; letter-spacing: 0.1em;
-  margin-top: 4px;
-}
-
-.recent-matches { margin-top: 1.5rem; }
-
-.recent-matches h4 {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 700; font-size: 0.75rem;
-  letter-spacing: 0.15em; text-transform: uppercase;
-  color: var(--green); margin-bottom: 0.75rem;
-}
-
-.recent-match-row {
-  display: flex; justify-content: space-between;
-  padding: 0.6rem 0;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-  font-size: 0.82rem; color: var(--grey-light);
-}
-
-/* Match protocol */
-.protocol-header {
-  text-align: center; margin-bottom: 1.5rem;
-}
-
-.protocol-score {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 900; font-size: 4rem;
-  color: var(--green); line-height: 1;
-}
-
-.protocol-teams {
-  display: flex; justify-content: center; gap: 2rem;
-  margin-top: 0.5rem;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 700; font-size: 1rem;
-  text-transform: uppercase; letter-spacing: 0.05em;
-}
-
-.timeline { margin-top: 1.5rem; }
-
-.timeline h4 {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 700; font-size: 0.75rem;
-  letter-spacing: 0.15em; text-transform: uppercase;
-  color: var(--green); margin-bottom: 1rem;
-}
-
-.timeline-event {
-  display: flex; align-items: center; gap: 1rem;
-  padding: 0.6rem 0;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-  font-size: 0.85rem;
-}
-
-.timeline-min {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 800;
-  color: var(--grey); min-width: 40px;
-  font-size: 0.9rem;
-}
-
-.event-icon { font-size: 1rem; flex-shrink: 0; }
-
-.event-text { color: var(--grey-light); }
-
-/* ========= FOOTER ========= */
-footer {
-  background: var(--navy-mid);
-  border-top: 1px solid var(--border);
-  padding: 2rem;
-  text-align: center;
-  color: var(--grey);
-  font-size: 0.8rem;
-}
-
-footer span { color: var(--green); }
-
-/* ========= ADMIN ========= */
-#admin-section {
-  display: none;
-  min-height: 100vh;
-  padding: 80px 1rem 4rem;
-  background: var(--navy);
-  width: 100%; box-sizing: border-box;
-}
-
-.admin-login {
-  max-width: 400px; margin: 4rem auto;
-  background: var(--navy-mid);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 2.5rem;
-}
-
-.admin-login h2 {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 900; font-size: 1.8rem;
-  text-transform: uppercase; margin-bottom: 0.5rem;
-}
-
-.admin-login p { color: var(--grey); font-size: 0.85rem; margin-bottom: 2rem; }
-
-.form-group { margin-bottom: 1.25rem; }
-
-.form-group label {
-  display: block;
-  font-size: 0.75rem; font-weight: 600;
-  letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--grey); margin-bottom: 0.5rem;
-}
-
-.form-group input, .form-group select {
-  width: 100%;
-  background: var(--navy-light);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 0.75rem 1rem;
-  color: var(--white);
-  font-family: 'Barlow', sans-serif;
-  font-size: 0.9rem;
-  outline: none;
-  transition: border-color 0.2s;
-}
-
-.form-group input:focus, .form-group select:focus {
-  border-color: var(--green);
-}
-
-.form-group select option { background: var(--navy-mid); }
-
-.btn-admin {
-  width: 100%;
-  background: var(--green);
-  color: var(--navy);
-  border: none;
-  border-radius: 8px;
-  padding: 0.85rem;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 800; font-size: 0.9rem;
-  letter-spacing: 0.1em; text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.btn-admin:hover { background: var(--white); }
-
-.login-error {
-  color: #ff4d4d; font-size: 0.8rem;
-  margin-top: 0.75rem; display: none;
-}
-
-.admin-panel { display: none; }
-
-.admin-tabs {
-  display: flex; gap: 0.5rem;
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
-}
-
-.admin-tab {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 700; font-size: 0.8rem;
-  letter-spacing: 0.1em; text-transform: uppercase;
-  padding: 0.5rem 1.25rem;
-  border-radius: 6px;
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--grey-light);
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.admin-tab.active, .admin-tab:hover {
-  background: var(--green-dim);
-  color: var(--green);
-  border-color: var(--green);
-}
-
-.admin-content { display: none; }
-.admin-content.active { display: block; }
-
-.admin-grid {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-}
-
-.admin-card {
-  background: var(--navy-mid);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 1.5rem;
-}
-
-.admin-card h3 {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 800; font-size: 1rem;
-  text-transform: uppercase; letter-spacing: 0.08em;
-  color: var(--green); margin-bottom: 1.25rem;
-}
-
-.admin-list {
-  list-style: none;
-  display: flex; flex-direction: column; gap: 0.5rem;
-  max-height: 480px; overflow-y: auto;
-  padding-right: 4px;
-}
-
-.admin-list::-webkit-scrollbar { width: 4px; }
-.admin-list::-webkit-scrollbar-track { background: var(--navy); border-radius: 2px; }
-.admin-list::-webkit-scrollbar-thumb { background: var(--green-dark); border-radius: 2px; }
-
-.admin-list li {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 0.6rem 0.75rem;
-  background: var(--navy-light);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  font-size: 0.82rem;
-}
-
-.btn-sm {
-  background: transparent;
-  border: 1px solid rgba(255,77,77,0.3);
-  color: #ff8080;
-  padding: 0.2rem 0.6rem;
-  border-radius: 4px;
-  font-size: 0.7rem;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.btn-sm:hover { background: rgba(255,77,77,0.15); }
-
-.btn-sm-green {
-  border-color: var(--border);
-  color: var(--green);
-}
-
-.btn-sm-green:hover { background: var(--green-dim); }
-
-.admin-header-bar {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 2rem;
-}
-
-.admin-header-bar h1 {
-  font-size: clamp(1.4rem, 3vw, 2rem);
-}
-
-.btn-logout {
-  background: transparent;
-  border: 1px solid rgba(255,77,77,0.4);
-  color: #ff8080;
-  padding: 0.4rem 1rem;
-  border-radius: 6px;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 700; font-size: 0.75rem;
-  letter-spacing: 0.1em; text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.btn-logout:hover { background: rgba(255,77,77,0.15); }
-
-.main-site { display: block; }
-
-/* ========= RESPONSIVE ========= */
-/* ========= SEARCH ========= */
-.search-bar-wrap {
-  margin-bottom: 2rem;
-  position: relative;
-  max-width: 420px;
-}
-.search-bar-wrap input {
-  width: 100%;
-  background: var(--navy-light);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 0.75rem 1rem 0.75rem 2.75rem;
-  color: var(--white);
-  font-family: 'Barlow', sans-serif;
-  font-size: 0.9rem;
-  outline: none;
-  transition: border-color 0.2s;
-}
-.search-bar-wrap input:focus { border-color: var(--green); }
-.search-bar-wrap input::placeholder { color: var(--grey); }
-.search-icon {
-  position: absolute; left: 0.9rem; top: 50%;
-  transform: translateY(-50%);
-  color: var(--grey); font-size: 1rem; pointer-events: none;
-}
-.search-results-drop {
-  position: absolute; top: calc(100% + 6px); left: 0; right: 0;
-  background: var(--navy-mid);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  z-index: 500;
-  max-height: 280px; overflow-y: auto;
-  display: none;
-}
-.search-results-drop.open { display: block; }
-.search-result-item {
-  display: flex; align-items: center; gap: 0.75rem;
-  padding: 0.7rem 1rem;
-  cursor: pointer;
-  transition: background 0.15s;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-}
-.search-result-item:last-child { border-bottom: none; }
-.search-result-item:hover { background: var(--green-dim); }
-.search-result-name { font-weight: 600; font-size: 0.85rem; }
-.search-result-meta { font-size: 0.72rem; color: var(--grey); }
-
-/* ========= SCORERS / DISCIPLINE ========= */
-.stats-tabs {
-  display: flex; gap: 0.5rem; margin-bottom: 1.5rem;
-}
-.stats-tab {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 700; font-size: 0.75rem;
-  letter-spacing: 0.1em; text-transform: uppercase;
-  padding: 0.4rem 1rem;
-  border-radius: 6px;
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--grey-light);
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.stats-tab.active, .stats-tab:hover {
-  background: var(--green-dim); color: var(--green); border-color: var(--green);
-}
-.stats-panel { display: none; }
-.stats-panel.active { display: block; }
-
-.scorer-row {
-  display: flex; align-items: center; gap: 0.75rem;
-  padding: 0.75rem;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-  transition: background 0.15s;
-  cursor: pointer;
-}
-.scorer-row:hover { background: rgba(0,229,102,0.1); border-radius: 8px; }
-.scorer-rank {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 900; font-size: 1.2rem;
-  color: var(--grey); min-width: 28px; text-align: center;
-}
-.scorer-rank-1 { color: #FFD700; }
-.scorer-rank-2 { color: #C0C0C0; }
-.scorer-rank-3 { color: #CD7F32; }
-.scorer-photo {
-  width: 36px; height: 36px; border-radius: 50%;
-  background: var(--navy-light);
-  border: 2px solid var(--border);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1rem; flex-shrink: 0;
-  overflow: hidden;
-}
-.scorer-photo img { width: 100%; height: 100%; object-fit: cover; }
-.scorer-info { flex: 1; min-width: 0; }
-.scorer-name { font-weight: 600; font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.scorer-team { font-size: 0.7rem; color: var(--grey); }
-.scorer-stat {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-weight: 900; font-size: 1.4rem;
-  color: var(--green); min-width: 32px; text-align: right;
-}
-.scorer-stat-label { font-size: 0.6rem; color: var(--grey); text-align: right; text-transform: uppercase; letter-spacing: 0.08em; }
-
-/* ========= PLAYER PHOTO ========= */
-.player-avatar img, .player-detail-avatar img {
-  width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
-}
-
-/* ========= RESPONSIVE ========= */
-
-/* --- GLOBAL OVERFLOW FIX --- */
-html { width: 100%; overflow-x: hidden; }
-body { width: 100%; max-width: 100vw; overflow-x: hidden; }
-*, *::before, *::after { box-sizing: border-box; }
-section, #admin-section { width: 100%; max-width: 100%; }
-
-/* ========= TABLET ≤ 900px ========= */
-@media (max-width: 900px) {
-  .container { padding: 0 1.25rem; }
-
-  /* Header */
-  header { padding: 0 1rem; }
-  .burger { display: flex; }
-  nav {
-    position: fixed; top: 64px; left: 0; right: 0; width: 100%;
-    background: var(--navy-mid);
-    border-bottom: 1px solid var(--border);
-    flex-direction: column; align-items: stretch;
-    padding: 0.75rem; gap: 0.25rem;
-    display: none; z-index: 999;
-  }
-  nav.open { display: flex; }
-  nav a {
-    padding: 0.9rem 1.25rem; font-size: 1rem;
-    border-radius: 8px;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-  }
-  nav a:last-child { border-bottom: none; }
-
-  /* Hero */
-  .hero-stats { gap: 2rem; }
-  .hero-stat-num { font-size: 2.2rem; }
-  section { padding: 4rem 0; }
-
-  /* Schedule */
-  .matches-grid { grid-template-columns: repeat(2, 1fr); }
-
-  /* Teams */
-  .teams-grid { grid-template-columns: repeat(2, 1fr); }
-
-  /* Stat layout */
-  .stat-block { max-width: 100%; }
-
-  /* Admin */
-  #admin-section { padding: 80px 1.25rem 4rem; }
-  .admin-grid { grid-template-columns: 1fr; }
-  .admin-tabs { flex-wrap: wrap; gap: 0.3rem; }
-  .admin-tab { font-size: 0.78rem; padding: 0.4rem 0.75rem; }
-  .stat-boxes { grid-template-columns: repeat(3, 1fr); }
-  .players-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
-  .protocol-teams { flex-direction: column; gap: 0.75rem; }
-}
-
-/* ========= MOBILE ≤ 600px ========= */
-@media (max-width: 600px) {
-  /* Global */
-  section { padding: 2.75rem 0; }
-  .container { padding: 0 1rem; }
-  #admin-section { padding: 80px 0.75rem 3rem; }
-
-  /* Header */
-  header { padding: 0 0.75rem; height: 56px; }
-  .logo-text { font-size: 0.95rem; }
-  .logo-text span { font-size: 0.58rem; }
-  .logo-icon { width: 34px; height: 34px; font-size: 16px; }
-
-  /* Nav */
-  nav { top: 56px; }
-
-  /* Hero */
-  .hero { padding: 5rem 0 3rem; }
-  .hero-content { padding: 0 1rem; width: 100%; }
-  h1 { font-size: clamp(1.9rem, 9vw, 3rem); }
-  .hero-sub { font-size: 0.88rem; margin-bottom: 1.75rem; }
-  .btn-primary { padding: 0.75rem 1.25rem; font-size: 0.82rem; width: 100%; justify-content: center; }
-  .hero-stats {
-    flex-wrap: wrap; gap: 1rem 1.5rem;
-    justify-content: center; margin-top: 2rem;
-  }
-  .hero-stat-num { font-size: 2rem; }
-  .hero-stat-label { font-size: 0.72rem; }
-
-  /* Section headers */
-  .section-header { flex-direction: column; align-items: flex-start; gap: 0.4rem; margin-bottom: 1.5rem; }
-  .section-title { font-size: 1.6rem; }
-
-  /* Schedule */
-  .matches-grid { grid-template-columns: 1fr; gap: 0.75rem; }
-  .match-card { padding: 1rem; }
-  .match-teams { gap: 0.5rem; }
-  .match-team { font-size: 0.85rem; }
-  .match-vs { font-size: 0.75rem; }
-
-  /* Teams */
-  .teams-grid { grid-template-columns: 1fr; gap: 0.55rem; }
-  .team-card {
-    padding: 0.8rem 1rem;
-    display: grid;
-    grid-template-columns: 46px 1fr auto;
-    grid-template-rows: auto auto;
-    column-gap: 0.85rem; row-gap: 0;
-    align-items: center; text-align: left; overflow: visible;
-  }
-  .team-card::after { display: none; }
-  .team-emblem { grid-column:1; grid-row:1/3; width:42px; height:42px; font-size:1.2rem; margin:0; }
-  .team-name { grid-column:2; grid-row:1; font-size:0.9rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0; letter-spacing:0.02em; }
-  .team-info { grid-column:2; grid-row:2; font-size:0.7rem; margin-top:2px; }
-  .team-arrow { grid-column:3; grid-row:1/3; font-size:0.7rem; white-space:nowrap; }
-
-  /* Stats */
-  .stat-block { margin-bottom: 1.5rem; }
-  #standings-table thead th:nth-child(4),
-  #standings-table thead th:nth-child(5),
-  #standings-table thead th:nth-child(6),
-  #standings-table tbody td:nth-child(4),
-  #standings-table tbody td:nth-child(5),
-  #standings-table tbody td:nth-child(6) { display: none; }
-  table { font-size: 0.82rem; }
-  thead th { padding: 0.7rem 0.4rem; font-size: 0.68rem; }
-  tbody td { padding: 0.65rem 0.4rem; }
-
-  /* Results */
-  .result-card { padding: 0.75rem; gap: 0.5rem; }
-  .result-date-col { min-width: 38px; font-size: 0.62rem; }
-  .result-teams-col { font-size: 0.78rem; flex: 1; min-width: 0; }
-  .result-team-name { font-size: 0.78rem; }
-  .result-score { font-size: 1.05rem; }
-  .result-details-btn { font-size: 0.58rem; padding: 0.25rem 0.4rem; }
-
-  /* Scorers */
-  .scorer-row { padding: 0.6rem 0.75rem; gap: 0.5rem; }
-  .scorer-rank { font-size: 0.9rem; min-width: 18px; }
-  .scorer-photo { width: 30px; height: 30px; font-size: 0.8rem; }
-  .scorer-name { font-size: 0.78rem; }
-  .scorer-team { font-size: 0.62rem; }
-  .scorer-stat { font-size: 1rem; }
-
-  /* Modals */
-  .modal { border-radius: 16px 16px 0 0; max-height: 90vh; width: 100% !important; }
-  .modal-overlay { align-items: flex-end; padding: 0; }
-  .modal-header { padding: 1rem 1rem 0.75rem; }
-  .modal-body { padding: 0 1rem 1rem; }
-
-  /* Player cards in modal */
-  .players-grid { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
-  .player-card { padding: 0.75rem 0.5rem; }
-  .player-avatar { width: 40px; height: 40px; font-size: 1rem; }
-  .player-name-card { font-size: 0.72rem; }
-
-  /* Stat boxes */
-  .stat-boxes { grid-template-columns: repeat(3, 1fr) !important; gap: 0.5rem; }
-  .stat-box { padding: 0.6rem 0.4rem; }
-  .stat-box-num { font-size: 1.4rem; }
-  .stat-box-label { font-size: 0.55rem; }
-
-  /* Admin */
-  .admin-tabs { gap: 0.25rem; }
-  .admin-tab { font-size: 0.72rem; padding: 0.35rem 0.6rem; border-radius: 6px; }
-  .admin-card { padding: 1rem; }
-  .admin-card h3 { font-size: 1rem; margin-bottom: 0.75rem; }
-  .form-group { margin-bottom: 1rem; }
-  .form-group label { font-size: 0.68rem; }
-  .form-group input, .form-group select, .form-group textarea {
-    padding: 0.6rem 0.75rem; font-size: 0.85rem;
-  }
-  .btn-admin { padding: 0.75rem; font-size: 0.82rem; }
-  .btn-sm { font-size: 0.72rem; padding: 0.25rem 0.45rem; }
-  .admin-list li { padding: 0.5rem 0.6rem; font-size: 0.8rem; gap: 0.4rem; }
-
-  /* Protocol */
-  .protocol-teams { flex-direction: column; gap: 0.5rem; font-size: 0.8rem; }
-  .protocol-score { font-size: 1.4rem; }
-  .event-row { flex-wrap: wrap; gap: 0.4rem; }
-  .event-row select, .event-row input { font-size: 0.78rem; padding: 0.35rem 0.5rem; }
-
-  /* Players grid in admin */
-  .players-grid { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
-
-  /* Standings edit table */
-  #admin-standings-edit input[type="number"] { width: 38px !important; padding: 2px 3px !important; }
-  #admin-standings-edit input[type="text"] { width: 100px !important; }
-
-  /* Footer */
-  footer { padding: 1.5rem 1rem; font-size: 0.75rem; }
-}
-
-/* ========= SMALL MOBILE ≤ 380px ========= */
-@media (max-width: 380px) {
-  h1 { font-size: 1.7rem; }
-  .hero-stat-num { font-size: 1.7rem; }
-  .admin-tab { font-size: 0.65rem; padding: 0.3rem 0.5rem; }
-  .teams-grid { gap: 0.4rem; }
-  .stat-boxes { gap: 0.35rem; }
-  .stat-box-num { font-size: 1.25rem; }
-}
-
-/* ========= CROP MODAL ========= */
-#crop-modal .modal-body { overflow: hidden; }
-#crop-container { touch-action: none; position: relative; overflow: hidden; }
-#crop-box { border-radius: 4px; pointer-events: none; }
-#crop-img { cursor: grab; }
-#crop-img:active { cursor: grabbing; }
-
-/* ========= ALIGNMENT FIXES ========= */
-/* All sections centered */
-.container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
-  box-sizing: border-box;
-}
-/* Section headers consistent */
-.section-header {
-  display: flex; align-items: baseline; gap: 1rem;
-  margin-bottom: 2.5rem;
-}
-/* Admin panel consistent padding */
-.admin-panel { width: 100%; }
-.admin-tabs { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 1.5rem; }
-/* Form groups consistent */
-.form-group input, .form-group select, .form-group textarea { width: 100%; }
-/* Stat block centered */
-.stat-block { width: 100%; max-width: 720px; margin: 0 auto 2.5rem; }
-
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>БРФЛ — Бронницкая Футбольная Лига</title>
+    
+    <!-- Preconnect for fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <!-- ===================== HEADER ===================== -->
 <header id="main-header">
-  <a class="logo" href="#hero">
-    <div class="logo-icon" id="logo-icon-wrap"><img id="logo-img" src="" alt="БРФЛ" style="display:none;width:100%;height:100%;object-fit:contain;border-radius:50%"><span id="logo-emoji">⚽</span></div>
-    <div class="logo-text">БРФЛ<span>Бронницкая Футбольная Лига</span></div>
-  </a>
-  <nav id="main-nav">
-    <a href="#schedule">Расписание</a>
-    <a href="#statistics">Статистика</a>
-    <a href="#teams">Команды</a>
-    <a href="#statistics">Результаты</a>
-  </nav>
-  <button class="burger" id="burger" aria-label="Меню">
-    <span></span><span></span><span></span>
-  </button>
+    <a class="logo" href="#hero" id="logo-link">
+        <div class="logo-icon" id="logo-icon-wrap">
+            <img id="logo-img" src="" alt="БРФЛ" style="display:none">
+            <span id="logo-emoji">⚽</span>
+        </div>
+        <div class="logo-text">БРФЛ<span>Бронницкая Футбольная Лига</span></div>
+    </a>
+    
+    <nav id="main-nav">
+        <a href="#schedule">Расписание</a>
+        <a href="#statistics">Статистика</a>
+        <a href="#teams">Команды</a>
+        <a href="#statistics">Результаты</a>
+    </nav>
+    
+    <button class="burger" id="burger" aria-label="Меню">
+        <span></span><span></span><span></span>
+    </button>
 </header>
 
 <!-- ===================== MAIN SITE ===================== -->
 <div class="main-site" id="main-site">
 
-  <!-- HERO -->
-  <section class="hero" id="hero">
-    <div class="hero-bg"></div>
-    <div class="field-lines"></div>
-    <div class="hero-circle"></div>
-    <div class="hero-circle2"></div>
-    <div class="hero-content">
-      <div class="hero-badge">Активный сезон 2026</div>
-      <h1>Бронницкая<em>Футбольная Лига</em></h1>
-      <p class="hero-sub">Официальный сайт любительской лиги города Бронницы. Следи за матчами, статистикой и результатами команд.</p>
-      <a href="#schedule" class="btn-primary">⚽ Расписание матчей</a>
-      <div class="hero-stats">
-        <div>
-          <div class="hero-stat-num" id="hstat-teams">10</div>
-          <div class="hero-stat-label">Команд</div>
+    <!-- HERO SECTION -->
+    <section class="hero" id="hero">
+        <div class="hero-bg"></div>
+        <div class="field-lines"></div>
+        <div class="hero-circle"></div>
+        <div class="hero-circle2"></div>
+        <div class="hero-content">
+            <div class="hero-badge">Активный сезон 2026</div>
+            <h1>Бронницкая<em>Футбольная Лига</em></h1>
+            <p class="hero-sub">Официальный сайт любительской лиги города Бронницы. Следи за матчами, статистикой и результатами команд.</p>
+            <a href="#schedule" class="btn-primary">⚽ Расписание матчей</a>
+            
+            <div class="hero-stats">
+                <div>
+                    <div class="hero-stat-num" id="hstat-teams">10</div>
+                    <div class="hero-stat-label">Команд</div>
+                </div>
+                <div>
+                    <div class="hero-stat-num" id="hstat-matches">38</div>
+                    <div class="hero-stat-label">Матчей</div>
+                </div>
+                <div>
+                    <div class="hero-stat-num" id="hstat-players">127</div>
+                    <div class="hero-stat-label">Игроков</div>
+                </div>
+                <div>
+                    <div class="hero-stat-num" id="hstat-goals">84</div>
+                    <div class="hero-stat-label">Голов</div>
+                </div>
+            </div>
         </div>
-        <div>
-          <div class="hero-stat-num" id="hstat-matches">38</div>
-          <div class="hero-stat-label">Матчей</div>
-        </div>
-        <div>
-          <div class="hero-stat-num" id="hstat-players">127</div>
-          <div class="hero-stat-label">Игроков</div>
-        </div>
-        <div>
-          <div class="hero-stat-num" id="hstat-goals">84</div>
-          <div class="hero-stat-label">Голов</div>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- SCHEDULE -->
-  <section id="schedule">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-tag">Ближайшие матчи</span>
-        <h2 class="section-title">Расписание</h2>
-      </div>
-      <div class="matches-grid" id="schedule-grid"></div>
-    </div>
-  </section>
-
-  <!-- TEAMS -->
-  <section id="teams">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-tag">Сезон 2026</span>
-        <h2 class="section-title">Команды</h2>
-      </div>
-      <div class="search-bar-wrap">
-        <span class="search-icon">🔍</span>
-        <input type="text" id="player-search" placeholder="Найти игрока..." oninput="onPlayerSearch(this.value)" autocomplete="off">
-        <div class="search-results-drop" id="search-drop"></div>
-      </div>
-      <div class="teams-grid" id="teams-grid"></div>
-    </div>
-  </section>
-
-  <!-- STATISTICS -->
-  <section id="statistics">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-tag">Турнир</span>
-        <h2 class="section-title">Статистика</h2>
-      </div>
-      <!-- Турнирная таблица -->
-      <div class="stat-block">
-        <p class="stat-block-label">Турнирная таблица</p>
-        <div class="table-wrap">
-          <table id="standings-table">
-            <thead>
-              <tr>
-                <th>#</th><th>Команда</th><th>И</th><th>В</th><th>Н</th><th>П</th><th>Очки</th>
-              </tr>
-            </thead>
-            <tbody id="standings-body"></tbody>
-          </table>
+    <!-- SCHEDULE SECTION -->
+    <section id="schedule">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Ближайшие матчи</span>
+                <h2 class="section-title">Расписание</h2>
+            </div>
+            <div class="matches-grid" id="schedule-grid"></div>
         </div>
-      </div>
+    </section>
 
-      <!-- Результаты матчей -->
-      <div class="stat-block">
-        <p class="stat-block-label">Результаты матчей</p>
-        <div class="results-list" id="results-list"></div>
-      </div>
+    <!-- TEAMS SECTION -->
+    <section id="teams">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Сезон 2026</span>
+                <h2 class="section-title">Команды</h2>
+            </div>
+            
+            <div class="search-bar-wrap">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="player-search" placeholder="Найти игрока..." autocomplete="off">
+                <div class="search-results-drop" id="search-drop"></div>
+            </div>
+            
+            <div class="teams-grid" id="teams-grid"></div>
+        </div>
+    </section>
 
-      <!-- Бомбардиры + Дисциплина -->
-      <div class="stat-block">
-        <div class="stats-tabs">
-          <button class="stats-tab active" onclick="switchStatsTab('scorers', this)">⚽ Бомбардиры</button>
-          <button class="stats-tab" onclick="switchStatsTab('discipline', this)">🟨 Дисциплина</button>
-        </div>
-        <div class="stats-panel active" id="panel-scorers">
-          <div class="table-wrap" style="padding:0.5rem 0" id="scorers-list"></div>
-        </div>
-        <div class="stats-panel" id="panel-discipline" style="display:none">
-          <div class="table-wrap" style="padding:0.5rem 0" id="discipline-list"></div>
-        </div>
-      </div>
-    </div>
-  </section>
+    <!-- STATISTICS SECTION -->
+    <section id="statistics">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Турнир</span>
+                <h2 class="section-title">Статистика</h2>
+            </div>
+            
+            <!-- Турнирная таблица -->
+            <div class="stat-block">
+                <p class="stat-block-label">Турнирная таблица</p>
+                <div class="table-wrap">
+                    <table id="standings-table">
+                        <thead>
+                            <tr>
+                                <th>#</th><th>Команда</th><th>И</th><th>В</th><th>Н</th><th>П</th><th>Очки</th>
+                            </tr>
+                        </thead>
+                        <tbody id="standings-body"></tbody>
+                    </table>
+                </div>
+            </div>
 
+            <!-- Результаты матчей -->
+            <div class="stat-block">
+                <p class="stat-block-label">Результаты матчей</p>
+                <div class="results-list" id="results-list"></div>
+            </div>
+
+            <!-- Бомбардиры + Дисциплина -->
+            <div class="stat-block">
+                <div class="stats-tabs">
+                    <button class="stats-tab active" data-tab="scorers">⚽ Бомбардиры</button>
+                    <button class="stats-tab" data-tab="discipline">🟨 Дисциплина</button>
+                </div>
+                <div class="stats-panel active" id="panel-scorers">
+                    <div class="table-wrap" id="scorers-list"></div>
+                </div>
+                <div class="stats-panel" id="panel-discipline">
+                    <div class="table-wrap" id="discipline-list"></div>
+                </div>
+            </div>
+        </div>
+    </section>
 </div>
 
 <!-- ===================== ADMIN SECTION ===================== -->
 <div id="admin-section">
-  <div class="container">
-    <!-- Login form -->
-    <div class="admin-login" id="admin-login">
-      <h2>🔒 Панель администратора</h2>
-      <p>Введите учётные данные для входа в систему управления лигой.</p>
-      <div class="form-group">
-        <label>Логин</label>
-        <input type="text" id="admin-user" placeholder="admin" autocomplete="off">
-      </div>
-      <div class="form-group">
-        <label>Пароль</label>
-        <input type="password" id="admin-pass" placeholder="••••••••">
-      </div>
-      <button class="btn-admin" onclick="adminLogin()">Войти</button>
-      <div class="login-error" id="login-error">Неверный логин или пароль</div>
+    <div class="container">
+        <!-- Login form -->
+        <div class="admin-login" id="admin-login">
+            <h2>🔒 Панель администратора</h2>
+            <p>Введите учётные данные для входа в систему управления лигой.</p>
+            <div class="form-group">
+                <label>Логин</label>
+                <input type="text" id="admin-user" placeholder="admin" autocomplete="off">
+            </div>
+            <div class="form-group">
+                <label>Пароль</label>
+                <input type="password" id="admin-pass" placeholder="••••••••">
+            </div>
+            <button class="btn-admin" id="admin-login-btn">Войти</button>
+            <div class="login-error" id="login-error">Неверный логин или пароль</div>
+        </div>
+
+        <!-- Admin Panel -->
+        <div class="admin-panel" id="admin-panel">
+            <div class="admin-header-bar">
+                <h1 class="section-title">⚙ Управление лигой</h1>
+                <div class="admin-header-actions">
+                    <button class="btn-logout" id="back-to-site">← На сайт</button>
+                    <button class="btn-logout" id="admin-logout-btn">Выйти</button>
+                </div>
+            </div>
+
+            <div class="admin-tabs">
+                <button class="admin-tab active" data-tab="tab-matches">Матчи</button>
+                <button class="admin-tab" data-tab="tab-results">Результаты</button>
+                <button class="admin-tab" data-tab="tab-table">Таблица</button>
+                <button class="admin-tab" data-tab="tab-players">Игроки</button>
+                <button class="admin-tab" data-tab="tab-teams">Команды</button>
+                <button class="admin-tab" data-tab="tab-settings">Настройки</button>
+                <button class="admin-tab" data-tab="tab-log">📋 Журнал</button>
+            </div>
+
+            <!-- TAB: Matches -->
+            <div class="admin-content active" id="tab-matches">
+                <div class="admin-grid">
+                    <div class="admin-card">
+                        <h3>Добавить матч</h3>
+                        <div class="form-group">
+                            <label>Команда 1</label>
+                            <select id="a-t1"></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Команда 2</label>
+                            <select id="a-t2"></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Дата</label>
+                            <input type="date" id="a-date">
+                        </div>
+                        <div class="form-group">
+                            <label>Время</label>
+                            <input type="time" id="a-time" value="15:00">
+                        </div>
+                        <div class="form-group">
+                            <label>Стадион</label>
+                            <input type="text" id="a-venue" value="Бронницкий городской стадион">
+                        </div>
+                        <div class="form-group">
+                            <label>Тип матча</label>
+                            <select id="a-kind">
+                                <option value="official">⚽ Официальный</option>
+                                <option value="friendly">🤝 Товарищеский</option>
+                            </select>
+                        </div>
+                        <button class="btn-admin" id="add-match-btn">Добавить матч</button>
+                    </div>
+                    <div class="admin-card">
+                        <h3>Предстоящие матчи</h3>
+                        <ul class="admin-list" id="admin-upcoming-list"></ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: Results -->
+            <div class="admin-content" id="tab-results">
+                <div class="admin-grid">
+                    <div class="admin-card">
+                        <h3>Добавить результат</h3>
+                        <div class="form-group">
+                            <label>Команда 1</label>
+                            <select id="r-t1"></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Команда 2</label>
+                            <select id="r-t2"></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Дата</label>
+                            <input type="date" id="r-date">
+                        </div>
+                        <div class="result-score-inputs">
+                            <div class="form-group">
+                                <label>Счёт (команда 1)</label>
+                                <input type="number" id="r-g1" value="0" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label>Счёт (команда 2)</label>
+                                <input type="number" id="r-g2" value="0" min="0">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Тип матча</label>
+                            <select id="r-kind">
+                                <option value="official">⚽ Официальный</option>
+                                <option value="friendly">🤝 Товарищеский</option>
+                            </select>
+                        </div>
+                        <button class="btn-admin" id="add-result-btn">Добавить результат</button>
+                    </div>
+                    <div class="admin-card">
+                        <h3>Сыгранные матчи</h3>
+                        <ul class="admin-list" id="admin-results-list"></ul>
+                    </div>
+                </div>
+
+                <!-- Protocol editor -->
+                <div class="admin-card" id="protocol-editor">
+                    <h3>📋 Протокол: <span id="proto-label"></span></h3>
+                    <input type="hidden" id="proto-result-id">
+
+                    <div class="protocol-events-grid">
+                        <div class="form-group">
+                            <label>Тип события</label>
+                            <select id="ev-type">
+                                <option value="goal">⚽ Гол</option>
+                                <option value="yellow">🟨 Жёлтая</option>
+                                <option value="red">🟥 Красная</option>
+                                <option value="sub">🔄 Замена</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Минута</label>
+                            <input type="number" id="ev-min" min="1" max="120" value="1">
+                        </div>
+                        <div class="form-group">
+                            <label>Команда</label>
+                            <select id="ev-team"></select>
+                        </div>
+                        <div class="form-group" id="ev-player-wrap">
+                            <label id="ev-player-label">Игрок</label>
+                            <select id="ev-player"></select>
+                        </div>
+                        <div class="form-group" id="ev-assist-wrap">
+                            <label>Голевой пас</label>
+                            <select id="ev-assist"></select>
+                        </div>
+                        <div class="form-group" id="ev-subout-wrap">
+                            <label>Уходит с поля</label>
+                            <select id="ev-subout"></select>
+                        </div>
+                    </div>
+                    
+                    <button class="btn-admin" id="add-protocol-event">+ Добавить событие</button>
+
+                    <div class="protocol-timeline">
+                        <h4>Хронология</h4>
+                        <div id="proto-events-list"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: Players -->
+            <div class="admin-content" id="tab-players">
+                <div class="admin-grid">
+                    <div class="admin-card">
+                        <h3>Выбор команды</h3>
+                        <div class="form-group">
+                            <label>Команда</label>
+                            <select id="p-team"></select>
+                        </div>
+                        
+                        <h3>Добавить игрока</h3>
+                        <div class="form-group">
+                            <label>Имя и фамилия</label>
+                            <input type="text" id="p-name" placeholder="Иван Иванов">
+                        </div>
+                        <div class="form-group">
+                            <label>Фото URL</label>
+                            <input type="text" id="p-photo-url" placeholder="https://...">
+                        </div>
+                        <div class="form-group">
+                            <label>Или загрузить файл</label>
+                            <input type="file" id="p-photo-file" accept="image/*">
+                        </div>
+                        <div class="form-group">
+                            <label>Позиция</label>
+                            <select id="p-pos">
+                                <option>Вратарь</option>
+                                <option>Защитник</option>
+                                <option>Полузащитник</option>
+                                <option>Нападающий</option>
+                                <option disabled>──────────</option>
+                                <option>Президент</option>
+                                <option>Тренер</option>
+                            </select>
+                        </div>
+                        <div class="player-stats-grid">
+                            <div class="form-group">
+                                <label>Матчей</label>
+                                <input type="number" id="p-matches" value="0" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label>Голов</label>
+                                <input type="number" id="p-goals" value="0" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label>ЖК</label>
+                                <input type="number" id="p-yellow" value="0" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label>КК</label>
+                                <input type="number" id="p-red" value="0" min="0">
+                            </div>
+                        </div>
+                        <button class="btn-admin" id="add-player-btn">Добавить игрока</button>
+                    </div>
+                    
+                    <div class="admin-card">
+                        <h3>Состав команды <span id="players-count"></span></h3>
+                        <ul class="admin-list" id="admin-players-list"></ul>
+                    </div>
+                </div>
+
+                <!-- Edit player card -->
+                <div class="admin-card" id="edit-player-card">
+                    <h3>✏️ Редактировать игрока: <span id="edit-player-label"></span></h3>
+                    <input type="hidden" id="ep-teamid">
+                    <input type="hidden" id="ep-playerid">
+                    
+                    <div class="edit-player-grid">
+                        <div class="form-group">
+                            <label>Имя</label>
+                            <input type="text" id="ep-name">
+                        </div>
+                        <div class="form-group">
+                            <label>Позиция</label>
+                            <select id="ep-pos">
+                                <option>Вратарь</option>
+                                <option>Защитник</option>
+                                <option>Полузащитник</option>
+                                <option>Нападающий</option>
+                                <option disabled>──────────</option>
+                                <option>Президент</option>
+                                <option>Тренер</option>
+                            </select>
+                        </div>
+                        <div class="form-group stat-only-field">
+                            <label>Матчей</label>
+                            <input type="number" id="ep-matches" min="0">
+                        </div>
+                        <div class="form-group stat-only-field">
+                            <label>Голов</label>
+                            <input type="number" id="ep-goals" min="0">
+                        </div>
+                        <div class="form-group stat-only-field">
+                            <label>ЖК</label>
+                            <input type="number" id="ep-yellow" min="0">
+                        </div>
+                        <div class="form-group stat-only-field">
+                            <label>КК</label>
+                            <input type="number" id="ep-red" min="0">
+                        </div>
+                    </div>
+                    
+                    <div class="edit-player-actions">
+                        <button class="btn-admin" id="save-player-btn">💾 Сохранить</button>
+                        <button class="btn-admin btn-cancel" id="cancel-edit-player">Отмена</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: Table -->
+            <div class="admin-content" id="tab-table">
+                <div class="admin-card">
+                    <div class="table-header-actions">
+                        <h3>Турнирная таблица</h3>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn-admin" id="recalc-standings-btn">🔄 Пересчитать по результатам</button>
+                            <button class="btn-admin" id="clear-standings-btn" style="background: #ff4d4d; color: white;">🗑️ ОЧИСТИТЬ ТАБЛИЦУ</button>
+                        </div>
+                    </div>
+                    <p class="table-hint">Нажмите кнопку выше для автоматического пересчёта или редактируйте вручную</p>
+                    
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Команда</th>
+                                    <th>И</th>
+                                    <th>В</th>
+                                    <th>Н</th>
+                                    <th>П</th>
+                                    <th>Очки</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-standings-edit"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: Teams -->
+            <div class="admin-content" id="tab-teams">
+                <div class="admin-grid">
+                    <div class="admin-card">
+                        <h3 id="team-edit-title">Добавить команду</h3>
+                        <div class="form-group">
+                            <label>Название команды</label>
+                            <input type="text" id="nt-name" placeholder="Название">
+                        </div>
+                        <div class="form-group">
+                            <label>Логотип URL</label>
+                            <input type="text" id="nt-logo-url" placeholder="https://...">
+                        </div>
+                        <div class="form-group">
+                            <label>Или загрузить файл</label>
+                            <input type="file" id="nt-logo-file" accept="image/*">
+                        </div>
+                        <div class="form-group">
+                            <label>Эмодзи (если нет логотипа)</label>
+                            <input type="text" id="nt-emoji" placeholder="⚽" maxlength="2">
+                        </div>
+                        <input type="hidden" id="nt-edit-id">
+                        
+                        <div class="team-edit-actions">
+                            <button class="btn-admin" id="save-team-btn">💾 Сохранить</button>
+                            <button class="btn-admin btn-cancel" id="nt-cancel-btn">Отмена</button>
+                        </div>
+                    </div>
+                    
+                    <div class="admin-card">
+                        <h3>Список команд</h3>
+                        <ul class="admin-list" id="admin-teams-list"></ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: Settings -->
+            <div class="admin-content" id="tab-settings">
+                <div class="admin-grid">
+                    <div class="admin-card">
+                        <h3>Логотип лиги</h3>
+                        <div class="form-group">
+                            <label>URL логотипа</label>
+                            <input type="text" id="league-logo-url">
+                        </div>
+                        <div class="form-group">
+                            <label>Загрузить файл</label>
+                            <input type="file" id="league-logo-file" accept="image/*">
+                        </div>
+                        <div id="league-logo-preview"></div>
+                        <button class="btn-admin" id="save-league-logo">💾 Сохранить логотип</button>
+                        <button class="btn-admin btn-secondary" id="reset-league-logo">Сбросить логотип</button>
+                    </div>
+                    
+                    <div class="admin-card">
+                        <h3>Статистика на главной</h3>
+                        <p class="settings-hint">Цифры под кнопкой «Расписание матчей»</p>
+                        <div class="hero-stats-grid">
+                            <div class="form-group">
+                                <label>Команд</label>
+                                <input type="number" id="hs-teams" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label>Матчей</label>
+                                <input type="number" id="hs-matches" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label>Игроков</label>
+                                <input type="number" id="hs-players" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label>Голов</label>
+                                <input type="number" id="hs-goals" min="0">
+                            </div>
+                        </div>
+                        <button class="btn-admin" id="save-hero-stats">💾 Сохранить</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: Log -->
+            <div class="admin-content" id="tab-log">
+                <div class="admin-card">
+                    <div class="log-header">
+                        <h3>📋 Журнал изменений</h3>
+                        <button class="btn-admin btn-secondary" id="clear-log-btn">Очистить журнал</button>
+                    </div>
+                    <div id="action-log-list"></div>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <!-- Admin Panel -->
-    <div class="admin-panel" id="admin-panel">
-      <div class="admin-header-bar">
-        <h1 class="section-title">⚙ Управление лигой</h1>
-        <div style="display:flex;gap:0.75rem;align-items:center">
-          <button class="btn-logout" style="border-color:var(--border);color:var(--grey-light)" onclick="window.location.hash='';showMain()">← На сайт</button>
-          <button class="btn-logout" onclick="adminLogout()">Выйти</button>
-        </div>
-      </div>
-
-      <div class="admin-tabs">
-        <button class="admin-tab active" onclick="showAdminTab('tab-matches')">Матчи</button>
-        <button class="admin-tab" onclick="showAdminTab('tab-results')">Результаты</button>
-        <button class="admin-tab" onclick="showAdminTab('tab-table')">Таблица</button>
-        <button class="admin-tab" onclick="showAdminTab('tab-players')">Игроки</button>
-        <button class="admin-tab" onclick="showAdminTab('tab-teams')">Команды</button>
-        <button class="admin-tab" onclick="showAdminTab('tab-settings')">Настройки</button>
-        <button class="admin-tab" onclick="showAdminTab('tab-log')">📋 Журнал</button>
-      </div>
-
-      <!-- TAB: Matches -->
-      <div class="admin-content active" id="tab-matches">
-        <div class="admin-grid">
-          <div class="admin-card">
-            <h3>Добавить матч</h3>
-            <div class="form-group">
-              <label>Команда 1</label>
-              <select id="a-t1"></select>
-            </div>
-            <div class="form-group">
-              <label>Команда 2</label>
-              <select id="a-t2"></select>
-            </div>
-            <div class="form-group">
-              <label>Дата</label>
-              <input type="date" id="a-date">
-            </div>
-            <div class="form-group">
-              <label>Время</label>
-              <input type="time" id="a-time" value="15:00">
-            </div>
-            <div class="form-group">
-              <label>Стадион</label>
-              <input type="text" id="a-venue" value="Бронницкий городской стадион">
-            </div>
-            <button class="btn-admin" onclick="addMatch()">Добавить матч</button>
-          </div>
-          <div class="admin-card">
-            <h3>Предстоящие матчи</h3>
-            <ul class="admin-list" id="admin-upcoming-list"></ul>
-          </div>
-        </div>
-      </div>
-
-      <!-- TAB: Results -->
-      <div class="admin-content" id="tab-results">
-        <div class="admin-grid">
-          <div class="admin-card">
-            <h3>Добавить матч</h3>
-            <div class="form-group">
-              <label>Команда 1</label>
-              <select id="r-t1"></select>
-            </div>
-            <div class="form-group">
-              <label>Команда 2</label>
-              <select id="r-t2"></select>
-            </div>
-            <div class="form-group">
-              <label>Дата</label>
-              <input type="date" id="r-date">
-            </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem">
-              <div class="form-group">
-                <label>Счёт (кmd 1)</label>
-                <input type="number" id="r-g1" value="0" min="0">
-              </div>
-              <div class="form-group">
-                <label>Счёт (кmd 2)</label>
-                <input type="number" id="r-g2" value="0" min="0">
-              </div>
-            </div>
-            <button class="btn-admin" onclick="addResult()">Добавить матч</button>
-          </div>
-          <div class="admin-card">
-            <h3>Сыгранные матчи</h3>
-            <ul class="admin-list" id="admin-results-list"></ul>
-          </div>
-        </div>
-
-        <!-- Protocol editor -->
-        <div class="admin-card" id="protocol-editor" style="margin-top:1.5rem;display:none">
-          <h3>📋 Протокол: <span id="proto-label"></span></h3>
-          <input type="hidden" id="proto-result-id">
-
-          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:0.75rem;margin-bottom:1.25rem">
-            <div class="form-group">
-              <label>Тип события</label>
-              <select id="ev-type" onchange="onEvTypeChange()">
-                <option value="goal">⚽ Гол</option>
-                <option value="yellow">🟨 Жёлтая</option>
-                <option value="red">🟥 Красная</option>
-                <option value="sub">🔄 Замена</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Минута</label>
-              <input type="number" id="ev-min" min="1" max="120" value="1">
-            </div>
-            <div class="form-group">
-              <label>Команда</label>
-              <select id="ev-team" onchange="onEvTeamChange()"></select>
-            </div>
-            <div class="form-group" id="ev-player-wrap">
-              <label id="ev-player-label">Игрок</label>
-              <select id="ev-player"></select>
-            </div>
-            <div class="form-group" id="ev-assist-wrap">
-              <label>Голевой пас (необяз.)</label>
-              <select id="ev-assist"></select>
-            </div>
-            <div class="form-group" id="ev-subout-wrap" style="display:none">
-              <label>Уходит с поля</label>
-              <select id="ev-subout"></select>
-            </div>
-          </div>
-          <button class="btn-admin" style="max-width:200px" onclick="addProtocolEvent()">+ Добавить событие</button>
-
-          <div style="margin-top:1.5rem">
-            <p style="font-size:0.72rem;color:var(--grey);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem">Хронология</p>
-            <div id="proto-events-list"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- TAB: Players -->
-      <div class="admin-content" id="tab-players">
-        <div class="admin-grid">
-          <div class="admin-card">
-            <h3>Выбор команды</h3>
-            <div class="form-group">
-              <label>Команда</label>
-              <select id="p-team" onchange="renderAdminPlayersList()"></select>
-            </div>
-            <h3 style="margin-top:1.25rem">Добавить игрока</h3>
-            <div class="form-group">
-              <label>Имя и фамилия</label>
-              <input type="text" id="p-name" placeholder="Иван Иванов">
-            </div>
-            <div class="form-group">
-              <label>Фото — URL или загрузить файл</label>
-              <input type="text" id="p-photo-url" placeholder="https://... или оставь пустым">
-              <input type="file" id="p-photo-file" accept="image/*" style="margin-top:6px;color:var(--grey);font-size:0.8rem;width:100%">
-            </div>
-            <div class="form-group">
-              <label>Позиция</label>
-              <select id="p-pos">
-                <option>Вратарь</option>
-                <option>Защитник</option>
-                <option>Полузащитник</option>
-                <option>Нападающий</option>
-                <option disabled>──────────</option>
-                <option>Президент</option>
-                <option>Тренер</option>
-              </select>
-            </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem">
-              <div class="form-group">
-                <label>Матчей</label>
-                <input type="number" id="p-matches" value="0" min="0">
-              </div>
-              <div class="form-group">
-                <label>Голов</label>
-                <input type="number" id="p-goals" value="0" min="0">
-              </div>
-              <div class="form-group">
-                <label>ЖК</label>
-                <input type="number" id="p-yellow" value="0" min="0">
-              </div>
-              <div class="form-group">
-                <label>КК</label>
-                <input type="number" id="p-red" value="0" min="0">
-              </div>
-            </div>
-            <button class="btn-admin" onclick="addPlayer()">Добавить игрока</button>
-          </div>
-          <div class="admin-card" style="display:flex;flex-direction:column">
-            <h3>Состав команды <span id="players-count" style="color:var(--grey);font-weight:400;font-size:0.8rem"></span></h3>
-            <ul class="admin-list" id="admin-players-list" style="max-height:none;flex:1"></ul>
-          </div>
-        </div>
-
-        <!-- Edit player inline -->
-        <div class="admin-card" id="edit-player-card" style="margin-top:1.5rem;display:none">
-          <h3>✏️ Редактировать игрока: <span id="edit-player-label"></span></h3>
-          <input type="hidden" id="ep-teamid">
-          <input type="hidden" id="ep-playerid">
-          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:0.75rem;margin-top:0.5rem">
-            <div class="form-group">
-              <label>Имя и фамилия</label>
-              <input type="text" id="ep-name">
-            </div>
-            <div class="form-group" style="grid-column:1/-1">
-              <label>Фото — URL или загрузить файл</label>
-              <input type="text" id="ep-photo-url" placeholder="https://...">
-              <input type="file" id="ep-photo-file" accept="image/*" style="margin-top:6px;color:var(--grey);font-size:0.8rem;width:100%">
-              <div id="ep-photo-preview" style="margin-top:8px;display:none">
-                <img id="ep-photo-img" style="width:60px;height:60px;border-radius:50%;object-fit:cover;border:2px solid var(--border)">
-              </div>
-            </div>
-            <div class="form-group">
-              <label>Позиция</label>
-              <select id="ep-pos" onchange="toggleStatFields(this.value)">
-                <option>Вратарь</option>
-                <option>Защитник</option>
-                <option>Полузащитник</option>
-                <option>Нападающий</option>
-                <option disabled>──────────</option>
-                <option>Президент</option>
-                <option>Тренер</option>
-              </select>
-            </div>
-            <div class="form-group stat-only-field">
-              <label>Матчей</label>
-              <input type="number" id="ep-matches" min="0">
-            </div>
-            <div class="form-group stat-only-field">
-              <label>Голов</label>
-              <input type="number" id="ep-goals" min="0">
-            </div>
-            <div class="form-group stat-only-field">
-              <label>ЖК</label>
-              <input type="number" id="ep-yellow" min="0">
-            </div>
-            <div class="form-group stat-only-field">
-              <label>КК</label>
-              <input type="number" id="ep-red" min="0">
-            </div>
-          </div>
-          <div style="display:flex;gap:0.75rem;margin-top:0.5rem">
-            <button class="btn-admin" style="max-width:200px" onclick="savePlayer()">💾 Сохранить</button>
-            <button class="btn-admin" style="max-width:160px;background:var(--navy-light);color:var(--grey)" onclick="document.getElementById('edit-player-card').style.display='none'">Отмена</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- TAB: Table -->
-      <div class="admin-content" id="tab-table">
-        <div class="admin-card">
-          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;margin-bottom:1.25rem">
-            <h3 style="margin:0">Турнирная таблица</h3>
-            <button class="btn-admin" style="max-width:260px;gap:0.5rem" onclick="recalcStandings()">🔄 Пересчитать по результатам</button>
-          </div>
-          <p style="font-size:0.75rem;color:var(--grey);margin-bottom:1rem">Нажми 🔄 чтобы автоматически посчитать В/Н/П/Очки из результатов матчей. Или редактируй вручную и жми 💾 у каждой строки.</p>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr><th>Команда</th><th>И</th><th>В</th><th>Н</th><th>П</th><th>Очки</th><th></th></tr>
-              </thead>
-              <tbody id="admin-standings-edit"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- TAB: Teams -->
-      <div class="admin-content" id="tab-teams">
-        <div class="admin-grid">
-          <div class="admin-card">
-            <h3 id="team-edit-title">Добавить команду</h3>
-            <div class="form-group">
-              <label>Название команды</label>
-              <input type="text" id="nt-name" placeholder="Название">
-            </div>
-            <div class="form-group">
-              <label>Логотип команды (URL или загрузить)</label>
-              <input type="text" id="nt-logo-url" placeholder="https://... или оставь пустым">
-              <input type="file" id="nt-logo-file" accept="image/*" style="margin-top:6px;color:var(--grey);font-size:0.8rem;width:100%" onchange="openCropModal('nt-logo')">
-              <div id="nt-logo-preview" style="margin-top:8px;display:none">
-                <img id="nt-logo-img" style="width:56px;height:56px;border-radius:50%;object-fit:contain;border:2px solid var(--border)">
-              </div>
-            </div>
-            <div class="form-group">
-              <label>Эмодзи (если нет логотипа)</label>
-              <input type="text" id="nt-emoji" placeholder="⚽" maxlength="2">
-            </div>
-            <input type="hidden" id="nt-edit-id">
-            <div style="display:flex;gap:0.75rem">
-              <button class="btn-admin" onclick="saveTeam()">💾 Сохранить</button>
-              <button class="btn-admin" id="nt-cancel-btn" style="background:var(--navy-light);color:var(--grey);display:none" onclick="cancelTeamEdit()">Отмена</button>
-            </div>
-          </div>
-          <div class="admin-card" style="display:flex;flex-direction:column">
-            <h3>Список команд</h3>
-            <ul class="admin-list" id="admin-teams-list" style="max-height:none;flex:1"></ul>
-          </div>
-        </div>
-      </div>
-
-      <!-- TAB: Settings -->
-      <div class="admin-content" id="tab-settings">
-        <div class="admin-grid">
-          <div class="admin-card">
-            <h3>Логотип лиги</h3>
-            <div class="form-group">
-              <label>URL логотипа</label>
-              <input type="text" id="league-logo-url" placeholder="https://...">
-            </div>
-            <div class="form-group">
-              <label>или загрузить файл</label>
-              <input type="file" id="league-logo-file" accept="image/*" style="color:var(--grey);font-size:0.8rem;width:100%" onchange="openCropModal('league-logo')">
-            </div>
-            <div id="league-logo-preview" style="margin:0.75rem 0;display:none">
-              <img id="league-logo-img" style="width:64px;height:64px;border-radius:50%;object-fit:contain;border:2px solid var(--border)">
-            </div>
-            <button class="btn-admin" onclick="saveLeagueLogo()">💾 Сохранить логотип</button>
-            <button class="btn-admin" style="margin-top:0.5rem;background:var(--navy-light);color:var(--grey)" onclick="resetLeagueLogo()">Сбросить логотип</button>
-          </div>
-          <div class="admin-card">
-            <h3>Статистика на главной</h3>
-            <p style="font-size:0.78rem;color:var(--grey);margin-bottom:1rem">Цифры под кнопкой «Расписание матчей»</p>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem">
-              <div class="form-group">
-                <label>Команд</label>
-                <input type="number" id="hs-teams" min="0">
-              </div>
-              <div class="form-group">
-                <label>Матчей</label>
-                <input type="number" id="hs-matches" min="0">
-              </div>
-              <div class="form-group">
-                <label>Игроков</label>
-                <input type="number" id="hs-players" min="0">
-              </div>
-              <div class="form-group">
-                <label>Голов</label>
-                <input type="number" id="hs-goals" min="0">
-              </div>
-            </div>
-            <button class="btn-admin" onclick="saveHeroStats()">💾 Сохранить</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- TAB: Log -->
-      <div class="admin-content" id="tab-log">
-        <div class="admin-card">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
-            <h3>📋 Журнал изменений</h3>
-            <div style="display:flex;gap:0.5rem">
-              
-              <button class="btn-admin" style="max-width:160px;background:var(--navy-light);color:var(--grey)" onclick="clearLog()">Очистить журнал</button>
-            </div>
-          </div>
-          <div id="action-log-list" style="display:flex;flex-direction:column;gap:0.5rem;max-height:500px;overflow-y:auto"></div>
-        </div>
-      </div>
-
-    </div>
-  </div>
 </div>
 
 <!-- ===================== FOOTER ===================== -->
 <footer>
-  <p>© 2026 <span>Бронницкая Футбольная Лига</span>. Сезон 2026. Все права защищены.</p>
-  <p style="margin-top:1rem;font-size:0.75rem;color:var(--grey);letter-spacing:0.05em">
-    Основатели лиги — <span style="color:var(--grey-light)">Абдуллин Константин</span> &amp; <span style="color:var(--grey-light)">Ежова Карина</span>
-  </p>
+    <p>© 2026 <span>Бронницкая Футбольная Лига</span>. Сезон 2026. Все права защищены.</p>
+    <p class="founders-credit">
+        Основатели лиги — <span>Абдуллин Константин</span> &amp; <span>Ежова Карина</span>
+    </p>
 </footer>
 
 <!-- ===================== MODALS ===================== -->
 <!-- Team modal -->
 <div class="modal-overlay" id="team-modal">
-  <div class="modal modal-wide">
-    <div class="modal-header">
-      <div>
-        <div class="modal-title" id="team-modal-title"></div>
-        <div style="font-size:0.75rem;color:var(--grey);margin-top:4px" id="team-modal-sub"></div>
-      </div>
-      <button class="modal-close" onclick="closeModal('team-modal')">✕</button>
+    <div class="modal modal-wide">
+        <div class="modal-header">
+            <div>
+                <div class="modal-title" id="team-modal-title"></div>
+                <div class="modal-subtitle" id="team-modal-sub"></div>
+            </div>
+            <button class="modal-close" data-modal="team-modal">✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="players-grid" id="team-players-grid"></div>
+        </div>
     </div>
-    <div class="modal-body">
-      <div class="players-grid" id="team-players-grid"></div>
-    </div>
-  </div>
 </div>
 
 <!-- Player modal -->
 <div class="modal-overlay" id="player-modal">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title" id="player-modal-title">Игрок</div>
-      <button class="modal-close" onclick="closeModal('player-modal')">✕</button>
+    <div class="modal">
+        <div class="modal-header">
+            <div class="modal-title" id="player-modal-title">Игрок</div>
+            <button class="modal-close" data-modal="player-modal">✕</button>
+        </div>
+        <div class="modal-body" id="player-modal-body"></div>
     </div>
-    <div class="modal-body" id="player-modal-body"></div>
-  </div>
 </div>
 
 <!-- Match protocol modal -->
 <div class="modal-overlay" id="protocol-modal">
-  <div class="modal modal-wide">
-    <div class="modal-header">
-      <div class="modal-title">Протокол матча</div>
-      <button class="modal-close" onclick="closeModal('protocol-modal')">✕</button>
+    <div class="modal modal-wide">
+        <div class="modal-header">
+            <div class="modal-title">Протокол матча</div>
+            <button class="modal-close" data-modal="protocol-modal">✕</button>
+        </div>
+        <div class="modal-body" id="protocol-modal-body"></div>
     </div>
-    <div class="modal-body" id="protocol-modal-body"></div>
-  </div>
 </div>
 
-<script>
-// ===================== DATA =====================
-
-const DEFAULT_TEAMS = [
-  { id:1, name:"Бронницы-1", emoji:"🔵", players:[
-    {id:101,name:"Алексей Зимин",pos:"Вратарь",matches:12,goals:0,yellow:1,red:0,recentMatches:[{date:"12.05",opp:"Ветеран"},{date:"05.05",opp:"Торпедо"},{date:"28.04",opp:"Молния"}]},
-    {id:102,name:"Дмитрий Морев",pos:"Защитник",matches:11,goals:1,yellow:3,red:0,recentMatches:[{date:"12.05",opp:"Ветеран"},{date:"05.05",opp:"Торпедо"}]},
-    {id:103,name:"Артём Волков",pos:"Защитник",matches:12,goals:0,yellow:2,red:0,recentMatches:[{date:"12.05",opp:"Ветеран"},{date:"05.05",opp:"Торпедо"},{date:"28.04",opp:"Молния"}]},
-    {id:104,name:"Сергей Лазарев",pos:"Полузащитник",matches:12,goals:3,yellow:1,red:0,recentMatches:[{date:"12.05",opp:"Ветеран"},{date:"05.05",opp:"Торпедо"}]},
-    {id:105,name:"Николай Фролов",pos:"Полузащитник",matches:10,goals:4,yellow:0,red:0,recentMatches:[{date:"12.05",opp:"Ветеран"},{date:"28.04",opp:"Молния"}]},
-    {id:106,name:"Роман Калинин",pos:"Нападающий",matches:12,goals:9,yellow:2,red:1,recentMatches:[{date:"12.05",opp:"Ветеран"},{date:"05.05",opp:"Торпедо"},{date:"28.04",opp:"Молния"}]},
-    {id:107,name:"Антон Беляев",pos:"Нападающий",matches:11,goals:6,yellow:3,red:0,recentMatches:[{date:"12.05",opp:"Ветеран"},{date:"05.05",opp:"Торпедо"}]},
-    {id:108,name:"Павел Грачёв",pos:"Защитник",matches:9,goals:1,yellow:1,red:0,recentMatches:[{date:"12.05",opp:"Ветеран"}]},
-  ]},
-  { id:2, name:"Ветеран", emoji:"🟤", players:[
-    {id:201,name:"Виктор Соколов",pos:"Вратарь",matches:13,goals:0,yellow:0,red:0,recentMatches:[{date:"12.05",opp:"Бронницы-1"},{date:"04.05",opp:"Звезда"}]},
-    {id:202,name:"Михаил Орлов",pos:"Защитник",matches:12,goals:2,yellow:2,red:0,recentMatches:[{date:"12.05",opp:"Бронницы-1"},{date:"04.05",opp:"Звезда"}]},
-    {id:203,name:"Юрий Степанов",pos:"Полузащитник",matches:11,goals:5,yellow:1,red:0,recentMatches:[{date:"12.05",opp:"Бронницы-1"}]},
-    {id:204,name:"Борис Крылов",pos:"Нападающий",matches:13,goals:7,yellow:3,red:1,recentMatches:[{date:"12.05",opp:"Бронницы-1"},{date:"04.05",opp:"Звезда"}]},
-    {id:205,name:"Иван Назаров",pos:"Защитник",matches:10,goals:0,yellow:4,red:0,recentMatches:[{date:"04.05",opp:"Звезда"}]},
-    {id:206,name:"Олег Тихонов",pos:"Полузащитник",matches:12,goals:3,yellow:1,red:0,recentMatches:[{date:"12.05",opp:"Бронницы-1"},{date:"04.05",opp:"Звезда"}]},
-    {id:207,name:"Леонид Баранов",pos:"Нападающий",matches:11,goals:4,yellow:2,red:0,recentMatches:[{date:"12.05",opp:"Бронницы-1"}]},
-  ]},
-  { id:3, name:"Молния", emoji:"⚡", players:[
-    {id:301,name:"Сёмён Кузин",pos:"Вратарь",matches:10,goals:0,yellow:1,red:0,recentMatches:[{date:"28.04",opp:"Бронницы-1"},{date:"21.04",opp:"Спарта"}]},
-    {id:302,name:"Виталий Жуков",pos:"Защитник",matches:9,goals:1,yellow:2,red:0,recentMatches:[{date:"28.04",opp:"Бронницы-1"}]},
-    {id:303,name:"Фёдор Панов",pos:"Полузащитник",matches:10,goals:6,yellow:0,red:0,recentMatches:[{date:"28.04",opp:"Бронницы-1"},{date:"21.04",opp:"Спарта"}]},
-    {id:304,name:"Станислав Рыбин",pos:"Нападающий",matches:10,goals:8,yellow:1,red:0,recentMatches:[{date:"28.04",opp:"Бронницы-1"},{date:"21.04",opp:"Спарта"}]},
-    {id:305,name:"Герман Свиридов",pos:"Защитник",matches:8,goals:0,yellow:3,red:1,recentMatches:[{date:"28.04",opp:"Бронницы-1"}]},
-    {id:306,name:"Тарас Воронов",pos:"Полузащитник",matches:10,goals:2,yellow:0,red:0,recentMatches:[{date:"28.04",opp:"Бронницы-1"},{date:"21.04",opp:"Спарта"}]},
-  ]},
-  { id:4, name:"Торпедо", emoji:"🚀", players:[
-    {id:401,name:"Максим Ефимов",pos:"Вратарь",matches:11,goals:0,yellow:0,red:0,recentMatches:[{date:"05.05",opp:"Бронницы-1"},{date:"26.04",opp:"Динамо"}]},
-    {id:402,name:"Денис Власов",pos:"Защитник",matches:11,goals:2,yellow:1,red:0,recentMatches:[{date:"05.05",opp:"Бронницы-1"}]},
-    {id:403,name:"Кирилл Медведев",pos:"Полузащитник",matches:11,goals:5,yellow:2,red:0,recentMatches:[{date:"05.05",opp:"Бронницы-1"},{date:"26.04",opp:"Динамо"}]},
-    {id:404,name:"Василий Попов",pos:"Нападающий",matches:10,goals:7,yellow:1,red:0,recentMatches:[{date:"05.05",opp:"Бронницы-1"},{date:"26.04",opp:"Динамо"}]},
-    {id:405,name:"Эдуард Смирнов",pos:"Защитник",matches:9,goals:1,yellow:3,red:0,recentMatches:[{date:"05.05",opp:"Бронницы-1"}]},
-    {id:406,name:"Владимир Лебедев",pos:"Полузащитник",matches:11,goals:4,yellow:0,red:0,recentMatches:[{date:"05.05",opp:"Бронницы-1"},{date:"26.04",opp:"Динамо"}]},
-  ]},
-  { id:5, name:"Звезда", emoji:"⭐", players:[
-    {id:501,name:"Глеб Романов",pos:"Вратарь",matches:12,goals:0,yellow:1,red:0,recentMatches:[{date:"04.05",opp:"Ветеран"},{date:"27.04",opp:"Вымпел"}]},
-    {id:502,name:"Илья Козлов",pos:"Защитник",matches:11,goals:3,yellow:2,red:0,recentMatches:[{date:"04.05",opp:"Ветеран"},{date:"27.04",opp:"Вымпел"}]},
-    {id:503,name:"Тимур Сидоров",pos:"Полузащитник",matches:12,goals:7,yellow:0,red:0,recentMatches:[{date:"04.05",opp:"Ветеран"}]},
-    {id:504,name:"Арсений Новиков",pos:"Нападающий",matches:12,goals:10,yellow:1,red:0,recentMatches:[{date:"04.05",opp:"Ветеран"},{date:"27.04",opp:"Вымпел"}]},
-    {id:505,name:"Платон Федоров",pos:"Защитник",matches:10,goals:0,yellow:4,red:1,recentMatches:[{date:"27.04",opp:"Вымпел"}]},
-    {id:506,name:"Алишер Маков",pos:"Полузащитник",matches:11,goals:4,yellow:1,red:0,recentMatches:[{date:"04.05",opp:"Ветеран"},{date:"27.04",opp:"Вымпел"}]},
-  ]},
-  { id:6, name:"Динамо-Бронницы", emoji:"🔶", players:[
-    {id:601,name:"Евгений Ковалёв",pos:"Вратарь",matches:10,goals:0,yellow:2,red:0,recentMatches:[{date:"26.04",opp:"Торпедо"},{date:"19.04",opp:"Локомотив"}]},
-    {id:602,name:"Руслан Петров",pos:"Защитник",matches:9,goals:1,yellow:3,red:1,recentMatches:[{date:"26.04",opp:"Торпедо"}]},
-    {id:603,name:"Захар Семёнов",pos:"Полузащитник",matches:10,goals:4,yellow:1,red:0,recentMatches:[{date:"26.04",opp:"Торпедо"},{date:"19.04",opp:"Локомотив"}]},
-    {id:604,name:"Всеволод Гусев",pos:"Нападающий",matches:10,goals:5,yellow:2,red:0,recentMatches:[{date:"26.04",opp:"Торпедо"},{date:"19.04",opp:"Локомотив"}]},
-    {id:605,name:"Ярослав Беляков",pos:"Защитник",matches:8,goals:0,yellow:1,red:0,recentMatches:[{date:"19.04",opp:"Локомотив"}]},
-    {id:606,name:"Дмитрий Уткин",pos:"Полузащитник",matches:10,goals:3,yellow:0,red:0,recentMatches:[{date:"26.04",opp:"Торпедо"},{date:"19.04",opp:"Локомотив"}]},
-  ]},
-  { id:7, name:"Спарта", emoji:"⚔️", players:[
-    {id:701,name:"Игорь Лысенко",pos:"Вратарь",matches:11,goals:0,yellow:0,red:0,recentMatches:[{date:"21.04",opp:"Молния"},{date:"14.04",opp:"Цементник"}]},
-    {id:702,name:"Константин Агеев",pos:"Защитник",matches:10,goals:2,yellow:2,red:0,recentMatches:[{date:"21.04",opp:"Молния"}]},
-    {id:703,name:"Никита Исаев",pos:"Полузащитник",matches:11,goals:5,yellow:1,red:0,recentMatches:[{date:"21.04",opp:"Молния"},{date:"14.04",opp:"Цементник"}]},
-    {id:704,name:"Анатолий Гришин",pos:"Нападающий",matches:11,goals:8,yellow:2,red:0,recentMatches:[{date:"21.04",opp:"Молния"},{date:"14.04",opp:"Цементник"}]},
-    {id:705,name:"Геннадий Рощин",pos:"Защитник",matches:9,goals:1,yellow:3,red:1,recentMatches:[{date:"14.04",opp:"Цементник"}]},
-    {id:706,name:"Семён Архипов",pos:"Полузащитник",matches:11,goals:3,yellow:0,red:0,recentMatches:[{date:"21.04",opp:"Молния"},{date:"14.04",opp:"Цементник"}]},
-  ]},
-  { id:8, name:"Вымпел", emoji:"🚩", players:[
-    {id:801,name:"Пётр Ильин",pos:"Вратарь",matches:10,goals:0,yellow:1,red:0,recentMatches:[{date:"27.04",opp:"Звезда"},{date:"20.04",opp:"Бронницы-1"}]},
-    {id:802,name:"Алексей Губин",pos:"Защитник",matches:9,goals:0,yellow:2,red:0,recentMatches:[{date:"27.04",opp:"Звезда"}]},
-    {id:803,name:"Григорий Чернов",pos:"Полузащитник",matches:10,goals:3,yellow:1,red:0,recentMatches:[{date:"27.04",opp:"Звезда"},{date:"20.04",opp:"Бронницы-1"}]},
-    {id:804,name:"Степан Малышев",pos:"Нападающий",matches:10,goals:6,yellow:0,red:0,recentMatches:[{date:"27.04",opp:"Звезда"},{date:"20.04",opp:"Бронницы-1"}]},
-    {id:805,name:"Аркадий Жданов",pos:"Защитник",matches:8,goals:0,yellow:3,red:0,recentMatches:[{date:"20.04",opp:"Бронницы-1"}]},
-    {id:806,name:"Леонтий Поляков",pos:"Полузащитник",matches:10,goals:2,yellow:1,red:0,recentMatches:[{date:"27.04",opp:"Звезда"},{date:"20.04",opp:"Бронницы-1"}]},
-  ]},
-  { id:9, name:"Локомотив", emoji:"🚂", players:[
-    {id:901,name:"Матвей Кузнецов",pos:"Вратарь",matches:11,goals:0,yellow:0,red:0,recentMatches:[{date:"19.04",opp:"Динамо-Бронницы"},{date:"12.04",opp:"Ветеран"}]},
-    {id:902,name:"Тихон Сергеев",pos:"Защитник",matches:10,goals:1,yellow:2,red:0,recentMatches:[{date:"19.04",opp:"Динамо-Бронницы"}]},
-    {id:903,name:"Вадим Громов",pos:"Полузащитник",matches:11,goals:4,yellow:1,red:0,recentMatches:[{date:"19.04",opp:"Динамо-Бронницы"},{date:"12.04",opp:"Ветеран"}]},
-    {id:904,name:"Арсений Климов",pos:"Нападающий",matches:11,goals:7,yellow:1,red:0,recentMatches:[{date:"19.04",opp:"Динамо-Бронницы"},{date:"12.04",opp:"Ветеран"}]},
-    {id:905,name:"Тарас Щербаков",pos:"Защитник",matches:9,goals:0,yellow:4,red:1,recentMatches:[{date:"12.04",opp:"Ветеран"}]},
-    {id:906,name:"Роман Пахомов",pos:"Полузащитник",matches:11,goals:3,yellow:0,red:0,recentMatches:[{date:"19.04",opp:"Динамо-Бронницы"},{date:"12.04",opp:"Ветеран"}]},
-  ]},
-  { id:10, name:"Цементник", emoji:"🏗️", players:[
-    {id:1001,name:"Владислав Ермолов",pos:"Вратарь",matches:9,goals:0,yellow:1,red:0,recentMatches:[{date:"14.04",opp:"Спарта"},{date:"07.04",opp:"Молния"}]},
-    {id:1002,name:"Сергей Воробьёв",pos:"Защитник",matches:8,goals:0,yellow:3,red:0,recentMatches:[{date:"14.04",opp:"Спарта"}]},
-    {id:1003,name:"Андрей Тимофеев",pos:"Полузащитник",matches:9,goals:2,yellow:2,red:0,recentMatches:[{date:"14.04",opp:"Спарта"},{date:"07.04",opp:"Молния"}]},
-    {id:1004,name:"Михаил Дорофеев",pos:"Нападающий",matches:9,goals:4,yellow:1,red:1,recentMatches:[{date:"14.04",оpp:"Спарта"},{date:"07.04",opp:"Молния"}]},
-    {id:1005,name:"Николай Брагин",pos:"Защитник",matches:7,goals:0,yellow:2,red:0,recentMatches:[{date:"07.04",opp:"Молния"}]},
-    {id:1006,name:"Владимир Зайцев",pos:"Полузащитник",matches:9,goals:1,yellow:0,red:0,recentMatches:[{date:"14.04",opp:"Спарта"},{date:"07.04",opp:"Молния"}]},
-  ]},
-];
-
-const DEFAULT_UPCOMING = [
-  {id:"u1",team1:"Бронницы-1",team2:"Молния",date:"2025-06-07",time:"15:00",venue:"Бронницкий городской стадион"},
-  {id:"u2",team1:"Звезда",team2:"Торпедо",date:"2025-06-07",time:"17:00",venue:"Бронницкий городской стадион"},
-  {id:"u3",team1:"Ветеран",team2:"Спарта",date:"2025-06-08",time:"12:00",venue:"Стадион «Авангард»"},
-  {id:"u4",team1:"Динамо-Бронницы",team2:"Вымпел",date:"2025-06-14",time:"16:00",venue:"Бронницкий городской стадион"},
-  {id:"u5",team1:"Локомотив",team2:"Цементник",date:"2025-06-14",time:"18:00",venue:"Стадион «Авангард»"},
-];
-
-const DEFAULT_RESULTS = [
-  {id:"r1",team1:"Бронницы-1",team2:"Ветеран",date:"2025-05-12",g1:3,g2:1,events:[
-    {min:18,type:"goal",playerName:"Калинин Р.",teamName:"Бронницы-1",assistName:"Фролов Н."},
-    {min:35,type:"goal",playerName:"Крылов Б.",teamName:"Ветеран",assistName:""},
-    {min:42,type:"yellow",playerName:"Назаров И.",teamName:"Ветеран"},
-    {min:56,type:"goal",playerName:"Фролов Н.",teamName:"Бронницы-1",assistName:"Беляев А."},
-    {min:67,type:"yellow",playerName:"Морев Д.",teamName:"Бронницы-1"},
-    {min:70,type:"sub",playerName:"Грачёв П.",teamName:"Бронницы-1",subOutName:"Морев Д."},
-    {min:78,type:"goal",playerName:"Беляев А.",teamName:"Бронницы-1",assistName:"Калинин Р."},
-    {min:85,type:"red",playerName:"Калинин Р.",teamName:"Бронницы-1"},
-  ]},
-  {id:"r2",team1:"Торпедо",team2:"Бронницы-1",date:"2025-05-05",g1:1,g2:2,events:[
-    {min:12,type:"goal",playerName:"Калинин Р.",teamName:"Бронницы-1",assistName:"Беляев А."},
-    {min:34,type:"yellow",playerName:"Власов Д.",teamName:"Торпедо"},
-    {min:51,type:"goal",playerName:"Попов В.",teamName:"Торпедо",assistName:"Медведев К."},
-    {min:63,type:"goal",playerName:"Фролов Н.",teamName:"Бронницы-1",assistName:""},
-    {min:71,type:"yellow",playerName:"Медведев К.",teamName:"Торпедо"},
-    {min:80,type:"sub",playerName:"Грачёв П.",teamName:"Бронницы-1",subOutName:"Лазарев С."},
-  ]},
-  {id:"r3",team1:"Звезда",team2:"Ветеран",date:"2025-05-04",g1:2,g2:0,events:[
-    {min:22,type:"goal",playerName:"Новиков А.",teamName:"Звезда",assistName:"Сидоров Т."},
-    {min:38,type:"yellow",playerName:"Назаров И.",teamName:"Ветеран"},
-    {min:54,type:"goal",playerName:"Сидоров Т.",teamName:"Звезда",assistName:"Маков А."},
-    {min:72,type:"red",playerName:"Крылов Б.",teamName:"Ветеран"},
-  ]},
-  {id:"r4",team1:"Молния",team2:"Бронницы-1",date:"2025-04-28",g1:2,g2:2,events:[
-    {min:8,type:"goal",playerName:"Рыбин С.",teamName:"Молния",assistName:"Панов Ф."},
-    {min:25,type:"goal",playerName:"Калинин Р.",teamName:"Бронницы-1",assistName:"Фролов Н."},
-    {min:44,type:"yellow",playerName:"Жуков В.",teamName:"Молния"},
-    {min:60,type:"goal",playerName:"Панов Ф.",teamName:"Молния",assistName:"Рыбин С."},
-    {min:75,type:"sub",playerName:"Грачёв П.",teamName:"Бронницы-1",subOutName:"Волков А."},
-    {min:80,type:"goal",playerName:"Беляев А.",teamName:"Бронницы-1",assistName:"Калинин Р."},
-  ]},
-  {id:"r5",team1:"Вымпел",team2:"Звезда",date:"2025-04-27",g1:1,g2:3,events:[
-    {min:15,type:"goal",playerName:"Новиков А.",teamName:"Звезда",assistName:"Сидоров Т."},
-    {min:33,type:"goal",playerName:"Малышев С.",teamName:"Вымпел",assistName:"Чернов Г."},
-    {min:47,type:"yellow",playerName:"Губин А.",teamName:"Вымпел"},
-    {min:58,type:"goal",playerName:"Сидоров Т.",teamName:"Звезда",assistName:"Новиков А."},
-    {min:65,type:"sub",playerName:"Маков А.",teamName:"Звезда",subOutName:"Козлов И."},
-    {min:76,type:"goal",playerName:"Новиков А.",teamName:"Звезда",assistName:"Маков А."},
-  ]},
-  {id:"r6",team1:"Торпедо",team2:"Динамо-Бронницы",date:"2025-04-26",g1:3,g2:2,events:[
-    {min:10,type:"goal",playerName:"Попов В.",teamName:"Торпедо",assistName:"Медведев К."},
-    {min:20,type:"goal",playerName:"Гусев В.",teamName:"Динамо-Бронницы",assistName:"Семёнов З."},
-    {min:39,type:"yellow",playerName:"Петров Р.",teamName:"Динамо-Бронницы"},
-    {min:52,type:"goal",playerName:"Попов В.",teamName:"Торпедо",assistName:"Лебедев В."},
-    {min:65,type:"goal",playerName:"Семёнов З.",teamName:"Динамо-Бронницы",assistName:"Гусев В."},
-    {min:70,type:"sub",playerName:"Власов Д.",teamName:"Торпедо",subOutName:"Ефимов М."},
-    {min:77,type:"goal",playerName:"Медведев К.",teamName:"Торпедо",assistName:"Попов В."},
-    {min:88,type:"red",playerName:"Петров Р.",teamName:"Динамо-Бронницы"},
-  ]},
-];
-
-const DEFAULT_STANDINGS = [
-  {team:"Бронницы-1",p:12,w:9,d:2,l:1,pts:29},
-  {team:"Звезда",p:12,w:8,d:2,l:2,pts:26},
-  {team:"Торпедо",p:11,w:7,d:1,l:3,pts:22},
-  {team:"Молния",p:10,w:6,d:2,l:2,pts:20},
-  {team:"Ветеран",p:13,w:5,d:3,l:5,pts:18},
-  {team:"Спарта",p:11,w:5,d:2,l:4,pts:17},
-  {team:"Локомотив",p:11,w:4,d:3,l:4,pts:15},
-  {team:"Динамо-Бронницы",p:10,w:4,d:1,l:5,pts:13},
-  {team:"Вымпел",p:10,w:2,d:2,l:6,pts:8},
-  {team:"Цементник",p:9,w:1,d:1,l:7,pts:4},
-];
-
-// ===================== SUPABASE =====================
-const SB_URL = 'https://rqjgqsdofvvigqsoiglx.supabase.co';
-const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJxamdxc2RvZnZ2aWdxc29pZ2x4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxNzI4NDMsImV4cCI6MjA4ODc0ODg0M30.qfIIBtDooO5zzFBHqYZ7Y-9qK_ldO2a3XspfjY1VP7o';
-const SB_HEADERS = { 'Content-Type': 'application/json', 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY };
-
-async function sbGet(table, params='') {
-  const r = await fetch(`${SB_URL}/rest/v1/${table}?${params}`, { headers: SB_HEADERS });
-  if(!r.ok) throw new Error(await r.text());
-  return r.json();
-}
-async function sbPost(table, body) {
-  const r = await fetch(`${SB_URL}/rest/v1/${table}`, {
-    method:'POST', headers:{...SB_HEADERS,'Prefer':'return=representation'}, body:JSON.stringify(body)
-  });
-  if(!r.ok) throw new Error(await r.text());
-  return r.json();
-}
-async function sbPatch(table, match, body) {
-  const q = Object.entries(match).map(([k,v])=>`${k}=eq.${encodeURIComponent(v)}`).join('&');
-  const r = await fetch(`${SB_URL}/rest/v1/${table}?${q}`, {
-    method:'PATCH', headers:{...SB_HEADERS,'Prefer':'return=representation'}, body:JSON.stringify(body)
-  });
-  if(!r.ok) throw new Error(await r.text());
-  return r.json();
-}
-async function sbDelete(table, match) {
-  const q = Object.entries(match).map(([k,v])=>`${k}=eq.${encodeURIComponent(v)}`).join('&');
-  const r = await fetch(`${SB_URL}/rest/v1/${table}?${q}`, { method:'DELETE', headers:SB_HEADERS });
-  if(!r.ok) throw new Error(await r.text());
-}
-async function sbUpsert(table, body) {
-  const r = await fetch(`${SB_URL}/rest/v1/${table}`, {
-    method:'POST', headers:{...SB_HEADERS,'Prefer':'resolution=merge-duplicates,return=representation'}, body:JSON.stringify(body)
-  });
-  if(!r.ok) throw new Error(await r.text());
-  return r.json();
-}
-async function sbSetting(key) {
-  const rows = await sbGet('settings', `key=eq.${key}&select=value`);
-  return rows.length ? rows[0].value : null;
-}
-async function sbSetSetting(key, value) {
-  await sbUpsert('settings', {key, value: typeof value === 'string' ? value : JSON.stringify(value)});
-}
-
-// Upload image to Supabase Storage, returns public URL
-async function uploadToStorage(bucket, path, base64DataUrl) {
-  const arr = base64DataUrl.split(',');
-  const mime = arr[0].match(/:(.*?);/)[1];
-  const bstr = atob(arr[1]);
-  const bytes = new Uint8Array(bstr.length);
-  for(let i=0;i<bstr.length;i++) bytes[i]=bstr.charCodeAt(i);
-  const blob = new Blob([bytes], {type:mime});
-  const ext = mime.split('/')[1].replace('jpeg','jpg');
-  const fullPath = `${path}.${ext}?t=${Date.now()}`;
-  const r = await fetch(`${SB_URL}/storage/v1/object/${bucket}/${fullPath}`, {
-    method:'POST',
-    headers:{ 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': mime, 'x-upsert': 'true' },
-    body: blob
-  });
-  if(!r.ok) { const e = await r.text(); throw new Error(e); }
-  return `${SB_URL}/storage/v1/object/public/${bucket}/${fullPath}`;
-}
-
-// ===================== STATE =====================
-let teams = [];
-let upcoming = [];
-let results = [];
-let standings = [];
-let heroStats = {teams:0,matches:0,players:0,goals:0};
-let leagueLogo = null;
-let actionLog = [];
-let actionHistory = [];
-
-function showLoader(msg='Загрузка...') {
-  let el = document.getElementById('sb-loader');
-  if(!el) {
-    el = document.createElement('div');
-    el.id = 'sb-loader';
-    el.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:9999;background:var(--green);color:#000;font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:0.85rem;padding:6px 1rem;text-align:center;letter-spacing:0.05em;transition:opacity 0.3s';
-    document.body.appendChild(el);
-  }
-  el.textContent = msg;
-  el.style.opacity = '1';
-}
-function hideLoader() {
-  const el = document.getElementById('sb-loader');
-  if(el) { el.style.opacity='0'; setTimeout(()=>el.remove(),300); }
-}
-
-async function loadAllData() {
-  showLoader('⏳ Загрузка данных...');
-  try {
-    // Load teams with players
-    const teamsRaw = await sbGet('teams', 'order=id.asc');
-    const playersRaw = await sbGet('players', 'order=id.asc');
-    teams = teamsRaw.map(t => ({
-      ...t,
-      players: playersRaw.filter(p => p.team_id === t.id).map(p => ({
-        id: p.id, name: p.name, pos: p.pos||'Нападающий',
-        matches: p.matches||0, goals: p.goals||0,
-        yellow: p.yellow||0, red: p.red||0, photo: p.photo||'',
-        recentMatches: []
-      }))
-    }));
-
-    // Load upcoming
-    const upRaw = await sbGet('upcoming', 'order=date.asc');
-    upcoming = upRaw.map(u => ({id:u.id,team1:u.team1,team2:u.team2,date:u.date,time:u.time,venue:u.venue}));
-
-    // Load results
-    const resRaw = await sbGet('results', 'order=date.desc');
-    results = resRaw.map(r => ({
-      id: r.id, team1: r.team1, team2: r.team2,
-      date: r.date, g1: r.g1||0, g2: r.g2||0,
-      events: Array.isArray(r.events) ? r.events : (r.events ? JSON.parse(r.events) : [])
-    }));
-
-    // Load standings
-    const stRaw = await sbGet('standings', 'order=pts.desc');
-    standings = stRaw.map(s => ({id:s.id,team:s.team,p:s.p||0,w:s.w||0,d:s.d||0,l:s.l||0,pts:s.pts||0}));
-
-    // Load settings
-    const heroRaw = await sbSetting('hero_stats');
-    heroStats = heroRaw ? JSON.parse(heroRaw) : {teams:0,matches:0,players:0,goals:0};
-    leagueLogo = await sbSetting('league_logo');
-    const logRaw = await sbSetting('action_log');
-    actionLog = logRaw ? JSON.parse(logRaw) : [];
-    actionHistory = [];
-
-    hideLoader();
-  } catch(e) {
-    hideLoader();
-    console.error('Supabase load error:', e);
-    showError('Ошибка загрузки данных: ' + e.message);
-  }
-}
-
-function showError(msg) {
-  const el = document.createElement('div');
-  el.style.cssText = 'position:fixed;bottom:1rem;left:50%;transform:translateX(-50%);background:#ff4d4d;color:#fff;padding:0.75rem 1.25rem;border-radius:8px;font-size:0.85rem;z-index:9999;max-width:90vw;text-align:center';
-  el.textContent = msg;
-  document.body.appendChild(el);
-  setTimeout(()=>el.remove(), 5000);
-}
-function showSuccess(msg) {
-  const el = document.createElement('div');
-  el.style.cssText = 'position:fixed;bottom:1rem;left:50%;transform:translateX(-50%);background:var(--green);color:#000;padding:0.75rem 1.25rem;border-radius:8px;font-size:0.85rem;font-weight:600;z-index:9999;max-width:90vw;text-align:center';
-  el.textContent = msg;
-  document.body.appendChild(el);
-  setTimeout(()=>el.remove(), 3000);
-}
-
-// ===================== RENDER =====================
-function formatDate(str) {
-  const d = new Date(str);
-  return d.toLocaleDateString('ru-RU', {day:'2-digit',month:'long',weekday:'short'});
-}
-
-function renderSchedule() {
-  const g = document.getElementById('schedule-grid');
-  g.innerHTML = upcoming.map(m => `
-    <div class="match-card">
-      <div class="match-date-row">
-        <span class="match-date">${formatDate(m.date)}</span>
-        <span class="match-venue">📍 ${m.venue}</span>
-      </div>
-      <div class="match-teams">
-        <div class="match-team">${m.team1}</div>
-        <div class="match-vs">VS</div>
-        <div class="match-team away">${m.team2}</div>
-      </div>
-      <div class="match-time">🕐 Начало в ${m.time}</div>
-    </div>`).join('');
-}
-
-function renderTeams() {
-  const g = document.getElementById('teams-grid');
-  const colors = ['#1a3a2b','#2b1a1a','#1a2b1a','#2b2a1a','#1a1a2b','#2b2a1a','#1a2a2b','#2b1a2a','#1a2b1a','#1a1a2b'];
-  g.innerHTML = teams.map((t,i) => {
-    const emblemContent = t.logo
-      ? `<img src="${t.logo}" style="width:100%;height:100%;object-fit:contain;border-radius:50%">`
-      : (t.emoji||'⚽');
-    return `<div class="team-card" onclick="openTeamModal(${t.id})">
-      <div class="team-emblem" style="background:${colors[i%colors.length]}">${emblemContent}</div>
-      <div class="team-name">${t.name}</div>
-      <div class="team-info">${t.players.length} игроков</div>
-      <div class="team-arrow">Состав →</div>
-    </div>`;
-  }).join('');
-}
-
-function renderStandings() {
-  const tb = document.getElementById('standings-body');
-  const sorted = [...standings].sort((a,b)=>b.pts-a.pts);
-  tb.innerHTML = sorted.map((s,i) => {
-    const pos = i<3 ? `<span class="pos-badge pos-${i+1}">${i+1}</span>` : `<span style="color:var(--grey)">${i+1}</span>`;
-    return `<tr>
-      <td>${pos}</td>
-      <td><strong>${s.team}</strong></td>
-      <td>${s.p}</td><td>${s.w}</td><td>${s.d}</td><td>${s.l}</td>
-      <td class="pts-col">${s.pts}</td>
-    </tr>`;
-  }).join('');
-}
-
-function renderResults() {
-  const rl = document.getElementById('results-list');
-  rl.innerHTML = results.map(r => {
-    const dateStr = r.date ? new Date(r.date).toLocaleDateString('ru-RU',{day:'2-digit',month:'short'}) : '';
-    return `
-    <div class="result-card" onclick="openProtocol('${r.id}')">
-      <div class="result-date-col">${dateStr}</div>
-      <div class="result-teams-col">
-        <span class="result-team-name">${r.team1}</span>
-        <span style="color:var(--grey);margin:0 4px;font-size:0.75rem">vs</span>
-        <span class="result-team-name">${r.team2}</span>
-      </div>
-      <div class="result-score">${r.g1}:${r.g2}</div>
-      <div class="result-details-btn">Протокол</div>
-    </div>`;
-  }).join('');
-}
-
-// ===================== MODALS =====================
-function openModal(id) { document.getElementById(id).classList.add('open'); document.body.style.overflow='hidden'; }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); document.body.style.overflow=''; }
-
-document.querySelectorAll('.modal-overlay').forEach(m => {
-  m.addEventListener('click', e => { if(e.target === m) closeModal(m.id); });
-});
-
-document.addEventListener('keydown', e => { if(e.key==='Escape') document.querySelectorAll('.modal-overlay.open').forEach(m=>closeModal(m.id)); });
-
-function openTeamModal(teamId) {
-  const t = teams.find(x=>x.id===teamId);
-  if(!t) return;
-  document.getElementById('team-modal-title').textContent = t.emoji + ' ' + t.name;
-  document.getElementById('team-modal-sub').textContent = `Состав команды · ${t.players.length} игроков`;
-  const posColor = {Вратарь:'#4a90d9',Защитник:'#7b68ee',Полузащитник:'#50c878',Нападающий:'#ff7043'};
-  const posEmoji = {Вратарь:'🧤',Защитник:'🛡️',Нападающий:'⚡',Полузащитник:'🎯',Президент:'👑',Тренер:'📋'};
-  document.getElementById('team-players-grid').innerHTML = t.players.map(p => `
-    <div class="player-card" onclick="openPlayerModal(${t.id},${p.id})">
-      <div class="player-avatar">${p.photo ? `<img src="${p.photo}">` : (posEmoji[p.pos]||'👤')}</div>
-      <div class="player-name-card">${p.name.split(' ')[0]}<br>${p.name.split(' ')[1]||''}</div>
-      <div class="player-pos-card" style="color:${posColor[p.pos]||'var(--grey)'}">${p.pos}</div>
-    </div>`).join('');
-  openModal('team-modal');
-}
-
-function openPlayerModal(teamId, playerId) {
-  const t = teams.find(x=>x.id===teamId);
-  const p = t && t.players.find(x=>x.id===playerId);
-  if(!p) return;
-  const posEmoji = {Вратарь:'🧤',Защитник:'🛡️',Нападающий:'⚡',Полузащитник:'🎯',Президент:'👑',Тренер:'📋'};
-  document.getElementById('player-modal-title').textContent = p.name;
-
-  // Build per-match history from results
-  const matchHistory = getPlayerMatchHistory(p.name, t.name);
-
-  // Compute live stats from history (override stored if history exists)
-  const liveGoals = matchHistory.reduce((s,m)=>s+m.goals,0);
-  const liveAssists = matchHistory.reduce((s,m)=>s+m.assists,0);
-  const liveYellow = matchHistory.reduce((s,m)=>s+m.yellow,0);
-  const liveRed = matchHistory.reduce((s,m)=>s+m.red,0);
-  const goals = matchHistory.length ? liveGoals : p.goals;
-  const assists = matchHistory.length ? liveAssists : (p.assists||0);
-  const yellow = matchHistory.length ? liveYellow : p.yellow;
-  const red = matchHistory.length ? liveRed : p.red;
-
-  const avatarHtml = p.photo
-    ? `<img src="${p.photo}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:2px solid var(--border);flex-shrink:0">`
-    : `<div class="player-detail-avatar">${posEmoji[p.pos]||'👤'}</div>`;
-
-  const matchHistoryHtml = matchHistory.length ? `
-    <div class="recent-matches" style="margin-top:1.5rem">
-      <h4>История матчей</h4>
-      ${matchHistory.map(m => {
-        const badges = [];
-        if(m.goals) badges.push(`<span style="color:var(--green);font-weight:700">${m.goals>1?m.goals+'×':''}⚽${m.goalMins.map(mn=>`<span style="font-size:0.65rem;color:var(--grey)"> ${mn}'</span>`).join('')}</span>`);
-        if(m.assists) badges.push(`<span style="color:#60a5fa;font-weight:700">${m.assists>1?m.assists+'×':''}🎯</span>`);
-        if(m.yellow) badges.push(`<span style="color:#FFD700">🟨</span>`);
-        if(m.red) badges.push(`<span style="color:#ff4d4d">🟥</span>`);
-        if(m.subIn) badges.push(`<span style="color:#a3e635;font-size:0.75rem">↑${m.subIn}'</span>`);
-        if(m.subOut) badges.push(`<span style="color:#f87171;font-size:0.75rem">↓${m.subOut}'</span>`);
-        return `<div class="recent-match-row" style="flex-wrap:wrap;gap:4px">
-          <span style="min-width:55px;color:var(--grey);font-size:0.75rem">${m.dateStr}</span>
-          <span style="flex:1;font-size:0.82rem">vs <strong>${m.opp}</strong> <span style="color:var(--grey);font-size:0.75rem">${m.score}</span></span>
-          <span style="display:flex;gap:6px;align-items:center">${badges.join('')}</span>
-        </div>`;
-      }).join('')}
-    </div>` : (p.recentMatches||[]).length ? `
-    <div class="recent-matches"><h4>Последние матчи</h4>
-      ${(p.recentMatches||[]).map(m=>`<div class="recent-match-row"><span>${m.date}</span><span>vs ${m.opp}</span></div>`).join('')}
-    </div>` : '';
-
-  document.getElementById('player-modal-body').innerHTML = `
-    <div class="player-detail-header">
-      ${avatarHtml}
-      <div>
-        <div class="player-detail-name">${p.name}</div>
-        <div class="player-detail-pos">${p.pos} · ${t.name}</div>
-      </div>
-    </div>
-    ${['Президент','Тренер'].includes(p.pos) ? `
-    <div style="padding:0.75rem 1rem;background:var(--navy-light);border:1px solid var(--border);border-radius:8px;text-align:center;color:var(--grey);font-size:0.82rem">
-      ${p.pos === 'Президент' ? '👑 Президент клуба' : '📋 Тренер команды'} — статистика не ведётся
-    </div>` : `
-    <div class="stat-boxes" style="grid-template-columns:repeat(5,1fr)">
-      <div class="stat-box"><div class="stat-box-num">${p.matches}</div><div class="stat-box-label">Матчей</div></div>
-      <div class="stat-box"><div class="stat-box-num" style="color:var(--green)">${goals}</div><div class="stat-box-label">Голов</div></div>
-      <div class="stat-box"><div class="stat-box-num" style="color:#60a5fa">${assists}</div><div class="stat-box-label">Пасов</div></div>
-      <div class="stat-box"><div class="stat-box-num" style="color:#FFD700">${yellow}</div><div class="stat-box-label">ЖК</div></div>
-      <div class="stat-box"><div class="stat-box-num" style="color:#ff4d4d">${red}</div><div class="stat-box-label">КК</div></div>
-    </div>`}
-    ${matchHistoryHtml}`;
-  openModal('player-modal');
-}
-
-// Build per-match stats for a player from results data
-function getPlayerMatchHistory(playerName, teamName) {
-  const history = [];
-  results.forEach(r => {
-    const isParticipant = r.events && r.events.some(e =>
-      (e.playerName === playerName && e.teamName === teamName) ||
-      (e.type === 'sub' && e.subOutName === playerName && e.teamName === teamName)
-    );
-    if(!isParticipant) return;
-    const opp = r.team1 === teamName ? r.team2 : r.team1;
-    const score = `${r.g1}:${r.g2}`;
-    const dateStr = r.date ? new Date(r.date).toLocaleDateString('ru-RU',{day:'2-digit',month:'short'}) : '';
-    let goals=0, assists=0, yellow=0, red=0, subIn=null, subOut=null;
-    const goalMins = [];
-    (r.events||[]).forEach(e => {
-      if(e.playerName === playerName && e.teamName === teamName) {
-        if(e.type==='goal') { goals++; goalMins.push(e.min); }
-        if(e.type==='assist'||e.assistName===playerName) assists++;
-        if(e.type==='yellow') yellow++;
-        if(e.type==='red') red++;
-        if(e.type==='sub') subIn = e.min;
-      }
-      // assist credited to assistName
-      if(e.type==='goal' && e.assistName===playerName && e.teamName===teamName) assists++;
-      // sub out
-      if(e.type==='sub' && e.subOutName===playerName && e.teamName===teamName) subOut = e.min;
-    });
-    history.push({opp, score, dateStr, goals, goalMins, assists, yellow, red, subIn, subOut, date: r.date});
-  });
-  history.sort((a,b) => new Date(b.date) - new Date(a.date));
-  return history;
-}
-
-function openProtocol(resultId) {
-  const r = results.find(x=>x.id===resultId);
-  if(!r) return;
-  const evtHtml = (r.events||[]).sort((a,b)=>a.min-b.min).map(e => {
-    let icon, text;
-    if(e.type==='goal') {
-      icon='⚽';
-      text = `<strong>${e.playerName}</strong> (${e.teamName})${e.assistName ? ` <span style="color:#60a5fa;font-size:0.78rem">пас: ${e.assistName}</span>` : ''}`;
-    } else if(e.type==='yellow') {
-      icon='🟨'; text = `${e.playerName} (${e.teamName})`;
-    } else if(e.type==='red') {
-      icon='🟥'; text = `${e.playerName} (${e.teamName})`;
-    } else if(e.type==='sub') {
-      icon='🔄'; text = `↑ ${e.playerName} / ↓ ${e.subOutName} (${e.teamName})`;
-    } else { icon='•'; text = e.playerName||''; }
-    return `<div class="timeline-event">
-      <span class="timeline-min">${e.min}'</span>
-      <span class="event-icon">${icon}</span>
-      <span class="event-text">${text}</span>
-    </div>`;
-  }).join('');
-  document.getElementById('protocol-modal-body').innerHTML = `
-    <div class="protocol-header">
-      <div class="protocol-score">${r.g1} : ${r.g2}</div>
-      <div class="protocol-teams"><span>${r.team1}</span><span>${r.team2}</span></div>
-      ${r.date ? `<div style="margin-top:8px;font-size:0.75rem;color:var(--grey)">${new Date(r.date).toLocaleDateString('ru-RU',{day:'2-digit',month:'long',year:'numeric'})}</div>` : ''}
-    </div>
-    ${evtHtml ? `<div class="timeline"><h4>Хронология событий</h4>${evtHtml}</div>` : '<p style="color:var(--grey);text-align:center;padding:1rem">Событий не добавлено</p>'}`;
-  openModal('protocol-modal');
-}
-
-// ===================== NAVIGATION =====================
-function initNavigation() {
-  const hash = window.location.hash;
-  if(hash === '#admin') {
-    showAdmin();
-  }
-}
-
-// Check hash immediately on script load (before Supabase data)
-(function() {
-  if(window.location.hash === '#admin') {
-    document.getElementById('main-site').style.display = 'none';
-    document.getElementById('admin-section').style.display = 'block';
-    document.getElementById('main-header').style.display = 'flex';
-    const loggedIn = sessionStorage.getItem('bfl_admin');
-    if(loggedIn) {
-      document.getElementById('admin-login').style.display = 'none';
-      document.getElementById('admin-panel').style.display = 'block';
-    }
-  }
-})();
-
-function showAdmin() {
-  document.getElementById('main-site').style.display='none';
-  document.getElementById('admin-section').style.display='block';
-  document.getElementById('main-header').style.display='flex';
-  const loggedIn = sessionStorage.getItem('bfl_admin');
-  if(loggedIn) showAdminPanel();
-}
-
-function showMain() {
-  document.getElementById('admin-section').style.display='none';
-  document.getElementById('main-site').style.display='block';
-}
-
-// ===================== BURGER MENU =====================
-const burger = document.getElementById('burger');
-const nav = document.getElementById('main-nav');
-burger.addEventListener('click', () => {
-  burger.classList.toggle('open');
-  nav.classList.toggle('open');
-});
-nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-  burger.classList.remove('open');
-  nav.classList.remove('open');
-}));
-
-// ===================== ADMIN =====================
-function adminLogin() {
-  const u = document.getElementById('admin-user').value;
-  const p = document.getElementById('admin-pass').value;
-  const err = document.getElementById('login-error');
-  if(u==='admin' && p==='brfl2026') {
-    sessionStorage.setItem('bfl_admin','1');
-    err.style.display='none';
-    showAdminPanel();
-  } else {
-    err.style.display='block';
-  }
-}
-
-document.getElementById('admin-pass').addEventListener('keydown', e => { if(e.key==='Enter') adminLogin(); });
-
-function adminLogout() {
-  sessionStorage.removeItem('bfl_admin');
-  document.getElementById('admin-panel').style.display='none';
-  document.getElementById('admin-login').style.display='block';
-}
-
-function showAdminPanel() {
-  document.getElementById('admin-login').style.display='none';
-  document.getElementById('admin-panel').style.display='block';
-  populateAdminSelects();
-  renderAdminUpcoming();
-  renderAdminResults();
-  renderAdminStandingsEdit();
-  populatePlayerTeamSelect();
-}
-
-function showAdminTab(id) {
-  document.querySelectorAll('.admin-content').forEach(c=>c.classList.remove('active'));
-  document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  event.target.classList.add('active');
-  if(id==='tab-teams') renderAdminTeamsList();
-  if(id==='tab-settings') initSettingsTab();
-  if(id==='tab-log') renderActionLog();
-}
-
-function populateTeamSelects() {
-  const opts = teams.map(t=>`<option value="${t.name}">${t.name}</option>`).join('');
-  ['a-t1','a-t2','r-t1','r-t2'].forEach(id => {
-    const el = document.getElementById(id);
-    if(el) el.innerHTML = opts;
-  });
-}
-
-function populateAdminSelects() { populateTeamSelects(); }
-
-function renderAdminUpcoming() {
-  const list = document.getElementById('admin-upcoming-list');
-  list.innerHTML = upcoming.map(m => `
-    <li>
-      <span>${m.team1} vs ${m.team2} · ${m.date}</span>
-      <button class="btn-sm" onclick="deleteUpcoming('${m.id}')">Удалить</button>
-    </li>`).join('') || '<li style="color:var(--grey)">Нет матчей</li>';
-}
-
-function renderAdminResults() {
-  const list = document.getElementById('admin-results-list');
-  list.innerHTML = results.map(r => `
-    <li>
-      <span>${r.team1} ${r.g1}:${r.g2} ${r.team2}</span>
-      <button class="btn-sm" onclick="deleteResult('${r.id}')">Удалить</button>
-    </li>`).join('') || '<li style="color:var(--grey)">Нет результатов</li>';
-}
-
-function renderAdminStandingsEdit() {
-  const tb = document.getElementById('admin-standings-edit');
-  tb.innerHTML = standings.map((s,i) => `
-    <tr>
-      <td><input type="text" value="${s.team}" style="background:var(--navy);border:1px solid var(--border);color:var(--white);border-radius:4px;padding:3px 6px;width:130px;font-size:0.85rem" onchange="updateStanding(${i},'team',this.value)"></td>
-      <td><input type="number" value="${s.p}" min="0" style="width:50px;background:var(--navy);border:1px solid var(--border);color:var(--white);border-radius:4px;padding:2px 4px" onchange="updateStanding(${i},'p',this.value)"></td>
-      <td><input type="number" value="${s.w}" min="0" style="width:50px;background:var(--navy);border:1px solid var(--border);color:var(--white);border-radius:4px;padding:2px 4px" onchange="updateStanding(${i},'w',this.value)"></td>
-      <td><input type="number" value="${s.d}" min="0" style="width:50px;background:var(--navy);border:1px solid var(--border);color:var(--white);border-radius:4px;padding:2px 4px" onchange="updateStanding(${i},'d',this.value)"></td>
-      <td><input type="number" value="${s.l}" min="0" style="width:50px;background:var(--navy);border:1px solid var(--border);color:var(--white);border-radius:4px;padding:2px 4px" onchange="updateStanding(${i},'l',this.value)"></td>
-      <td><input type="number" value="${s.pts}" min="0" style="width:50px;background:var(--navy);border:1px solid var(--border);color:var(--green);border-radius:4px;padding:2px 4px;font-weight:700" onchange="updateStanding(${i},'pts',this.value)"></td>
-      <td><button class="btn-sm btn-sm-green" onclick="saveStandings()">💾</button></td>
-    </tr>`).join('');
-}
-
-function updateStanding(i, field, val) {
-  if(field === 'team') standings[i][field] = val;
-  else standings[i][field] = parseInt(val)||0;
-}
-
-async function saveStandings() {
-  showLoader('Сохранение таблицы...');
-  try {
-    for(const s of standings) {
-      await sbPatch('standings', {id:s.id}, {team:s.team,p:s.p,w:s.w,d:s.d,l:s.l,pts:s.pts});
-    }
-    renderStandings();
-    logAction('edit','Сохранена турнирная таблица');
-    showSuccess('Таблица сохранена!');
-  } catch(e) { showError('Ошибка: '+e.message); }
-  hideLoader();
-}
-
-async function recalcStandings() {
-  if(!confirm('Пересчитать таблицу автоматически по результатам матчей? Текущие данные будут заменены.')) return;
-  showLoader('Пересчёт...');
-  try {
-    // Build map from team name -> stats
-    const map = {};
-    const ensureTeam = name => {
-      if(!map[name]) map[name] = {team:name,p:0,w:0,d:0,l:0,pts:0};
-    };
-    results.forEach(r => {
-      ensureTeam(r.team1); ensureTeam(r.team2);
-      const s1 = map[r.team1], s2 = map[r.team2];
-      s1.p++; s2.p++;
-      if(r.g1 > r.g2) { s1.w++; s1.pts+=3; s2.l++; }
-      else if(r.g1 < r.g2) { s2.w++; s2.pts+=3; s1.l++; }
-      else { s1.d++; s2.d++; s1.pts++; s2.pts++; }
-    });
-
-    // For teams already in standings — update them; for new — insert
-    const newRows = Object.values(map);
-    for(const row of newRows) {
-      const existing = standings.find(s => s.team === row.team);
-      if(existing) {
-        existing.p=row.p; existing.w=row.w; existing.d=row.d; existing.l=row.l; existing.pts=row.pts;
-        await sbPatch('standings', {id:existing.id}, {p:row.p,w:row.w,d:row.d,l:row.l,pts:row.pts});
-      } else {
-        const [inserted] = await sbPost('standings', row);
-        standings.push({...row, id:inserted.id});
-      }
-    }
-    // Also add teams from teams list that have no results yet
-    for(const t of teams) {
-      if(!map[t.name] && !standings.find(s=>s.team===t.name)) {
-        const [inserted] = await sbPost('standings', {team:t.name,p:0,w:0,d:0,l:0,pts:0});
-        standings.push({team:t.name,p:0,w:0,d:0,l:0,pts:0,id:inserted.id});
-      }
-    }
-    renderStandings();
-    renderAdminStandingsEdit();
-    logAction('edit','Таблица пересчитана автоматически');
-    showSuccess('Таблица обновлена!');
-  } catch(e) { showError('Ошибка: '+e.message); }
-  hideLoader();
-}
-
-async function addMatch() {
-  const t1 = document.getElementById('a-t1').value;
-  const t2 = document.getElementById('a-t2').value;
-  const date = document.getElementById('a-date').value;
-  const time = document.getElementById('a-time').value;
-  const venue = document.getElementById('a-venue').value;
-  if(!date || t1===t2) { alert('Заполните все поля и выберите разные команды'); return; }
-  showLoader('Сохранение...');
-  try {
-    const id = 'u'+Date.now();
-    await sbPost('upcoming', {id,team1:t1,team2:t2,date,time,venue});
-    upcoming.push({id,team1:t1,team2:t2,date,time,venue});
-    renderSchedule(); renderAdminUpcoming();
-    logAction('match',`Добавлен матч: ${t1} vs ${t2} (${date})`, {entity:'match',id});
-    showSuccess('Матч добавлен!');
-  } catch(e) { showError('Ошибка: '+e.message); }
-  hideLoader();
-}
-
-async function deleteUpcoming(id) {
-  const m = upcoming.find(x=>x.id===id);
-  showLoader('Удаление...');
-  try {
-    await sbDelete('upcoming', {id});
-    upcoming = upcoming.filter(x=>x.id!==id);
-    renderSchedule(); renderAdminUpcoming();
-    if(m) logAction('delete',`Удалён матч: ${m.team1} vs ${m.team2}`);
-    showSuccess('Удалено!');
-  } catch(e) { showError('Ошибка: '+e.message); }
-  hideLoader();
-}
-
-async function addResult() {
-  const t1 = document.getElementById('r-t1').value;
-  const t2 = document.getElementById('r-t2').value;
-  const date = document.getElementById('r-date').value;
-  const g1 = parseInt(document.getElementById('r-g1').value)||0;
-  const g2 = parseInt(document.getElementById('r-g2').value)||0;
-  if(!date || t1===t2) { alert('Заполните все поля и выберите разные команды'); return; }
-  showLoader('Сохранение...');
-  try {
-    const id = 'r'+Date.now();
-    await sbPost('results', {id,team1:t1,team2:t2,date,g1,g2,events:[]});
-    results.unshift({id,team1:t1,team2:t2,date,g1,g2,events:[]});
-    renderResults(); renderAdminResults();
-    openProtocolEditor(id);
-    logAction('result',`Добавлен результат: ${t1} ${g1}:${g2} ${t2} (${date})`, {entity:'result',id});
-    autoSyncStats();
-    showSuccess('Результат добавлен!');
-  } catch(e) { showError('Ошибка: '+e.message); }
-  hideLoader();
-}
-
-async function deleteResult(id) {
-  const r = results.find(x=>x.id===id);
-  if(!confirm('Удалить матч и все его события?')) return;
-  showLoader('Удаление...');
-  try {
-    await sbDelete('results', {id});
-    results = results.filter(x=>x.id!==id);
-    renderResults(); renderAdminResults();
-    document.getElementById('protocol-editor').style.display='none';
-    if(r) logAction('delete',`Удалён результат: ${r.team1} ${r.g1}:${r.g2} ${r.team2}`);
-    autoSyncStats();
-    showSuccess('Удалено!');
-  } catch(e) { showError('Ошибка: '+e.message); }
-  hideLoader();
-}
-
-// ===================== PROTOCOL EDITOR =====================
-function renderAdminResults() {
-  const list = document.getElementById('admin-results-list');
-  list.innerHTML = results.map(r => `
-    <li>
-      <span style="cursor:pointer;flex:1" onclick="openProtocolEditor('${r.id}')">${r.team1} ${r.g1}:${r.g2} ${r.team2} <span style="color:var(--grey);font-size:0.7rem">(${r.events?.length||0} событий)</span></span>
-      <button class="btn-sm btn-sm-green" onclick="openProtocolEditor('${r.id}')">✏️</button>
-      <button class="btn-sm" onclick="deleteResult('${r.id}')">✕</button>
-    </li>`).join('') || '<li style="color:var(--grey)">Нет матчей</li>';
-}
-
-function openProtocolEditor(resultId) {
-  const r = results.find(x=>x.id===resultId);
-  if(!r) return;
-  document.getElementById('proto-result-id').value = resultId;
-  document.getElementById('proto-label').textContent = `${r.team1} ${r.g1}:${r.g2} ${r.team2}`;
-  // populate team selects for event editor
-  const teamOpts = [r.team1, r.team2].map(t=>`<option value="${t}">${t}</option>`).join('');
-  document.getElementById('ev-team').innerHTML = teamOpts;
-  onEvTeamChange();
-  onEvTypeChange();
-  renderProtoEventsList(r);
-  const card = document.getElementById('protocol-editor');
-  card.style.display = 'block';
-  card.scrollIntoView({behavior:'smooth', block:'start'});
-}
-
-function onEvTeamChange() {
-  const resultId = document.getElementById('proto-result-id').value;
-  const r = results.find(x=>x.id===resultId);
-  if(!r) return;
-  const teamName = document.getElementById('ev-team').value;
-  const t = teams.find(x=>x.name===teamName);
-  const playerOpts = t
-    ? ['<option value="">— выбрать —</option>',...t.players.map(p=>`<option value="${p.name}">${p.name}</option>`)].join('')
-    : '<option>Нет игроков</option>';
-  document.getElementById('ev-player').innerHTML = playerOpts;
-  document.getElementById('ev-assist').innerHTML = '<option value="">— нет —</option>' + (t ? t.players.map(p=>`<option value="${p.name}">${p.name}</option>`).join('') : '');
-  document.getElementById('ev-subout').innerHTML = playerOpts;
-}
-
-function onEvTypeChange() {
-  const type = document.getElementById('ev-type').value;
-  document.getElementById('ev-assist-wrap').style.display = type==='goal' ? 'block' : 'none';
-  document.getElementById('ev-subout-wrap').style.display = type==='sub' ? 'block' : 'none';
-  document.getElementById('ev-player-label').textContent = type==='sub' ? 'Выходит на поле' : 'Игрок';
-}
-
-async function addProtocolEvent() {
-  const resultId = document.getElementById('proto-result-id').value;
-  const r = results.find(x=>x.id===resultId);
-  if(!r) return;
-  const type = document.getElementById('ev-type').value;
-  const min = parseInt(document.getElementById('ev-min').value)||1;
-  const teamName = document.getElementById('ev-team').value;
-  const playerName = document.getElementById('ev-player').value;
-  if(!playerName) { alert('Выберите игрока'); return; }
-  const evt = {min, type, playerName, teamName};
-  if(type==='goal') {
-    const assist = document.getElementById('ev-assist').value;
-    if(assist && assist !== playerName) evt.assistName = assist;
-  }
-  if(type==='sub') {
-    evt.subOutName = document.getElementById('ev-subout').value;
-  }
-  if(!r.events) r.events = [];
-  r.events.push(evt);
-  r.events.sort((a,b)=>a.min-b.min);
-  try {
-    await sbPatch('results', {id:r.id}, {events: r.events, g1:r.g1, g2:r.g2});
-  } catch(e) { showError('Ошибка сохранения: '+e.message); }
-  renderProtoEventsList(r);
-  renderResults();
-  autoSyncStats();
-}
-
-async function deleteProtocolEvent(resultId, idx) {
-  const r = results.find(x=>x.id===resultId);
-  if(!r) return;
-  r.events.splice(idx,1);
-  try {
-    await sbPatch('results', {id:r.id}, {events: r.events});
-  } catch(e) { showError('Ошибка: '+e.message); }
-  renderProtoEventsList(r);
-  renderResults();
-  autoSyncStats();
-}
-
-function renderProtoEventsList(r) {
-  const el = document.getElementById('proto-events-list');
-  if(!r.events || !r.events.length) {
-    el.innerHTML = '<p style="color:var(--grey);font-size:0.82rem">Событий пока нет</p>';
-    return;
-  }
-  el.innerHTML = r.events.map((e,i) => {
-    const icon = e.type==='goal'?'⚽':e.type==='yellow'?'🟨':e.type==='red'?'🟥':'🔄';
-    let desc = `${e.playerName} (${e.teamName})`;
-    if(e.type==='goal' && e.assistName) desc += ` · пас: ${e.assistName}`;
-    if(e.type==='sub' && e.subOutName) desc += ` ↔ ${e.subOutName}`;
-    return `<div style="display:flex;align-items:center;gap:0.75rem;padding:0.5rem 0.75rem;background:var(--navy-light);border:1px solid var(--border);border-radius:6px;margin-bottom:6px">
-      <span style="color:var(--grey);font-family:'Barlow Condensed',sans-serif;font-weight:700;min-width:32px">${e.min}'</span>
-      <span>${icon}</span>
-      <span style="flex:1;font-size:0.82rem">${desc}</span>
-      <button class="btn-sm" onclick="deleteProtocolEvent('${r.id}',${i})">✕</button>
-    </div>`;
-  }).join('');
-}
-
-// ===================== ADMIN PLAYERS =====================
-function populatePlayerTeamSelect() {
-  const sel = document.getElementById('p-team');
-  if(!sel) return;
-  sel.innerHTML = teams.map(t=>`<option value="${t.id}">${t.name}</option>`).join('');
-  renderAdminPlayersList();
-}
-
-function renderAdminPlayersList(forceTeamId) {
-  const teamId = forceTeamId !== undefined ? forceTeamId : parseInt(document.getElementById('p-team').value);
-  const t = teams.find(x=>x.id===teamId);
-  const list = document.getElementById('admin-players-list');
-  if(!t) { list.innerHTML='<li style="color:var(--grey)">Выберите команду</li>'; return; }
-  const countEl = document.getElementById('players-count');
-  if(countEl) countEl.textContent = `· ${t.players.length} чел.`;
-  const posEmoji = {Вратарь:'🧤',Защитник:'🛡️',Нападающий:'⚡',Полузащитник:'🎯',Президент:'👑',Тренер:'📋'};
-  list.innerHTML = t.players.map(p => `
-    <li>
-      <span style="display:flex;align-items:center;gap:8px;min-width:0">
-        <span>${p.photo ? `<img src="${p.photo}" style="width:24px;height:24px;border-radius:50%;object-fit:cover;vertical-align:middle">` : (posEmoji[p.pos]||'👤')}</span>
-        <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
-          ${p.name} <span style="color:var(--grey);font-size:0.7rem">${p.pos}</span>
-        </span>
-      </span>
-      <span style="display:flex;gap:6px;flex-shrink:0">
-        <span style="color:var(--green);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.8rem;align-self:center">
-          ${p.goals}⚽ ${p.yellow}🟨 ${p.red}🟥
-        </span>
-        <button class="btn-sm btn-sm-green" onclick="openEditPlayer(${t.id},${p.id})">✏️</button>
-        <button class="btn-sm" onclick="deletePlayer(${t.id},${p.id})">✕</button>
-      </span>
-    </li>`).join('') || '<li style="color:var(--grey)">Нет игроков</li>';
-}
-
-async function addPlayer() {
-  const teamId = parseInt(document.getElementById('p-team').value);
-  const name = document.getElementById('p-name').value.trim();
-  const pos = document.getElementById('p-pos').value;
-  const matches = parseInt(document.getElementById('p-matches').value)||0;
-  const goals = parseInt(document.getElementById('p-goals').value)||0;
-  const yellow = parseInt(document.getElementById('p-yellow').value)||0;
-  const red = parseInt(document.getElementById('p-red').value)||0;
-  if(!name) { alert('Введите имя игрока'); return; }
-  const t = teams.find(x=>x.id===teamId);
-  if(!t) return;
-  showLoader('Добавление игрока...');
-  try {
-    let photo = document.getElementById('p-photo-url').value.trim();
-    const fileEl = document.getElementById('p-photo-file');
-    if(fileEl._croppedData) {
-      photo = await uploadToStorage('logos', `players/p_${Date.now()}`, fileEl._croppedData);
-      fileEl._croppedData = null;
-    } else if(fileEl.files[0]) {
-      const b64 = await fileToBase64(fileEl.files[0]);
-      photo = await uploadToStorage('logos', `players/p_${Date.now()}`, b64);
-    }
-    const [row] = await sbPost('players', {team_id:teamId,name,pos,matches,goals,yellow,red,photo:photo||''});
-    const newPlayer = {id:row.id,name,pos,matches,goals,yellow,red,photo:photo||'',recentMatches:[]};
-    t.players.push(newPlayer);
-    renderAdminPlayersList(teamId); renderTeams(); renderScorers(); renderDiscipline();
-    document.getElementById('p-name').value='';
-    document.getElementById('p-photo-url').value='';
-    fileEl.value='';
-    document.getElementById('p-matches').value='0';
-    document.getElementById('p-goals').value='0';
-    document.getElementById('p-yellow').value='0';
-    document.getElementById('p-red').value='0';
-    logAction('add',`Добавлен игрок: ${name} (${t.name}, ${pos})`, {entity:'player',id:row.id,teamId});
-    showSuccess('Игрок добавлен!');
-  } catch(e) { showError('Ошибка: '+e.message); }
-  hideLoader();
-}
-
-async function deletePlayer(teamId, playerId) {
-  if(!confirm('Удалить игрока?')) return;
-  const t = teams.find(x=>x.id===teamId);
-  if(!t) return;
-  const p = t.players.find(x=>x.id===playerId);
-  showLoader('Удаление...');
-  try {
-    await sbDelete('players', {id:playerId});
-    t.players = t.players.filter(x=>x.id!==playerId);
-    renderAdminPlayersList(teamId); renderTeams(); renderScorers(); renderDiscipline();
-    document.getElementById('edit-player-card').style.display='none';
-    if(p) logAction('delete',`Удалён игрок: ${p.name} (${t.name})`);
-    showSuccess('Игрок удалён!');
-  } catch(e) { showError('Ошибка: '+e.message); }
-  hideLoader();
-}
-
-function openEditPlayer(teamId, playerId) {
-  const t = teams.find(x=>x.id===teamId);
-  const p = t && t.players.find(x=>x.id===playerId);
-  if(!p) return;
-  document.getElementById('ep-teamid').value = teamId;
-  document.getElementById('ep-playerid').value = playerId;
-  document.getElementById('ep-name').value = p.name;
-  document.getElementById('ep-pos').value = p.pos;
-  document.getElementById('ep-matches').value = p.matches;
-  document.getElementById('ep-goals').value = p.goals;
-  document.getElementById('ep-yellow').value = p.yellow;
-  document.getElementById('ep-red').value = p.red;
-  document.getElementById('ep-photo-url').value = (p.photo && !p.photo.startsWith('data:')) ? p.photo : '';
-  document.getElementById('ep-photo-file').value = '';
-  const preview = document.getElementById('ep-photo-preview');
-  const img = document.getElementById('ep-photo-img');
-  if(p.photo) { img.src=p.photo; preview.style.display='block'; } else { preview.style.display='none'; }
-  document.getElementById('edit-player-label').textContent = p.name;
-  toggleStatFields(p.pos);
-  const card = document.getElementById('edit-player-card');
-  card.style.display = 'block';
-  card.scrollIntoView({behavior:'smooth', block:'nearest'});
-}
-
-async function savePlayer() {
-  const teamId = parseInt(document.getElementById('ep-teamid').value);
-  const playerId = parseInt(document.getElementById('ep-playerid').value);
-  const t = teams.find(x=>x.id===teamId);
-  const p = t && t.players.find(x=>x.id===playerId);
-  if(!p) return;
-  showLoader('Сохранение...');
-  try {
-    const oldName = p.name;
-    p.name = document.getElementById('ep-name').value.trim() || p.name;
-    p.pos = document.getElementById('ep-pos').value;
-    p.matches = parseInt(document.getElementById('ep-matches').value)||0;
-    p.goals = parseInt(document.getElementById('ep-goals').value)||0;
-    p.yellow = parseInt(document.getElementById('ep-yellow').value)||0;
-    p.red = parseInt(document.getElementById('ep-red').value)||0;
-
-    const urlVal = document.getElementById('ep-photo-url').value.trim();
-    const fileEl = document.getElementById('ep-photo-file');
-    if(fileEl._croppedData) {
-      p.photo = await uploadToStorage('logos', `players/p_${playerId}`, fileEl._croppedData);
-      fileEl._croppedData = null;
-    } else if(fileEl.files[0]) {
-      const b64 = await fileToBase64(fileEl.files[0]);
-      p.photo = await uploadToStorage('logos', `players/p_${playerId}`, b64);
-    } else if(urlVal) p.photo = urlVal;
-
-    await sbPatch('players', {id:playerId}, {name:p.name,pos:p.pos,matches:p.matches,goals:p.goals,yellow:p.yellow,red:p.red,photo:p.photo});
-    renderAdminPlayersList(teamId); renderTeams(); renderScorers(); renderDiscipline();
-    document.getElementById('edit-player-label').textContent = p.name;
-    document.getElementById('edit-player-card').style.display='none';
-    fileEl.value='';
-    logAction('edit',`Изменён игрок: ${oldName} (${t.name})`, {entity:'player',id:playerId,teamId});
-    showSuccess('Игрок сохранён!');
-  } catch(e) { showError('Ошибка: '+e.message); }
-  hideLoader();
-}
-
-// ===================== SEARCH =====================
-function onPlayerSearch(q) {
-  const drop = document.getElementById('search-drop');
-  q = q.trim().toLowerCase();
-  if(q.length < 2) { drop.classList.remove('open'); return; }
-  const results = [];
-  teams.forEach(t => {
-    t.players.forEach(p => {
-      if(p.name.toLowerCase().includes(q)) results.push({t, p});
-    });
-  });
-  if(!results.length) {
-    drop.innerHTML = '<div class="search-result-item"><span class="search-result-meta">Ничего не найдено</span></div>';
-  } else {
-    const posEmoji = {Вратарь:'🧤',Защитник:'🛡️',Нападающий:'⚡',Полузащитник:'🎯',Президент:'👑',Тренер:'📋'};
-    drop.innerHTML = results.slice(0,8).map(({t,p}) => `
-      <div class="search-result-item" onclick="openTeamModal(${t.id});setTimeout(()=>openPlayerModal(${t.id},${p.id}),120);document.getElementById('player-search').value='';document.getElementById('search-drop').classList.remove('open')">
-        <div class="scorer-photo">${p.photo ? `<img src="${p.photo}">` : (posEmoji[p.pos]||'👤')}</div>
-        <div>
-          <div class="search-result-name">${p.name}</div>
-          <div class="search-result-meta">${p.pos} · ${t.name}</div>
+<!-- Image crop modal -->
+<div class="modal-overlay" id="crop-modal">
+    <div class="modal">
+        <div class="modal-header">
+            <div class="modal-title">✂️ Обрезать изображение</div>
+            <button class="modal-close" data-modal="crop-modal">✕</button>
         </div>
-      </div>`).join('');
-  }
-  drop.classList.add('open');
-}
-
-document.addEventListener('click', e => {
-  if(!e.target.closest('.search-bar-wrap')) {
-    document.getElementById('search-drop').classList.remove('open');
-  }
-});
-
-// ===================== SCORERS & DISCIPLINE =====================
-function getAllPlayers() {
-  const all = [];
-  teams.forEach(t => t.players.forEach(p => all.push({...p, teamName: t.name, teamId: t.id})));
-  return all;
-}
-
-function renderScorers() {
-  // Compute live stats from all result events
-  const pMap = {}; // key: playerId
-  teams.forEach(t => t.players.forEach(p => {
-    pMap[`${p.name}||${t.name}`] = {...p, teamName:t.name, teamId:t.id, liveGoals:0, liveAssists:0};
-  }));
-  results.forEach(r => {
-    (r.events||[]).forEach(e => {
-      const key = `${e.playerName}||${e.teamName}`;
-      if(pMap[key]) {
-        if(e.type==='goal') pMap[key].liveGoals++;
-        if(e.assistName) {
-          const aKey = `${e.assistName}||${e.teamName}`;
-          if(pMap[aKey]) pMap[aKey].liveAssists++;
-        }
-      }
-    });
-  });
-  const all = Object.values(pMap)
-    .map(p => ({...p, goals: results.length ? p.liveGoals : p.goals, assists: results.length ? p.liveAssists : (p.assists||0)}))
-    .filter(p => p.goals > 0)
-    .sort((a,b) => b.goals - a.goals || b.assists - a.assists);
-  const posEmoji = {Вратарь:'🧤',Защитник:'🛡️',Нападающий:'⚡',Полузащитник:'🎯',Президент:'👑',Тренер:'📋'};
-  const el = document.getElementById('scorers-list');
-  if(!el) return;
-  el.innerHTML = all.slice(0,10).map((p,i) => {
-    const rankClass = i===0?'scorer-rank-1':i===1?'scorer-rank-2':i===2?'scorer-rank-3':'';
-    return `<div class="scorer-row" onclick="openTeamModal(${p.teamId});setTimeout(()=>openPlayerModal(${p.teamId},${p.id}),120)">
-      <div class="scorer-rank ${rankClass}">${i+1}</div>
-      <div class="scorer-photo">${p.photo ? `<img src="${p.photo}">` : (posEmoji[p.pos]||'👤')}</div>
-      <div class="scorer-info">
-        <div class="scorer-name">${p.name}</div>
-        <div class="scorer-team">${p.pos} · ${p.teamName}</div>
-      </div>
-      <div style="text-align:right">
-        <div class="scorer-stat">${p.goals}</div>
-        <div class="scorer-stat-label">голов</div>
-      </div>
-      <div style="text-align:right;min-width:36px">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.1rem;color:#60a5fa">${p.assists||0}</div>
-        <div class="scorer-stat-label">пасов</div>
-      </div>
-    </div>`;
-  }).join('') || '<div style="padding:1rem;color:var(--grey);text-align:center;font-size:0.85rem">Нет данных</div>';
-}
-
-function renderDiscipline() {
-  const pMap = {};
-  teams.forEach(t => t.players.forEach(p => {
-    pMap[`${p.name}||${t.name}`] = {...p, teamName:t.name, teamId:t.id, liveYellow:0, liveRed:0};
-  }));
-  results.forEach(r => {
-    (r.events||[]).forEach(e => {
-      const key = `${e.playerName}||${e.teamName}`;
-      if(pMap[key]) {
-        if(e.type==='yellow') pMap[key].liveYellow++;
-        if(e.type==='red')    pMap[key].liveRed++;
-      }
-    });
-  });
-  const all = Object.values(pMap)
-    .map(p => ({...p, yellow: results.length ? p.liveYellow : p.yellow, red: results.length ? p.liveRed : p.red}))
-    .filter(p => p.yellow > 0 || p.red > 0)
-    .sort((a,b) => (b.red*3+b.yellow) - (a.red*3+a.yellow));
-  const posEmoji = {Вратарь:'🧤',Защитник:'🛡️',Нападающий:'⚡',Полузащитник:'🎯',Президент:'👑',Тренер:'📋'};
-  const el = document.getElementById('discipline-list');
-  if(!el) return;
-  el.innerHTML = all.slice(0,10).map((p,i) => `
-    <div class="scorer-row" onclick="openTeamModal(${p.teamId});setTimeout(()=>openPlayerModal(${p.teamId},${p.id}),120)">
-      <div class="scorer-rank">${i+1}</div>
-      <div class="scorer-photo">${p.photo ? `<img src="${p.photo}">` : (posEmoji[p.pos]||'👤')}</div>
-      <div class="scorer-info">
-        <div class="scorer-name">${p.name}</div>
-        <div class="scorer-team">${p.pos} · ${p.teamName}</div>
-      </div>
-      <div style="text-align:right">
-        <div style="font-size:0.85rem;white-space:nowrap">${p.yellow > 0 ? `<span style="color:#FFD700;font-weight:700">${p.yellow}🟨</span> ` : ''}${p.red > 0 ? `<span style="color:#ff4d4d;font-weight:700">${p.red}🟥</span>` : ''}</div>
-      </div>
-    </div>`).join('') || '<div style="padding:1rem;color:var(--grey);text-align:center;font-size:0.85rem">Нет нарушений</div>';
-}
-
-function switchStatsTab(tab, btn) {
-  document.querySelectorAll('.stats-tab').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  if(tab==='scorers') {
-    document.getElementById('panel-scorers').style.display='block';
-    document.getElementById('panel-discipline').style.display='none';
-  } else {
-    document.getElementById('panel-scorers').style.display='none';
-    document.getElementById('panel-discipline').style.display='block';
-  }
-}
-
-// ===================== AUTO STATS SYNC =====================
-// Called after any protocol change — recalculates everything from results
-async function autoSyncStats() {
-  // 1. Build stats map from ALL results/events
-  // map: playerName+teamName -> {goals, assists, yellow, red, matches (set of resultIds)}
-  const pStats = {}; // key: `${playerName}||${teamName}`
-  const teamGoals = {}; // teamName -> total goals scored
-
-  results.forEach(r => {
-    const matchPlayers = new Set(); // players who appeared in this match
-
-    (r.events || []).forEach(e => {
-      const key = `${e.playerName}||${e.teamName}`;
-      if(!pStats[key]) pStats[key] = {goals:0,assists:0,yellow:0,red:0,matches:new Set()};
-      pStats[key].matches.add(r.id);
-      matchPlayers.add(key);
-
-      if(e.type === 'goal') {
-        pStats[key].goals++;
-        teamGoals[e.teamName] = (teamGoals[e.teamName]||0) + 1;
-        if(e.assistName) {
-          const aKey = `${e.assistName}||${e.teamName}`;
-          if(!pStats[aKey]) pStats[aKey] = {goals:0,assists:0,yellow:0,red:0,matches:new Set()};
-          pStats[aKey].assists++;
-          pStats[aKey].matches.add(r.id);
-        }
-      }
-      if(e.type === 'yellow') pStats[key].yellow++;
-      if(e.type === 'red')    pStats[key].red++;
-      if(e.type === 'sub' && e.subOutName) {
-        const outKey = `${e.subOutName}||${e.teamName}`;
-        if(!pStats[outKey]) pStats[outKey] = {goals:0,assists:0,yellow:0,red:0,matches:new Set()};
-        pStats[outKey].matches.add(r.id);
-      }
-    });
-  });
-
-  // 2. Update player stats in teams array + DB
-  const updatePromises = [];
-  teams.forEach(t => {
-    t.players.forEach(p => {
-      if(['Президент','Тренер'].includes(p.pos)) return;
-      const key = `${p.name}||${t.name}`;
-      const s = pStats[key];
-      if(!s) return; // no events for this player yet
-      const newMatches = s.matches.size;
-      const newGoals   = s.goals;
-      const newAssists = s.assists;
-      const newYellow  = s.yellow;
-      const newRed     = s.red;
-      // Only update if changed
-      if(p.matches !== newMatches || p.goals !== newGoals ||
-         (p.assists||0) !== newAssists || p.yellow !== newYellow || p.red !== newRed) {
-        p.matches = newMatches;
-        p.goals   = newGoals;
-        p.assists = newAssists;
-        p.yellow  = newYellow;
-        p.red     = newRed;
-        updatePromises.push(
-          sbPatch('players', {id:p.id}, {
-            matches:newMatches, goals:newGoals,
-            yellow:newYellow, red:newRed
-          }).catch(()=>{})
-        );
-      }
-    });
-  });
-
-  // 3. Update standings (W/D/L/Pts) from results
-  const standMap = {};
-  const ensureSt = name => {
-    if(!standMap[name]) standMap[name] = {team:name,p:0,w:0,d:0,l:0,pts:0};
-  };
-  results.forEach(r => {
-    ensureSt(r.team1); ensureSt(r.team2);
-    const s1 = standMap[r.team1], s2 = standMap[r.team2];
-    s1.p++; s2.p++;
-    if(r.g1 > r.g2)      { s1.w++; s1.pts+=3; s2.l++; }
-    else if(r.g1 < r.g2) { s2.w++; s2.pts+=3; s1.l++; }
-    else                  { s1.d++; s2.d++; s1.pts++; s2.pts++; }
-  });
-
-  for(const row of Object.values(standMap)) {
-    const existing = standings.find(s => s.team === row.team);
-    if(existing) {
-      existing.p=row.p; existing.w=row.w; existing.d=row.d; existing.l=row.l; existing.pts=row.pts;
-      updatePromises.push(
-        sbPatch('standings', {id:existing.id}, {p:row.p,w:row.w,d:row.d,l:row.l,pts:row.pts}).catch(()=>{})
-      );
-    }
-  }
-
-  // 4. Update hero stats on main page
-  const totalGoals   = results.reduce((s,r) => s + (r.g1||0) + (r.g2||0), 0);
-  const totalMatches = results.length;
-  const totalPlayers = teams.reduce((s,t) => s + t.players.length, 0);
-  const totalTeams   = teams.length;
-  heroStats = {teams:totalTeams, matches:totalMatches, players:totalPlayers, goals:totalGoals};
-  updatePromises.push(
-    sbSetSetting('hero_stats', JSON.stringify(heroStats)).catch(()=>{})
-  );
-
-  await Promise.all(updatePromises);
-
-  // 5. Re-render everything
-  renderHeroStats();
-  renderStandings();
-  renderAdminStandingsEdit();
-  renderScorers();
-  renderDiscipline();
-  renderTeams();
-}
-
-
-function fileToBase64(file) {
-  return new Promise((res,rej) => {
-    const r = new FileReader();
-    r.onload = () => res(r.result);
-    r.onerror = rej;
-    r.readAsDataURL(file);
-  });
-}
-
-// Photo preview in edit form
-document.addEventListener('change', async e => {
-  // Player photo preview
-  if(e.target.id === 'ep-photo-file') {
-    const file = e.target.files[0];
-    if(!file) return;
-    const b64 = await fileToBase64(file);
-    document.getElementById('ep-photo-url').value = '';
-    document.getElementById('ep-photo-img').src = b64;
-    document.getElementById('ep-photo-preview').style.display = 'block';
-  }
-  // Team logo preview
-  if(e.target.id === 'nt-logo-file') {
-    const file = e.target.files[0];
-    if(!file) return;
-    const b64 = await fileToBase64(file);
-    document.getElementById('nt-logo-url').value = '';
-    document.getElementById('nt-logo-img').src = b64;
-    document.getElementById('nt-logo-preview').style.display = 'block';
-  }
-  // League logo preview
-  if(e.target.id === 'league-logo-file') {
-    const file = e.target.files[0];
-    if(!file) return;
-    const b64 = await fileToBase64(file);
-    document.getElementById('league-logo-url').value = '';
-    document.getElementById('league-logo-img').src = b64;
-    document.getElementById('league-logo-preview').style.display = 'block';
-  }
-  // Position → auto emoji for new player form
-  if(e.target.id === 'p-pos') {
-    const icons = {Вратарь:'🧤',Защитник:'🛡️',Полузащитник:'🎯',Нападающий:'⚡'};
-    // clear photo URL so icon shows by default
-    document.getElementById('p-photo-url').value = '';
-  }
-});
-
-// ===================== HASH ROUTING =====================
-window.addEventListener('hashchange', () => {
-  if(window.location.hash==='#admin') showAdmin();
-  else if(window.location.hash==='#home' || window.location.hash==='') showMain();
-});
-
-// ===================== ACTION LOG =====================
-// ref: { entity: 'player'|'team'|'match'|'result', id, teamId? }
-function logAction(type, description, ref) {
-  const entry = {
-    id: Date.now(),
-    time: new Date().toLocaleString('ru-RU'),
-    type, description,
-    ref: ref || null
-  };
-  actionLog.unshift(entry);
-  if(actionLog.length > 50) actionLog = actionLog.slice(0, 50);
-  actionHistory.unshift(entry);
-  if(actionHistory.length > 20) actionHistory = actionHistory.slice(0, 20);
-  sbSetSetting('action_log', JSON.stringify(actionLog)).catch(()=>{});
-  renderActionLog();
-}
-
-function renderActionLog() {
-  const el = document.getElementById('action-log-list');
-  if(!el) return;
-  if(!actionLog.length) {
-    el.innerHTML = '<p style="color:var(--grey);font-size:0.82rem">Журнал пуст</p>';
-    return;
-  }
-  const icons = {add:'➕',edit:'✏️',delete:'🗑️',result:'⚽',match:'📅',team:'🏟️',settings:'⚙️',logo:'🖼️'};
-  el.innerHTML = actionLog.map(e => {
-    const ref = e.ref;
-    let editBtn = '', delBtn = '';
-    if(ref && e.type !== 'delete') {
-      if(ref.entity === 'player' && ref.teamId && ref.id) {
-        editBtn = `<button class="btn-sm btn-sm-green" onclick="logEditPlayer(${ref.teamId},${ref.id})" title="Редактировать">✏️</button>`;
-        delBtn  = `<button class="btn-sm" onclick="logDeletePlayer(${ref.teamId},${ref.id},${e.id})" title="Удалить">🗑️</button>`;
-      } else if(ref.entity === 'team' && ref.id) {
-        editBtn = `<button class="btn-sm btn-sm-green" onclick="logEditTeam(${ref.id})" title="Редактировать">✏️</button>`;
-        delBtn  = `<button class="btn-sm" onclick="deleteTeam(${ref.id})" title="Удалить">🗑️</button>`;
-      } else if(ref.entity === 'match' && ref.id) {
-        delBtn  = `<button class="btn-sm" onclick="logDeleteMatch('${ref.id}',${e.id})" title="Удалить матч">🗑️</button>`;
-      } else if(ref.entity === 'result' && ref.id) {
-        editBtn = `<button class="btn-sm btn-sm-green" onclick="logEditResult('${ref.id}')" title="Открыть протокол">✏️</button>`;
-        delBtn  = `<button class="btn-sm" onclick="deleteResult('${ref.id}')" title="Удалить">🗑️</button>`;
-      }
-    }
-    const hasActions = editBtn || delBtn;
-    return `
-    <div style="display:flex;align-items:center;gap:0.75rem;padding:0.6rem 0.75rem;background:var(--navy-light);border:1px solid var(--border);border-radius:8px">
-      <span style="font-size:1.1rem;flex-shrink:0">${icons[e.type]||'•'}</span>
-      <div style="flex:1;min-width:0">
-        <div style="font-size:0.82rem">${e.description}</div>
-        <div style="font-size:0.65rem;color:var(--grey);margin-top:2px">${e.time}</div>
-      </div>
-      ${hasActions ? `<div style="display:flex;gap:4px;flex-shrink:0">${editBtn}${delBtn}</div>` : ''}
-    </div>`;
-  }).join('');
-}
-
-// Journal action helpers
-function logEditPlayer(teamId, playerId) {
-  showAdminTab_byId('tab-players');
-  setTimeout(() => {
-    const sel = document.getElementById('p-team');
-    if(sel) { sel.value = teamId; renderAdminPlayersList(teamId); }
-    setTimeout(() => openEditPlayer(teamId, playerId), 150);
-  }, 100);
-}
-
-function logEditTeam(teamId) {
-  showAdminTab_byId('tab-teams');
-  setTimeout(() => editTeam(teamId), 100);
-}
-
-function logEditResult(resultId) {
-  showAdminTab_byId('tab-results');
-  setTimeout(() => openProtocolEditor(resultId), 100);
-}
-
-async function logDeletePlayer(teamId, playerId, logEntryId) {
-  await deletePlayer(teamId, playerId);
-  // remove from log
-  actionLog = actionLog.filter(e => e.id !== logEntryId);
-  sbSetSetting('action_log', JSON.stringify(actionLog)).catch(()=>{});
-  renderActionLog();
-}
-
-async function logDeleteMatch(matchId, logEntryId) {
-  await deleteUpcoming(matchId);
-  actionLog = actionLog.filter(e => e.id !== logEntryId);
-  sbSetSetting('action_log', JSON.stringify(actionLog)).catch(()=>{});
-  renderActionLog();
-}
-
-function showAdminTab_byId(tabId) {
-  document.querySelectorAll('.admin-content').forEach(c => c.classList.remove('active'));
-  document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
-  const tab = document.getElementById(tabId);
-  if(tab) tab.classList.add('active');
-  document.querySelectorAll('.admin-tab').forEach(btn => {
-    if(btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(tabId)) {
-      btn.classList.add('active');
-    }
-  });
-  if(tabId === 'tab-teams') renderAdminTeamsList();
-  if(tabId === 'tab-settings') initSettingsTab();
-}
-
-function undoLastAction() {
-  alert('Функция отмены недоступна при работе с облачной базой данных.\nДля исправления ошибок используйте редактирование данных напрямую.');
-}
-
-function clearLog() {
-  if(!confirm('Очистить журнал?')) return;
-  actionLog = []; actionHistory = [];
-  sbSetSetting('action_log', '[]').catch(()=>{});
-  renderActionLog();
-}
-
-// ===================== HERO STATS =====================
-function renderHeroStats() {
-  // Always compute from real data if available
-  const totalGoals   = results.reduce((s,r) => s+(r.g1||0)+(r.g2||0), 0);
-  const totalMatches = results.length;
-  const totalPlayers = teams.reduce((s,t) => s+t.players.length, 0);
-  const totalTeams   = teams.length;
-  // Use computed if data exists, otherwise fall back to heroStats setting
-  document.getElementById('hstat-teams').textContent   = totalTeams   || heroStats.teams;
-  document.getElementById('hstat-matches').textContent = totalMatches || heroStats.matches;
-  document.getElementById('hstat-players').textContent = totalPlayers || heroStats.players;
-  document.getElementById('hstat-goals').textContent   = totalGoals   || heroStats.goals;
-}
-
-function initHeroStatsForm() {
-  document.getElementById('hs-teams').value = heroStats.teams;
-  document.getElementById('hs-matches').value = heroStats.matches;
-  document.getElementById('hs-players').value = heroStats.players;
-  document.getElementById('hs-goals').value = heroStats.goals;
-}
-
-async function saveHeroStats() {
-  heroStats = {
-    teams: parseInt(document.getElementById('hs-teams').value)||0,
-    matches: parseInt(document.getElementById('hs-matches').value)||0,
-    players: parseInt(document.getElementById('hs-players').value)||0,
-    goals: parseInt(document.getElementById('hs-goals').value)||0,
-  };
-  showLoader('Сохранение...');
-  try {
-    await sbSetSetting('hero_stats', JSON.stringify(heroStats));
-    renderHeroStats();
-    logAction('settings','Обновлена статистика на главной');
-    showSuccess('Сохранено!');
-  } catch(e) { showError('Ошибка: '+e.message); }
-  hideLoader();
-}
-
-// ===================== LEAGUE LOGO =====================
-function applyLeagueLogo() {
-  const img = document.getElementById('logo-img');
-  const em = document.getElementById('logo-emoji');
-  if(leagueLogo) {
-    img.src = leagueLogo; img.style.display='block'; em.style.display='none';
-    document.getElementById('league-logo-img').src = leagueLogo;
-    document.getElementById('league-logo-preview').style.display='block';
-  } else {
-    img.style.display='none'; em.style.display='block';
-  }
-}
-
-async function saveLeagueLogo() {
-  const urlVal = document.getElementById('league-logo-url').value.trim();
-  const fileEl = document.getElementById('league-logo-file');
-  showLoader('Загрузка логотипа...');
-  try {
-    if(urlVal) {
-      leagueLogo = urlVal;
-    } else if(fileEl._croppedData) {
-      leagueLogo = await uploadToStorage('logos', 'league/logo', fileEl._croppedData);
-      fileEl._croppedData = null;
-    } else if(fileEl.files[0]) {
-      const b64 = await fileToBase64(fileEl.files[0]);
-      leagueLogo = await uploadToStorage('logos', 'league/logo', b64);
-    } else {
-      hideLoader();
-      alert('Укажите URL или загрузите файл');
-      return;
-    }
-    await sbSetSetting('league_logo', leagueLogo);
-    applyLeagueLogo();
-    logAction('logo','Обновлён логотип лиги');
-    showSuccess('Логотип сохранён!');
-  } catch(e) { showError('Ошибка: '+e.message); }
-  hideLoader();
-}
-
-async function resetLeagueLogo() {
-  showLoader('Сброс...');
-  try {
-    leagueLogo = null;
-    await sbSetSetting('league_logo', '');
-    applyLeagueLogo();
-    logAction('logo','Логотип лиги сброшен');
-    showSuccess('Логотип сброшен');
-  } catch(e) { showError('Ошибка: '+e.message); }
-  hideLoader();
-}
-
-// ===================== TEAMS ADMIN =====================
-function renderAdminTeamsList() {
-  const list = document.getElementById('admin-teams-list');
-  if(!list) return;
-  list.innerHTML = teams.map(t => {
-    const logoHtml = t.logo
-      ? `<img src="${t.logo}" style="width:32px;height:32px;border-radius:50%;object-fit:contain;border:1px solid var(--border)">`
-      : `<span style="font-size:1.4rem">${t.emoji||'⚽'}</span>`;
-    return `<li>
-      <span style="display:flex;align-items:center;gap:0.6rem;flex:1">${logoHtml}<span>${t.name}</span></span>
-      <button class="btn-sm btn-sm-green" onclick="editTeam(${t.id})">✏️</button>
-      <button class="btn-sm" onclick="deleteTeam(${t.id})">✕</button>
-    </li>`;
-  }).join('') || '<li style="color:var(--grey)">Нет команд</li>';
-}
-
-function editTeam(id) {
-  const t = teams.find(x=>x.id===id);
-  if(!t) return;
-  document.getElementById('nt-name').value = t.name;
-  document.getElementById('nt-emoji').value = t.emoji||'';
-  document.getElementById('nt-logo-url').value = t.logo||'';
-  document.getElementById('nt-edit-id').value = id;
-  document.getElementById('team-edit-title').textContent = 'Редактировать команду';
-  document.getElementById('nt-cancel-btn').style.display='block';
-  if(t.logo) {
-    document.getElementById('nt-logo-img').src = t.logo;
-    document.getElementById('nt-logo-preview').style.display='block';
-  }
-}
-
-function cancelTeamEdit() {
-  document.getElementById('nt-name').value='';
-  document.getElementById('nt-emoji').value='';
-  document.getElementById('nt-logo-url').value='';
-  document.getElementById('nt-edit-id').value='';
-  document.getElementById('team-edit-title').textContent='Добавить команду';
-  document.getElementById('nt-cancel-btn').style.display='none';
-  document.getElementById('nt-logo-preview').style.display='none';
-}
-
-function saveTeam() {
-  const name = document.getElementById('nt-name').value.trim();
-  const emoji = document.getElementById('nt-emoji').value.trim() || '⚽';
-  const logoUrl = document.getElementById('nt-logo-url').value.trim();
-  const editId = parseInt(document.getElementById('nt-edit-id').value);
-  if(!name) { alert('Введите название'); return; }
-  const fileEl = document.getElementById('nt-logo-file');
-  showLoader('Сохранение команды...');
-  const doSave = async (logoData) => {
-    try {
-      let logo = logoUrl || null;
-      if(logoData) {
-        // upload to storage
-        logo = await uploadToStorage('logos', `teams/t_${editId||Date.now()}`, logoData);
-      }
-      if(editId) {
-        const t = teams.find(x=>x.id===editId);
-        if(t) {
-          const old=t.name; t.name=name; t.emoji=emoji;
-          if(logo !== null) t.logo = logo;
-          await sbPatch('teams', {id:editId}, {name, emoji, logo: t.logo});
-          logAction('edit',`Изменена команда: ${old} → ${name}`, {entity:'team',id:editId});
-        }
-      } else {
-        const [row] = await sbPost('teams', {name, emoji, logo});
-        teams.push({id:row.id,name,emoji,logo:logo||null,players:[]});
-        logAction('add',`Добавлена команда: ${name}`, {entity:'team',id:row.id});
-      }
-      renderTeams(); renderAdminTeamsList(); populateTeamSelects();
-      cancelTeamEdit();
-      showSuccess(editId ? 'Команда обновлена!' : 'Команда добавлена!');
-    } catch(e) { showError('Ошибка: '+e.message); }
-    hideLoader();
-  };
-  if(fileEl._croppedData) {
-    const d = fileEl._croppedData; fileEl._croppedData = null;
-    doSave(d);
-  } else if(fileEl.files[0]) {
-    fileToBase64(fileEl.files[0]).then(b64 => doSave(b64));
-  } else {
-    doSave(null);
-  }
-}
-
-async function deleteTeam(id) {
-  const t = teams.find(x=>x.id===id);
-  if(!t || !confirm(`Удалить команду «${t.name}»? Все игроки будут удалены.`)) return;
-  showLoader('Удаление...');
-  try {
-    await sbDelete('teams', {id});
-    logAction('delete',`Удалена команда: ${t.name}`);
-    teams = teams.filter(x=>x.id!==id);
-    renderTeams(); renderAdminTeamsList(); populateTeamSelects();
-    showSuccess('Команда удалена!');
-  } catch(e) { showError('Ошибка: '+e.message); }
-  hideLoader();
-}
-
-// ===================== INIT SETTINGS TAB =====================
-function initSettingsTab() {
-  initHeroStatsForm();
-  applyLeagueLogo();
-}
-
-// ===================== ROLE STAT TOGGLE =====================
-function toggleStatFields(pos) {
-  const isNonPlaying = ['Президент','Тренер'].includes(pos);
-  document.querySelectorAll('.stat-only-field').forEach(el => {
-    el.style.display = isNonPlaying ? 'none' : '';
-  });
-}
-
-// ===================== IMAGE CROP =====================
-// New approach: fixed crop box in center, IMAGE moves/scales under it
-let _cropTarget = null;
-let _cropScale = 1;
-let _cropMinScale = 1;
-let _cropImgOffset = {x:0, y:0}; // offset of image top-left from container
-let _cropDrag = false;
-let _cropDragStart = {x:0,y:0};
-let _cropOffsetStart = {x:0,y:0};
-const CROP_SIZE = 220;
-
-function openCropModal(target) {
-  const fileInput = document.getElementById(target === 'league-logo' ? 'league-logo-file' : 'nt-logo-file');
-  const file = fileInput.files[0];
-  if(!file) return;
-  _cropTarget = target;
-
-  const reader = new FileReader();
-  reader.onload = e => {
-    const img = document.getElementById('crop-img');
-    img.onload = () => {
-      const containerW = Math.min(420, window.innerWidth - 48);
-      const containerH = containerW;
-      const container = document.getElementById('crop-container');
-      container.style.width = containerW + 'px';
-      container.style.height = containerH + 'px';
-
-      // Fixed crop box in center
-      const box = document.getElementById('crop-box');
-      box.style.width = CROP_SIZE + 'px';
-      box.style.height = CROP_SIZE + 'px';
-      box.style.left = ((containerW - CROP_SIZE) / 2) + 'px';
-      box.style.top = ((containerH - CROP_SIZE) / 2) + 'px';
-      box.style.cursor = 'default';
-
-      // Scale image to cover the crop box fully
-      const minScale = Math.max(CROP_SIZE / img.naturalWidth, CROP_SIZE / img.naturalHeight);
-      _cropMinScale = minScale;
-      _cropScale = minScale;
-
-      // Set slider
-      const slider = document.getElementById('crop-scale');
-      slider.min = minScale;
-      slider.max = minScale * 4;
-      slider.step = minScale * 0.01;
-      slider.value = minScale;
-
-      // Center image over crop box
-      _applyCropTransform(img, containerW, containerH);
-    };
-    img.src = e.target.result;
-  };
-  reader.readAsDataURL(file);
-  document.getElementById('crop-modal').classList.add('open');
-}
-
-function _applyCropTransform(img, containerW, containerH) {
-  img = img || document.getElementById('crop-img');
-  containerW = containerW || document.getElementById('crop-container').clientWidth;
-  containerH = containerH || document.getElementById('crop-container').clientHeight;
-  const iw = img.naturalWidth * _cropScale;
-  const ih = img.naturalHeight * _cropScale;
-  // Clamp offset so image always covers the crop box
-  const boxLeft = (containerW - CROP_SIZE) / 2;
-  const boxTop = (containerH - CROP_SIZE) / 2;
-  const minX = boxLeft + CROP_SIZE - iw;
-  const maxX = boxLeft;
-  const minY = boxTop + CROP_SIZE - ih;
-  const maxY = boxTop;
-  _cropImgOffset.x = Math.max(minX, Math.min(maxX, _cropImgOffset.x));
-  _cropImgOffset.y = Math.max(minY, Math.min(maxY, _cropImgOffset.y));
-  // On first render, center image
-  if(!img._cropInitDone) {
-    _cropImgOffset.x = boxLeft - (iw - CROP_SIZE) / 2;
-    _cropImgOffset.y = boxTop - (ih - CROP_SIZE) / 2;
-    img._cropInitDone = true;
-  }
-  img.style.position = 'absolute';
-  img.style.left = _cropImgOffset.x + 'px';
-  img.style.top = _cropImgOffset.y + 'px';
-  img.style.width = iw + 'px';
-  img.style.height = ih + 'px';
-}
-
-function updateCropScale() {
-  _cropScale = parseFloat(document.getElementById('crop-scale').value);
-  const img = document.getElementById('crop-img');
-  img._cropInitDone = true; // keep position, just re-clamp
-  _applyCropTransform(img);
-}
-
-// Image drag
-(function() {
-  function getXY(e) {
-    const t = e.touches ? e.touches[0] : e;
-    return {x: t.clientX, y: t.clientY};
-  }
-  document.addEventListener('mousedown', e => {
-    if(e.target.id === 'crop-img') {
-      _cropDrag = true;
-      const p = getXY(e);
-      _cropDragStart = p;
-      _cropOffsetStart = {..._cropImgOffset};
-      e.preventDefault();
-    }
-  });
-  document.addEventListener('touchstart', e => {
-    if(e.target.id === 'crop-img') {
-      _cropDrag = true;
-      const p = getXY(e);
-      _cropDragStart = p;
-      _cropOffsetStart = {..._cropImgOffset};
-    }
-  }, {passive:true});
-  function onMove(e) {
-    if(!_cropDrag) return;
-    const p = getXY(e);
-    _cropImgOffset.x = _cropOffsetStart.x + (p.x - _cropDragStart.x);
-    _cropImgOffset.y = _cropOffsetStart.y + (p.y - _cropDragStart.y);
-    _applyCropTransform();
-  }
-  document.addEventListener('mousemove', onMove);
-  document.addEventListener('touchmove', onMove, {passive:true});
-  document.addEventListener('mouseup', () => _cropDrag = false);
-  document.addEventListener('touchend', () => _cropDrag = false);
-})();
-
-function applyCrop() {
-  const img = document.getElementById('crop-img');
-  const box = document.getElementById('crop-box');
-  const container = document.getElementById('crop-container');
-
-  // box is fixed center; img offset is in _cropImgOffset
-  const boxLeft = parseFloat(box.style.left);
-  const boxTop = parseFloat(box.style.top);
-  const boxSize = CROP_SIZE;
-
-  // Source coords in natural image pixels
-  const scaleX = img.naturalWidth / (img.naturalWidth * _cropScale);
-  const scaleY = img.naturalHeight / (img.naturalHeight * _cropScale);
-  const sx = (boxLeft - _cropImgOffset.x) / _cropScale * (img.naturalWidth / img.naturalWidth);
-  const sy = (boxTop - _cropImgOffset.y) / _cropScale * (img.naturalHeight / img.naturalHeight);
-  // simpler:
-  const srcX = (boxLeft - _cropImgOffset.x) / _cropScale;
-  const srcY = (boxTop - _cropImgOffset.y) / _cropScale;
-  const srcW = boxSize / _cropScale;
-  const srcH = boxSize / _cropScale;
-
-  const canvas = document.createElement('canvas');
-  canvas.width = 300; canvas.height = 300;
-  const ctx = canvas.getContext('2d');
-  ctx.drawImage(img, srcX, srcY, srcW, srcH, 0, 0, 300, 300);
-  const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
-
-  if(_cropTarget === 'league-logo') {
-    document.getElementById('league-logo-img').src = dataUrl;
-    document.getElementById('league-logo-preview').style.display = 'block';
-    document.getElementById('league-logo-url').value = '';
-    // store for saveLeagueLogo
-    document.getElementById('league-logo-file')._croppedData = dataUrl;
-  } else {
-    document.getElementById('nt-logo-img').src = dataUrl;
-    document.getElementById('nt-logo-preview').style.display = 'block';
-    document.getElementById('nt-logo-url').value = '';
-    document.getElementById('nt-logo-file')._croppedData = dataUrl;
-  }
-  closeCropModal();
-}
-
-function closeCropModal() {
-  document.getElementById('crop-modal').classList.remove('open');
-  const img = document.getElementById('crop-img');
-  if(img) img._cropInitDone = false;
-}
-
-// ===================== EXTENDED renderTeams with logo support =====================
-
-
-// ===================== INIT =====================
-async function init() {
-  await loadAllData();
-  renderSchedule();
-  renderTeams();
-  renderStandings();
-  renderResults();
-  renderScorers();
-  renderDiscipline();
-  renderHeroStats();
-  applyLeagueLogo();
-  renderActionLog();
-  initNavigation();
-  // If admin is already shown (fast hash routing), refresh its data
-  if(window.location.hash === '#admin' && sessionStorage.getItem('bfl_admin')) {
-    showAdminPanel();
-  }
-}
-
-init();
-</script>
-
-<!-- ===== IMAGE CROP MODAL ===== -->
-<div class="modal-overlay" id="crop-modal" style="z-index:2000">
-  <div class="modal" style="max-width:500px;width:95vw">
-    <div class="modal-header">
-      <div class="modal-title">✂️ Обрезать изображение</div>
-      <button class="modal-close" onclick="closeCropModal()">✕</button>
-    </div>
-    <div class="modal-body" style="padding:1rem">
-      <div style="position:relative;overflow:hidden;background:#000;border-radius:8px;user-select:none;touch-action:none" id="crop-container">
-        <img id="crop-img" style="display:block;max-width:100%;transform-origin:top left" draggable="false">
-        <div id="crop-overlay" style="position:absolute;inset:0;pointer-events:none">
-          <div id="crop-box" style="position:absolute;border:2px solid var(--green);box-shadow:0 0 0 9999px rgba(0,0,0,0.55);cursor:move"></div>
+        <div class="modal-body">
+            <div class="crop-container" id="crop-container">
+                <img id="crop-img" draggable="false">
+                <div class="crop-overlay">
+                    <div class="crop-box" id="crop-box"></div>
+                </div>
+            </div>
+            
+            <div class="crop-controls">
+                <label>Масштаб</label>
+                <input type="range" id="crop-scale" min="0.5" max="3" step="0.01" value="1">
+            </div>
+            
+            <div class="crop-actions">
+                <button class="btn-admin" id="apply-crop-btn">✅ Применить</button>
+                <button class="btn-admin btn-cancel" data-modal="crop-modal">Отмена</button>
+            </div>
         </div>
-      </div>
-      <div style="display:flex;gap:0.5rem;margin-top:1rem;align-items:center">
-        <label style="font-size:0.75rem;color:var(--grey);flex-shrink:0">Масштаб</label>
-        <input type="range" id="crop-scale" min="0.5" max="3" step="0.01" value="1" style="flex:1" oninput="updateCropScale()">
-      </div>
-      <div style="display:flex;gap:0.75rem;margin-top:1rem">
-        <button class="btn-admin" onclick="applyCrop()">✅ Применить</button>
-        <button class="btn-admin" style="background:var(--navy-light);color:var(--grey)" onclick="closeCropModal()">Отмена</button>
-      </div>
     </div>
-  </div>
 </div>
+
+<!-- Main JavaScript -->
+<script src="script.js"></script>
 </body>
 </html>
