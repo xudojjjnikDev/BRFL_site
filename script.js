@@ -100,13 +100,18 @@ function formatDate(str) {
     return d.toLocaleDateString('ru-RU', { day: '2-digit', month: 'long', weekday: 'short' });
 }
 
-function matchWord(n) {
+function plural(n, one, few, many) {
     const mod10 = n % 10;
     const mod100 = n % 100;
-    if (mod10 === 1 && mod100 !== 11) return 'матч';
-    if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return 'матча';
-    return 'матчей';
+    if (mod10 === 1 && mod100 !== 11) return one;
+    if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return few;
+    return many;
 }
+
+function matchWord(n)  { return plural(n, 'матч',   'матча',   'матчей'); }
+function teamWord(n)   { return plural(n, 'команда', 'команды', 'команд'); }
+function playerWord(n) { return plural(n, 'игрок',   'игрока',  'игроков'); }
+function goalWord(n)   { return plural(n, 'гол',     'гола',    'голов'); }
 
 function fileToBase64(file) {
     return new Promise((resolve, reject) => {
@@ -267,7 +272,7 @@ function renderSchedule() {
         const lineupHtml = hasLineup ? `
             <div class="match-lineup-toggle">
                 <button class="match-lineup-btn" data-lineup-toggle="${m.id}">
-                    👥 Заявки на матч <span class="lineup-count">${l1.length + l2.length} игроков</span>
+                    👥 Заявки на матч <span class="lineup-count">${l1.length + l2.length} ${playerWord(l1.length + l2.length)}</span>
                 </button>
                 <div class="match-lineup-body" id="lineup-body-${m.id}">
                     <div class="match-lineup">
@@ -319,7 +324,7 @@ function renderTeams() {
             <div class="team-card" data-team-id="${t.id}">
                 <div class="team-emblem" style="background:${colors[i % colors.length]}">${emblemContent}</div>
                 <div class="team-name">${t.name}</div>
-                <div class="team-info">${t.players.length} игроков</div>
+                <div class="team-info">${t.players.length} ${playerWord(t.players.length)}</div>
                 <div class="team-arrow">Состав →</div>
             </div>
         `;
@@ -332,25 +337,28 @@ function renderStandings() {
 
     const sorted = [...standings]
         .filter(s => s.team && s.team.trim())
-        .sort((a, b) => b.pts - a.pts || b.w - a.w || a.l - b.l);
+        .sort((a, b) => b.pts - a.pts || (b.gf - b.ga) - (a.gf - a.ga) || b.gf - a.gf || b.w - a.w);
 
     tbody.innerHTML = sorted.map((s, i) => {
         const pos = i < 3
             ? `<span class="pos-badge pos-${i + 1}">${i + 1}</span>`
             : `<span class="pos-number">${i + 1}</span>`;
 
+        const gf = s.gf || 0;
+        const ga = s.ga || 0;
         return `
             <tr>
                 <td>${pos}</td>
-                <td><strong>${s.team}</strong></td>
+                <td class="team-col"><strong>${s.team}</strong></td>
                 <td>${s.p}</td>
-                <td>${s.w}</td>
-                <td>${s.d}</td>
-                <td>${s.l}</td>
+                <td class="hide-mobile">${s.w}</td>
+                <td class="hide-mobile">${s.d}</td>
+                <td class="hide-mobile">${s.l}</td>
+                <td class="hide-mobile">${gf}:${ga}</td>
                 <td class="pts-col">${s.pts}</td>
             </tr>
         `;
-    }).join('') || '<tr><td colspan="7" class="no-data">Нет данных</td></tr>';
+    }).join('') || '<tr><td colspan="8" class="no-data">Нет данных</td></tr>';
 }
 
 function renderResults() {
@@ -1070,7 +1078,7 @@ function renderAdminPlayersList(forceTeamId) {
     }
 
     const countEl = document.getElementById('players-count');
-    if (countEl) countEl.textContent = `· ${team.players.length} чел.`;
+    if (countEl) countEl.textContent = `· ${team.players.length} ${playerWord(team.players.length)}`;
 
     const posEmoji = {
         Вратарь: '🧤',
@@ -1318,7 +1326,7 @@ async function saveLineup(matchId) {
         await sbPatch('upcoming', { id: matchId }, { lineup1: l1, lineup2: l2 });
         renderSchedule();
         renderAdminUpcoming();
-        showSuccess(`Заявка сохранена: ${l1.length + l2.length} игроков`);
+        showSuccess(`Заявка сохранена: ${l1.length + l2.length} ${playerWord(l1.length + l2.length)}`);
     } catch (e) {
         showError('Ошибка: ' + e.message);
     }
@@ -1824,6 +1832,8 @@ async function recalcStandings() {
                 w: 0,
                 d: 0,
                 l: 0,
+                gf: 0,
+                ga: 0,
                 pts: 0
             };
         });
@@ -1839,6 +1849,10 @@ async function recalcStandings() {
             
             t1.p++;
             t2.p++;
+            t1.gf += r.g1 || 0;
+            t1.ga += r.g2 || 0;
+            t2.gf += r.g2 || 0;
+            t2.ga += r.g1 || 0;
 
             if (r.g1 > r.g2) {
                 t1.w++;
