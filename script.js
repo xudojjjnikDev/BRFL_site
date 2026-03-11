@@ -942,32 +942,72 @@ function renderAdminUpcoming() {
     const list = document.getElementById('admin-upcoming-list');
     if (!list) return;
 
+    const nonPlaying = ['Президент', 'Тренер'];
+
     list.innerHTML = upcoming.map(m => {
         const badge = m.kind === 'friendly' ? '🤝 ' : '⚽ ';
+        const l1 = m.lineup1 || [];
+        const l2 = m.lineup2 || [];
+
+        const team1obj = teams.find(t => t.name === m.team1);
+        const team2obj = teams.find(t => t.name === m.team2);
+
+        const players1 = (team1obj?.players || []).filter(p => !nonPlaying.includes(p.pos));
+        const players2 = (team2obj?.players || []).filter(p => !nonPlaying.includes(p.pos));
+
+        const renderCheckboxes = (players, selected, teamIdx, matchId) => {
+            if (!players.length) return `<div class="lineup-no-players">Нет игроков</div>`;
+            return players.map(p => {
+                const checked = selected.includes(p.name) ? 'checked' : '';
+                return `<label class="lineup-checkbox-label${checked ? ' selected' : ''}"><input type="checkbox" class="lineup-cb" data-match-id="${matchId}" data-team="${teamIdx}" value="${p.name}" ${checked}><span class="lineup-cb-name">${p.name}</span><span class="lineup-cb-pos">${p.pos}</span></label>`;
+            }).join('');
+        };
+
+        const total = l1.length + l2.length;
 
         return `
             <li>
                 <div class="upcoming-item">
                     <span class="upcoming-info">
                         ${badge}${m.team1} vs ${m.team2} · ${m.date}
+                        ${total ? `<span class="lineup-badge">${total} игр.</span>` : ''}
                     </span>
                     <div class="upcoming-actions">
-                        <button class="btn-sm btn-sm-green lineup-toggle" data-match-id="${m.id}" title="Заявка">📋</button>
+                        <button class="btn-sm btn-sm-green lineup-toggle" data-match-id="${m.id}">📋 Заявка</button>
                         <button class="btn-sm delete-upcoming" data-match-id="${m.id}">✕</button>
                     </div>
                 </div>
                 <div class="lineup-panel" id="lineup-panel-${m.id}">
-                    <div class="lineup-grid">
-                        <div>
-                            <div class="lineup-team-title">${m.team1}</div>
-                            <textarea class="lineup-textarea" id="lu1-${m.id}" rows="6" placeholder="Каждый игрок с новой строки">${(m.lineup1 || []).join('\n')}</textarea>
-                        </div>
-                        <div>
-                            <div class="lineup-team-title">${m.team2}</div>
-                            <textarea class="lineup-textarea" id="lu2-${m.id}" rows="6" placeholder="Каждый игрок с новой строки">${(m.lineup2 || []).join('\n')}</textarea>
+                    <div class="lineup-editor-header">
+                        <span>Отметьте игроков в заявку</span>
+                        <div class="lineup-counters">
+                            <span class="lineup-counter" id="lc1-${m.id}">${m.team1}: <b>${l1.length}</b></span>
+                            <span class="lineup-counter" id="lc2-${m.id}">${m.team2}: <b>${l2.length}</b></span>
                         </div>
                     </div>
-                    <button class="btn-sm btn-sm-green save-lineup" data-match-id="${m.id}">💾 Сохранить заявку</button>
+                    <div class="lineup-grid">
+                        <div class="lineup-col">
+                            <div class="lineup-team-title">
+                                ${m.team1}
+                                <span class="lineup-col-actions">
+                                    <button class="btn-sm btn-sm-green lineup-select-all" data-match-id="${m.id}" data-team="1">Все</button>
+                                    <button class="btn-sm lineup-clear-all" data-match-id="${m.id}" data-team="1">Сброс</button>
+                                </span>
+                            </div>
+                            <div class="lineup-checkboxes" id="lcb1-${m.id}">${renderCheckboxes(players1, l1, 1, m.id)}</div>
+                        </div>
+                        <div class="lineup-col">
+                            <div class="lineup-team-title">
+                                ${m.team2}
+                                <span class="lineup-col-actions">
+                                    <button class="btn-sm btn-sm-green lineup-select-all" data-match-id="${m.id}" data-team="2">Все</button>
+                                    <button class="btn-sm lineup-clear-all" data-match-id="${m.id}" data-team="2">Сброс</button>
+                                </span>
+                            </div>
+                            <div class="lineup-checkboxes" id="lcb2-${m.id}">${renderCheckboxes(players2, l2, 2, m.id)}</div>
+                        </div>
+                    </div>
+                    <button class="btn-sm btn-sm-green save-lineup" data-match-id="${m.id}" style="margin-top:0.75rem;width:100%;padding:0.6rem;">💾 Сохранить заявку</button>
                 </div>
             </li>
         `;
@@ -1263,33 +1303,43 @@ async function saveLineup(matchId) {
     const match = upcoming.find(m => m.id === matchId);
     if (!match) return;
 
-    const l1 = (document.getElementById('lu1-' + matchId)?.value || '')
-        .split('\n')
-        .map(s => s.trim())
-        .filter(Boolean);
+    const getChecked = (team) =>
+        [...document.querySelectorAll(`.lineup-cb[data-match-id="${matchId}"][data-team="${team}"]:checked`)]
+            .map(cb => cb.value);
 
-    const l2 = (document.getElementById('lu2-' + matchId)?.value || '')
-        .split('\n')
-        .map(s => s.trim())
-        .filter(Boolean);
+    const l1 = getChecked(1);
+    const l2 = getChecked(2);
 
     match.lineup1 = l1;
     match.lineup2 = l2;
 
+    showLoader('Сохранение...');
     try {
         await sbPatch('upcoming', { id: matchId }, { lineup1: l1, lineup2: l2 });
         renderSchedule();
-        showSuccess('Заявка сохранена!');
+        renderAdminUpcoming();
+        showSuccess(`Заявка сохранена: ${l1.length + l2.length} игроков`);
     } catch (e) {
         showError('Ошибка: ' + e.message);
     }
+    hideLoader();
 }
 
 function toggleLineupPanel(matchId) {
     const panel = document.getElementById('lineup-panel-' + matchId);
+    const btn = document.querySelector(`.lineup-toggle[data-match-id="${matchId}"]`);
     if (panel) {
-        panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+        panel.classList.toggle('open');
+        if (btn) btn.classList.toggle('active');
     }
+}
+
+function updateLineupCounter(matchId, team) {
+    const count = document.querySelectorAll(`.lineup-cb[data-match-id="${matchId}"][data-team="${team}"]:checked`).length;
+    const match = upcoming.find(m => m.id === matchId);
+    const teamName = team == 1 ? match?.team1 : match?.team2;
+    const counter = document.getElementById(`lc${team}-${matchId}`);
+    if (counter) counter.innerHTML = `${teamName}: <b>${count}</b>`;
 }
 
 async function addResult() {
@@ -2763,6 +2813,33 @@ function initEventListeners() {
             const btn = e.target.closest('.save-lineup');
             const matchId = btn.dataset.matchId;
             if (matchId) saveLineup(matchId);
+        }
+
+        // Admin: выбрать всех игроков команды
+        if (e.target.closest('.lineup-select-all')) {
+            const btn = e.target.closest('.lineup-select-all');
+            const matchId = btn.dataset.matchId;
+            const team = btn.dataset.team;
+            document.querySelectorAll(`.lineup-cb[data-match-id="${matchId}"][data-team="${team}"]`)
+                .forEach(cb => { cb.checked = true; cb.closest('.lineup-checkbox-label').classList.add('selected'); });
+            updateLineupCounter(matchId, team);
+        }
+
+        // Admin: сбросить всех игроков команды
+        if (e.target.closest('.lineup-clear-all')) {
+            const btn = e.target.closest('.lineup-clear-all');
+            const matchId = btn.dataset.matchId;
+            const team = btn.dataset.team;
+            document.querySelectorAll(`.lineup-cb[data-match-id="${matchId}"][data-team="${team}"]`)
+                .forEach(cb => { cb.checked = false; cb.closest('.lineup-checkbox-label').classList.remove('selected'); });
+            updateLineupCounter(matchId, team);
+        }
+
+        // Admin: клик по чекбоксу игрока
+        if (e.target.classList.contains('lineup-cb')) {
+            const cb = e.target;
+            cb.closest('.lineup-checkbox-label').classList.toggle('selected', cb.checked);
+            updateLineupCounter(cb.dataset.matchId, cb.dataset.team);
         }
 
         // Admin: delete upcoming
