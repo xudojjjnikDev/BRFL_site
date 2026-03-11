@@ -403,6 +403,14 @@
                                 <option>Тренер</option>
                             </select>
                         </div>
+                        <div class="form-group">
+                            <label>Фото URL</label>
+                            <input type="text" id="ep-photo-url" placeholder="https://...">
+                        </div>
+                        <div class="form-group">
+                            <label>Загрузить фото</label>
+                            <input type="file" id="ep-photo-file" accept="image/*">
+                        </div>
                         <div class="form-group stat-only-field">
                             <label>Матчей</label>
                             <input type="number" id="ep-matches" min="0">
@@ -419,6 +427,10 @@
                             <label>КК</label>
                             <input type="number" id="ep-red" min="0">
                         </div>
+                    </div>
+
+                    <div id="ep-photo-preview" style="display:none; margin: 0.75rem 0;">
+                        <img id="ep-photo-img" src="" alt="Фото игрока" style="width:64px; height:64px; border-radius:50%; object-fit:cover; border:2px solid var(--border);">
                     </div>
                     
                     <div class="edit-player-actions">
@@ -476,6 +488,9 @@
                             <label>Или загрузить файл</label>
                             <input type="file" id="nt-logo-file" accept="image/*">
                         </div>
+                        <div id="nt-logo-preview" style="display:none; margin: 0.75rem 0; text-align:center;">
+                            <img id="nt-logo-img" src="" alt="Превью логотипа" style="max-width:120px; max-height:120px; border-radius:8px; border:2px solid var(--border);">
+                        </div>
                         <div class="form-group">
                             <label>Эмодзи (если нет логотипа)</label>
                             <input type="text" id="nt-emoji" placeholder="⚽" maxlength="2">
@@ -495,49 +510,63 @@
                 </div>
             </div>
 
-            <!-- TAB: Settings -->
+                   <!-- TAB: Settings -->
             <div class="admin-content" id="tab-settings">
                 <div class="admin-grid">
                     <div class="admin-card">
                         <h3>Логотип лиги</h3>
-                        <div class="form-group">
-                            <label>URL логотипа</label>
-                            <input type="text" id="league-logo-url">
-                        </div>
-                        <div class="form-group">
-                            <label>Загрузить файл</label>
-                            <input type="file" id="league-logo-file" accept="image/*">
-                        </div>
-                        <div id="league-logo-preview"></div>
-                        <button class="btn-admin" id="save-league-logo">💾 Сохранить логотип</button>
-                        <button class="btn-admin btn-secondary" id="reset-league-logo">Сбросить логотип</button>
-                    </div>
-                    
-                    <div class="admin-card">
-                        <h3>Статистика на главной</h3>
-                        <p class="settings-hint">Цифры под кнопкой «Расписание матчей»</p>
-                        <div class="hero-stats-grid">
-                            <div class="form-group">
-                                <label>Команд</label>
-                                <input type="number" id="hs-teams" min="0">
-                            </div>
-                            <div class="form-group">
-                                <label>Матчей</label>
-                                <input type="number" id="hs-matches" min="0">
-                            </div>
-                            <div class="form-group">
-                                <label>Игроков</label>
-                                <input type="number" id="hs-players" min="0">
-                            </div>
-                            <div class="form-group">
-                                <label>Голов</label>
-                                <input type="number" id="hs-goals" min="0">
-                            </div>
-                        </div>
-                        <button class="btn-admin" id="save-hero-stats">💾 Сохранить</button>
-                    </div>
+            <div class="form-group">
+                <label>URL логотипа</label>
+                <input type="text" id="league-logo-url">
+            </div>
+            <div class="form-group">
+                <label>Загрузить файл</label>
+                <input type="file" id="league-logo-file" accept="image/*">
+            </div>
+            <div id="league-logo-preview" style="display:none; margin: 0.75rem 0; text-align:center;">
+                <img id="league-logo-img" src="" alt="Логотип лиги" style="width:80px; height:80px; border-radius:50%; object-fit:contain; border:2px solid var(--border);">
+            </div>
+            <button class="btn-admin" id="save-league-logo">💾 Сохранить логотип</button>
+            <button class="btn-admin btn-secondary" id="reset-league-logo">Сбросить логотип</button>
+        </div>
+        
+        <div class="admin-card">
+            <h3>Статистика на главной</h3>
+            <p class="settings-hint">Цифры под кнопкой «Расписание матчей»</p>
+            <div class="hero-stats-grid">
+                <div class="form-group">
+                    <label>Команд</label>
+                    <input type="number" id="hs-teams" min="0">
+                </div>
+                <div class="form-group">
+                    <label>Матчей</label>
+                    <input type="number" id="hs-matches" min="0">
+                </div>
+                <div class="form-group">
+                    <label>Игроков</label>
+                    <input type="number" id="hs-players" min="0">
+                </div>
+                <div class="form-group">
+                    <label>Голов</label>
+                    <input type="number" id="hs-goals" min="0">
                 </div>
             </div>
+            <button class="btn-admin" id="save-hero-stats">💾 Сохранить</button>
+        </div>
+    </div>
+    
+    <!-- ===== НОВАЯ КАРТОЧКА ДИАГНОСТИКИ ===== -->
+    <div class="admin-card" style="margin-top: 1.5rem;">
+        <h3>🔧 Диагностика</h3>
+        <p class="settings-hint">Проверка соединения с базой данных</p>
+        <button class="btn-admin" id="test-connection-btn" style="background: #4a90d9; color: white;">
+            🔌 Проверить соединение
+        </button>
+        <p style="font-size: 0.75rem; color: var(--grey); margin-top: 0.75rem;">
+            Если кнопка "Добавить матч" не работает, нажмите "Проверить соединение" и посмотрите результат в консоли (F12)
+        </p>
+    </div>
+</div>
 
             <!-- TAB: Log -->
             <div class="admin-content" id="tab-log">
