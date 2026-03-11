@@ -2296,3 +2296,161 @@ footer span {
 #admin-section {
     display: none;
 }
+
+/* Улучшенная мобильная навигация */
+@media (max-width: 768px) {
+    /* Основное меню */
+    nav {
+        position: fixed;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background: var(--navy-mid);
+        border-bottom: 1px solid var(--border);
+        padding: 0.75rem;
+        display: none;
+        z-index: 999;
+        max-height: calc(100vh - 64px);
+        overflow-y: auto;
+    }
+
+    nav.open {
+        display: block;
+    }
+
+    nav a {
+        display: block;
+        padding: 1rem 1.25rem;
+        font-size: 1.1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        text-align: center;
+    }
+
+    nav a:last-child {
+        border-bottom: none;
+    }
+
+    /* Бургер меню */
+    .burger {
+        display: flex;
+        width: 48px;
+        height: 48px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Логотип */
+    .logo-text {
+        font-size: 1rem;
+    }
+
+    .logo-text span {
+        font-size: 0.6rem;
+    }
+
+    /* Герой секция */
+    .hero {
+        padding-top: 80px;
+    }
+
+    h1 {
+        font-size: clamp(2rem, 10vw, 3.5rem);
+    }
+
+    .hero-stats {
+        flex-wrap: wrap;
+        gap: 1.5rem;
+    }
+
+    .hero-stat-num {
+        font-size: 2rem;
+    }
+
+    /* Секции */
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    /* Карточки матчей */
+    .match-card {
+        padding: 1rem;
+    }
+
+    .match-teams {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .match-team {
+        text-align: center !important;
+        width: 100%;
+    }
+
+    .match-vs {
+        font-size: 1rem;
+    }
+
+    /* Карточки команд */
+    .team-card {
+        padding: 1rem;
+    }
+
+    .team-emblem {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
+
+    /* Таблица */
+    .table-wrap {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+        min-width: 600px;
+    }
+
+    /* Результаты */
+    .result-card {
+        flex-wrap: wrap;
+        padding: 0.75rem;
+    }
+
+    .result-date-col {
+        width: 100%;
+        margin-bottom: 0.25rem;
+    }
+
+    .result-teams-col {
+        width: 100%;
+        order: 2;
+    }
+
+    .result-score {
+        order: 1;
+        font-size: 1.2rem;
+    }
+
+    .result-details-btn {
+        order: 3;
+        width: 100%;
+        text-align: center;
+        margin-top: 0.5rem;
+    }
+
+    /* Поиск */
+    .search-bar-wrap {
+        max-width: 100%;
+    }
+
+    .search-results-drop {
+        position: fixed;
+        top: auto;
+        left: 1rem;
+        right: 1rem;
+        max-height: 50vh;
+    }
+}
