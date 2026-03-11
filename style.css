@@ -423,7 +423,13 @@ nav a.active {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: 0.35rem;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.match-venue-row {
+    margin-bottom: 0.75rem;
 }
 
 .match-date {
@@ -433,6 +439,7 @@ nav a.active {
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--green);
+    white-space: nowrap;
 }
 
 .match-venue {
@@ -2825,4 +2832,645 @@ textarea::placeholder {
 .container {
     padding-left: max(1rem, env(safe-area-inset-left));
     padding-right: max(1rem, env(safe-area-inset-right));
+}
+/* ========= ИСПРАВЛЕНИЯ: ОТСУТСТВУЮЩИЕ КЛАССЫ ========= */
+
+/* --- Результаты: группировка --- */
+.results-group {
+    margin-bottom: 1.5rem;
+}
+
+.results-group-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    background: var(--navy-light);
+    border: 1px solid var(--border);
+    border-radius: 8px 8px 0 0;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.results-group .result-card {
+    border-radius: 0;
+    border-top: none;
+}
+
+.results-group .result-card:last-child {
+    border-radius: 0 0 8px 8px;
+}
+
+.vs-dot {
+    color: var(--grey);
+    font-size: 1.1rem;
+}
+
+.matches-count {
+    margin-left: auto;
+    font-size: 0.72rem;
+    color: var(--grey);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.result-kind {
+    font-size: 0.7rem;
+    color: var(--grey);
+    margin-right: 0.4rem;
+}
+
+.result-vs {
+    color: var(--grey);
+    font-size: 0.75rem;
+    margin: 0 0.3rem;
+}
+
+.result-actions {
+    display: flex;
+    gap: 0.35rem;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.result-info {
+    cursor: pointer;
+    flex: 1;
+}
+
+.events-count {
+    font-size: 0.7rem;
+    color: var(--grey);
+    margin-left: 0.4rem;
+}
+
+/* --- Журнал действий --- */
+.log-entry {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: var(--navy-light);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+.log-icon {
+    font-size: 1rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.log-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.log-description {
+    font-size: 0.85rem;
+    color: var(--grey-light);
+    word-break: break-word;
+}
+
+.log-time {
+    font-size: 0.7rem;
+    color: var(--grey);
+    margin-top: 3px;
+}
+
+.log-actions {
+    display: flex;
+    gap: 0.35rem;
+    flex-shrink: 0;
+}
+
+.log-edit {
+    border-color: var(--border);
+    color: var(--green);
+}
+
+.log-delete {
+    border-color: rgba(255,77,77,0.3);
+    color: #ff8080;
+}
+
+/* --- Заявки на матч --- */
+.upcoming-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.upcoming-info {
+    font-size: 0.82rem;
+    color: var(--grey-light);
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.upcoming-actions {
+    display: flex;
+    gap: 0.35rem;
+    flex-shrink: 0;
+    margin-left: 0.5rem;
+}
+
+.lineup-panel {
+    display: none;
+    padding: 1rem 0 0.5rem;
+    width: 100%;
+}
+
+.lineup-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.lineup-team-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--green);
+    margin-bottom: 0.4rem;
+}
+
+.lineup-textarea {
+    width: 100%;
+    background: var(--navy);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.82rem;
+    resize: vertical;
+    outline: none;
+}
+
+.lineup-textarea:focus {
+    border-color: var(--green);
+}
+
+/* Заявка на карточке матча */
+.match-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.7rem;
+    color: var(--grey);
+}
+
+.match-kind {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 4px;
+    padding: 0.2rem 0.55rem;
+    white-space: nowrap;
+}
+
+.match-kind.official {
+    color: var(--green);
+    background: var(--green-dim);
+    border: 1px solid var(--border);
+}
+
+.match-kind.friendly {
+    color: #f5a623;
+    background: rgba(245,166,35,0.12);
+    border: 1px solid rgba(245,166,35,0.3);
+}
+
+/* Кнопка заявки */
+.match-lineup-toggle {
+    margin-top: 0.85rem;
+    border-top: 1px solid var(--border);
+    padding-top: 0.75rem;
+}
+
+.match-lineup-btn {
+    width: 100%;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--grey-light);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.5rem 0.85rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.2s;
+}
+
+.match-lineup-btn:hover {
+    background: var(--green-dim);
+    border-color: var(--green);
+    color: var(--green);
+}
+
+.match-lineup-btn::after {
+    content: '▾';
+    font-size: 1rem;
+    transition: transform 0.2s;
+}
+
+.match-lineup-btn.open::after {
+    transform: rotate(180deg);
+}
+
+.lineup-count {
+    font-size: 0.68rem;
+    color: var(--grey);
+    font-weight: 400;
+    margin-left: 0.5rem;
+}
+
+/* Раскрывающееся тело */
+.match-lineup-body {
+    display: none;
+    margin-top: 0.75rem;
+}
+
+.match-lineup-body.open {
+    display: block;
+}
+
+/* Внутренняя сетка заявок */
+.match-lineup {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+}
+
+.lineup-team {
+    background: var(--navy);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.65rem 0.75rem;
+}
+
+.lineup-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--green);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.lineup-num {
+    font-size: 0.65rem;
+    color: var(--grey);
+    font-weight: 400;
+}
+
+.lineup-player {
+    font-size: 0.78rem;
+    color: var(--grey-light);
+    padding: 0.2rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+
+.lineup-player:last-child {
+    border-bottom: none;
+}
+
+.lineup-empty {
+    font-size: 0.72rem;
+    color: var(--grey);
+    font-style: italic;
+}
+
+/* --- Протокол редактор --- */
+.protocol-event {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 0.82rem;
+}
+
+.event-minute {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    color: var(--grey);
+    min-width: 36px;
+    font-size: 0.9rem;
+}
+
+.event-description {
+    flex: 1;
+    color: var(--grey-light);
+}
+
+.delete-event {
+    flex-shrink: 0;
+}
+
+/* Протокол просмотр */
+.protocol-assist {
+    color: var(--grey);
+    font-size: 0.78rem;
+}
+
+.protocol-date {
+    font-size: 0.78rem;
+    color: var(--grey);
+    margin-top: 0.5rem;
+}
+
+/* --- Игроки в списке админки --- */
+.player-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.player-avatar-mini {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    background: var(--navy);
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+.player-avatar-mini img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.player-name-mini {
+    font-size: 0.82rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 130px;
+}
+
+.player-pos-mini {
+    font-size: 0.68rem;
+    color: var(--grey);
+    margin-left: 0.25rem;
+}
+
+.player-stats-mini {
+    display: flex;
+    gap: 0.4rem;
+    font-size: 0.72rem;
+    color: var(--grey);
+    flex-shrink: 0;
+}
+
+.stat-goal { color: var(--green); }
+.stat-yellow { color: #FFD700; }
+.stat-red { color: #ff4d4d; }
+
+.player-actions {
+    display: flex;
+    gap: 0.35rem;
+    flex-shrink: 0;
+}
+
+/* Аватар в модалке игрока */
+.player-detail-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.player-detail-avatar-emoji {
+    font-size: 2.5rem;
+    line-height: 1;
+}
+
+/* --- История матчей игрока --- */
+.match-badges {
+    display: flex;
+    gap: 0.3rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.match-opponent {
+    flex: 1;
+    font-size: 0.8rem;
+    color: var(--grey-light);
+}
+
+.match-score {
+    color: var(--green);
+    font-weight: 700;
+    margin-left: 0.35rem;
+}
+
+.goal-badge {
+    background: var(--green-dim);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.1rem 0.4rem;
+    font-size: 0.72rem;
+    color: var(--green);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+}
+
+.goal-minute {
+    font-size: 0.65rem;
+    color: var(--grey);
+}
+
+.assist-badge {
+    background: rgba(96,165,250,0.12);
+    border: 1px solid rgba(96,165,250,0.25);
+    border-radius: 4px;
+    padding: 0.1rem 0.4rem;
+    font-size: 0.72rem;
+    color: #60a5fa;
+}
+
+.yellow-badge {
+    font-size: 0.85rem;
+}
+
+.red-badge {
+    font-size: 0.85rem;
+}
+
+.sub-in-badge {
+    font-size: 0.72rem;
+    color: var(--green);
+    background: var(--green-dim);
+    border-radius: 4px;
+    padding: 0.1rem 0.35rem;
+}
+
+.sub-out-badge {
+    font-size: 0.72rem;
+    color: #ff8080;
+    background: rgba(255,77,77,0.1);
+    border-radius: 4px;
+    padding: 0.1rem 0.35rem;
+}
+
+/* Non-playing badge */
+.non-playing-badge {
+    background: var(--gold-dim);
+    border: 1px solid var(--border-gold);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--gold);
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+/* --- Команды в модалке --- */
+.team-modal-tabs {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.team-tab {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.4rem 1rem;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--grey-light);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.team-tab.active,
+.team-tab:hover {
+    background: var(--green-dim);
+    color: var(--green);
+    border-color: var(--green);
+}
+
+/* --- Таблица: позиция --- */
+.pos-number {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--grey);
+}
+
+/* --- Дисциплина --- */
+.discipline-cards {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.yellow-card {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #FFD700;
+}
+
+.red-card {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #ff4d4d;
+}
+
+/* --- Команды в админке --- */
+.team-actions {
+    display: flex;
+    gap: 0.35rem;
+    flex-shrink: 0;
+}
+
+.team-logo-mini {
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    object-fit: contain;
+    border: 1px solid var(--border);
+}
+
+.team-emoji-mini {
+    font-size: 1.2rem;
+    width: 28px;
+    text-align: center;
+}
+
+/* --- save-standing кнопка в таблице --- */
+.save-standing {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--green);
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.save-standing:hover {
+    background: var(--green-dim);
+}
+
+/* --- Scorer assists колонка --- */
+.scorer-assists {
+    text-align: right;
+    min-width: 36px;
+}
+
+.scorer-assist-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #60a5fa;
+}
+
+.scorer-stats {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    min-width: 40px;
 }
