@@ -649,6 +649,14 @@ tbody td:first-child {
     color: var(--white) !important;
 }
 
+.goals-col {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--grey-light);
+    letter-spacing: 0.05em;
+}
+
 .pos-badge {
     width: 24px;
     height: 24px;
@@ -2033,13 +2041,15 @@ footer span {
         margin-bottom: 1.5rem;
     }
 
-    #standings-table thead th:nth-child(4),
-    #standings-table thead th:nth-child(5),
-    #standings-table thead th:nth-child(6),
-    #standings-table tbody td:nth-child(4),
-    #standings-table tbody td:nth-child(5),
-    #standings-table tbody td:nth-child(6) {
+    .hide-mobile {
         display: none;
+    }
+
+    .team-col {
+        max-width: 130px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
     table {
