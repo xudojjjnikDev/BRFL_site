@@ -7,27 +7,51 @@ const CONFIG = {
     CROP_SIZE: 220
 };
 
+
 // ===================== SUPABASE CLIENT =====================
 const SB_HEADERS = {
     'Content-Type': 'application/json',
     'apikey': CONFIG.SUPABASE_KEY,
-    'Authorization': 'Bearer ' + CONFIG.SUPABASE_KEY
+    'Authorization': 'Bearer ' + CONFIG.SUPABASE_KEY,
+    'X-Client-Info': 'supabase-js-web/2.0.0',
+    'Accept': 'application/json',
+    'Cache-Control': 'no-cache'
 };
 
 async function sbGet(table, params = '') {
-    const r = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/${table}?${params}`, { headers: SB_HEADERS });
-    if (!r.ok) throw new Error(await r.text());
-    return r.json();
+    try {
+        const response = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/${table}?${params}`, {
+            headers: SB_HEADERS,
+            credentials: 'omit',
+            mode: 'cors'
+        });
+        if (!response.ok) throw new Error(`HTTP ${response.status}: ${await response.text()}`);
+        return response.json();
+    } catch (error) {
+        console.error('Supabase GET error:', error);
+        throw error;
+    }
 }
 
 async function sbPost(table, body) {
-    const r = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/${table}`, {
-        method: 'POST',
-        headers: { ...SB_HEADERS, 'Prefer': 'return=representation' },
-        body: JSON.stringify(body)
-    });
-    if (!r.ok) throw new Error(await r.text());
-    return r.json();
+    try {
+        const response = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/${table}`, {
+            method: 'POST',
+            headers: { ...SB_HEADERS, 'Prefer': 'return=representation' },
+            body: JSON.stringify(body),
+            credentials: 'omit',
+            mode: 'cors'
+        });
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Supabase POST error response:', errorText);
+            throw new Error(`HTTP ${response.status}: ${errorText}`);
+        }
+        return response.json();
+    } catch (error) {
+        console.error('Supabase POST error:', error);
+        throw error;
+    }
 }
 
 async function sbPatch(table, match, body) {
@@ -74,6 +98,14 @@ function formatDate(str) {
     if (!str) return '';
     const d = new Date(str);
     return d.toLocaleDateString('ru-RU', { day: '2-digit', month: 'long', weekday: 'short' });
+}
+
+function matchWord(n) {
+    const mod10 = n % 10;
+    const mod100 = n % 100;
+    if (mod10 === 1 && mod100 !== 11) return 'матч';
+    if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return 'матча';
+    return 'матчей';
 }
 
 function fileToBase64(file) {
@@ -226,15 +258,28 @@ function renderSchedule() {
         const isFriendly = m.kind === 'friendly';
         const l1 = m.lineup1 || [];
         const l2 = m.lineup2 || [];
-        const lineupHtml = (l1.length || l2.length) ? `
-            <div class="match-lineup">
-                <div class="lineup-team">
-                    <div class="lineup-title">Заявка: ${m.team1}</div>
-                    ${l1.map(n => `<div class="lineup-player">• ${n}</div>`).join('')}
-                </div>
-                <div class="lineup-team">
-                    <div class="lineup-title">Заявка: ${m.team2}</div>
-                    ${l2.map(n => `<div class="lineup-player">• ${n}</div>`).join('')}
+        const hasLineup = l1.length > 0 || l2.length > 0;
+
+        const kindBadge = isFriendly
+            ? '<span class="match-kind friendly">🤝 Товарищеский</span>'
+            : '<span class="match-kind official">⚽ Официальный</span>';
+
+        const lineupHtml = hasLineup ? `
+            <div class="match-lineup-toggle">
+                <button class="match-lineup-btn" data-lineup-toggle="${m.id}">
+                    👥 Заявки на матч <span class="lineup-count">${l1.length + l2.length} игроков</span>
+                </button>
+                <div class="match-lineup-body" id="lineup-body-${m.id}">
+                    <div class="match-lineup">
+                        <div class="lineup-team">
+                            <div class="lineup-title">${m.team1} <span class="lineup-num">${l1.length}</span></div>
+                            ${l1.length ? l1.map(n => `<div class="lineup-player">• ${n}</div>`).join('') : '<div class="lineup-empty">Нет игроков</div>'}
+                        </div>
+                        <div class="lineup-team">
+                            <div class="lineup-title">${m.team2} <span class="lineup-num">${l2.length}</span></div>
+                            ${l2.length ? l2.map(n => `<div class="lineup-player">• ${n}</div>`).join('') : '<div class="lineup-empty">Нет игроков</div>'}
+                        </div>
+                    </div>
                 </div>
             </div>` : '';
 
@@ -242,10 +287,10 @@ function renderSchedule() {
             <div class="match-card">
                 <div class="match-date-row">
                     <span class="match-date">${formatDate(m.date)}</span>
-                    <span class="match-meta">
-                        ${isFriendly ? '<span class="match-kind">🤝 Товарищеский</span>' : ''}
-                        <span class="match-venue">📍 ${m.venue}</span>
-                    </span>
+                    ${kindBadge}
+                </div>
+                <div class="match-venue-row">
+                    <span class="match-venue">📍 ${m.venue}</span>
                 </div>
                 <div class="match-teams">
                     <div class="match-team">${m.team1}</div>
@@ -334,7 +379,7 @@ function renderResults() {
                 <span>${g.team1}</span>
                 <span class="vs-dot">·</span>
                 <span>${g.team2}</span>
-                <span class="matches-count">${g.matches.length} матч${g.matches.length === 1 ? '' : 'ей'}</span>
+                <span class="matches-count">${g.matches.length} ${matchWord(g.matches.length)}</span>
             </div>
         `;
 
@@ -843,6 +888,7 @@ function adminLogin(username, password) {
         showAdminPanel();
         return true;
     }
+    document.getElementById('login-error').style.display = 'block';
     return false;
 }
 
@@ -1099,32 +1145,92 @@ function renderActionLog() {
 
 // ===================== ADMIN ACTIONS =====================
 async function addMatch() {
+    // Получаем значения из формы
     const t1 = document.getElementById('a-t1').value;
     const t2 = document.getElementById('a-t2').value;
     const date = document.getElementById('a-date').value;
     const time = document.getElementById('a-time').value;
     const venue = document.getElementById('a-venue').value;
+    const kind = document.getElementById('a-kind')?.value || 'official';
 
-    if (!date || t1 === t2) {
-        alert('Заполните все поля и выберите разные команды');
+    // Валидация
+    if (!date) {
+        alert('Выберите дату матча');
         return;
     }
 
-    showLoader('Сохранение...');
+    if (t1 === t2) {
+        alert('Команды должны быть разными');
+        return;
+    }
+
+    if (!t1 || !t2) {
+        alert('Выберите обе команды');
+        return;
+    }
+
+    showLoader('Сохранение матча...');
 
     try {
-        const kind = document.getElementById('a-kind')?.value || 'official';
-        const id = 'u' + Date.now();
+        // Генерируем уникальный ID
+        const id = 'match_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
 
-        await sbPost('upcoming', { id, team1: t1, team2: t2, date, time, venue, kind });
-        upcoming.push({ id, team1: t1, team2: t2, date, time, venue, kind, lineup1: [], lineup2: [] });
+        // Данные для отправки
+        const matchData = {
+            id: id,
+            team1: t1,
+            team2: t2,
+            date: date,
+            time: time,
+            venue: venue,
+            kind: kind,
+            lineup1: [],
+            lineup2: []
+        };
 
+        console.log('Отправляем данные:', matchData);
+
+        // Отправляем в Supabase
+        const result = await sbPost('upcoming', matchData);
+        console.log('Ответ от Supabase:', result);
+
+        // Добавляем в локальный массив
+        upcoming.push(matchData);
+
+        // Обновляем отображение
         renderSchedule();
         renderAdminUpcoming();
-        logAction('match', `Добавлен матч: ${t1} vs ${t2} (${date})${kind === 'friendly' ? ' [Товарищ.]' : ''}`, { entity: 'match', id });
-        showSuccess('Матч добавлен!');
-    } catch (e) {
-        showError('Ошибка: ' + e.message);
+
+        // Логируем действие
+        logAction('match', `Добавлен матч: ${t1} vs ${t2} (${date})${kind === 'friendly' ? ' [Товарищ.]' : ''}`, { 
+            entity: 'match', 
+            id: id 
+        });
+
+        // Очищаем форму
+        document.getElementById('a-date').value = '';
+        document.getElementById('a-time').value = '15:00';
+        document.getElementById('a-venue').value = 'Бронницкий городской стадион';
+
+        showSuccess('Матч успешно добавлен!');
+
+    } catch (error) {
+        console.error('Ошибка при добавлении матча:', error);
+        
+        // Показываем понятное сообщение об ошибке
+        let errorMessage = 'Ошибка при добавлении матча: ';
+        
+        if (error.message.includes('400')) {
+            errorMessage += 'Проверьте правильность заполнения формы';
+        } else if (error.message.includes('401') || error.message.includes('403')) {
+            errorMessage += 'Ошибка авторизации. Попробуйте перезайти в админку';
+        } else if (error.message.includes('network')) {
+            errorMessage += 'Проблема с сетью. Проверьте подключение';
+        } else {
+            errorMessage += error.message;
+        }
+        
+        showError(errorMessage);
     }
 
     hideLoader();
@@ -1424,6 +1530,7 @@ async function addPlayer() {
             pos,
             matches,
             goals,
+            assists: 0,
             yellow,
             red,
             photo: photo || ''
@@ -1569,6 +1676,7 @@ async function savePlayer() {
             pos: player.pos,
             matches: player.matches,
             goals: player.goals,
+            assists: player.assists || 0,
             yellow: player.yellow,
             red: player.red,
             photo: player.photo
@@ -1994,6 +2102,7 @@ async function autoSyncStats() {
                     sbPatch('players', { id: p.id }, {
                         matches: newMatches,
                         goals: newGoals,
+                        assists: newAssists,
                         yellow: newYellow,
                         red: newRed
                     }).catch(err => console.error('Failed to update player stats:', err))
@@ -2516,6 +2625,42 @@ function initEventListeners() {
         });
     }
 
+    // Logo click — всегда возвращает на главную
+    const logoLink = document.getElementById('logo-link');
+    if (logoLink) {
+        logoLink.addEventListener('click', (e) => {
+            const adminSection = document.getElementById('admin-section');
+            if (adminSection && adminSection.style.display !== 'none') {
+                e.preventDefault();
+                showMain();
+                setTimeout(() => {
+                    const hero = document.getElementById('hero');
+                    if (hero) hero.scrollIntoView({ behavior: 'smooth' });
+                }, 50);
+            }
+        });
+    }
+
+    // Test connection button
+    const testConnBtn = document.getElementById('test-connection-btn');
+    if (testConnBtn) {
+        testConnBtn.addEventListener('click', async () => {
+            testConnBtn.textContent = '⏳ Проверка...';
+            testConnBtn.disabled = true;
+            try {
+                const data = await sbGet('teams', 'select=id&limit=1');
+                console.log('Supabase connection OK:', data);
+                showSuccess('✅ Соединение установлено! Supabase работает.');
+            } catch (e) {
+                console.error('Supabase connection FAIL:', e);
+                showError('❌ Ошибка соединения: ' + e.message);
+            } finally {
+                testConnBtn.textContent = '🔌 Проверить соединение';
+                testConnBtn.disabled = false;
+            }
+        });
+    }
+
     // Admin tabs
     document.querySelectorAll('.admin-tab').forEach(tab => {
         tab.addEventListener('click', (e) => {
@@ -2532,13 +2677,9 @@ function initEventListeners() {
             document.querySelectorAll('.stats-tab').forEach(t => t.classList.remove('active'));
             tab.classList.add('active');
 
-            if (tabId === 'scorers') {
-                document.getElementById('panel-scorers').style.display = 'block';
-                document.getElementById('panel-discipline').style.display = 'none';
-            } else {
-                document.getElementById('panel-scorers').style.display = 'none';
-                document.getElementById('panel-discipline').style.display = 'block';
-            }
+            document.querySelectorAll('.stats-panel').forEach(p => p.classList.remove('active'));
+            const targetPanel = document.getElementById('panel-' + tabId);
+            if (targetPanel) targetPanel.classList.add('active');
         });
     });
 
@@ -2604,6 +2745,17 @@ function initEventListeners() {
             const btn = e.target.closest('.lineup-toggle');
             const matchId = btn.dataset.matchId;
             if (matchId) toggleLineupPanel(matchId);
+        }
+
+        // Public: lineup toggle на карточке матча
+        if (e.target.closest('[data-lineup-toggle]')) {
+            const btn = e.target.closest('[data-lineup-toggle]');
+            const matchId = btn.dataset.lineupToggle;
+            const body = document.getElementById('lineup-body-' + matchId);
+            if (body) {
+                body.classList.toggle('open');
+                btn.classList.toggle('open');
+            }
         }
 
         // Admin: save lineup
