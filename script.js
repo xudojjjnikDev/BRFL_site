@@ -1939,6 +1939,8 @@ try {
             w: s.w,
             d: s.d,
             l: s.l,
+            gf: s.gf || 0,
+            ga: s.ga || 0,
             pts: s.pts
         });
     }
@@ -2353,7 +2355,7 @@ const standMap = {};
 
 const ensureSt = (name) => {
     if (!standMap[name]) {
-        standMap[name] = { team: name, p: 0, w: 0, d: 0, l: 0, pts: 0 };
+        standMap[name] = { team: name, p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 };
     }
 };
 
@@ -2368,6 +2370,10 @@ results.forEach(r => {
 
     s1.p++;
     s2.p++;
+    s1.gf += r.g1 || 0;
+    s1.ga += r.g2 || 0;
+    s2.gf += r.g2 || 0;
+    s2.ga += r.g1 || 0;
 
     if (r.g1 > r.g2) {
         s1.w++;
@@ -2404,12 +2410,16 @@ for (const row of Object.values(standMap)) {
         existing.l = row.l;
         existing.pts = row.pts;
 
+        existing.gf = row.gf;
+        existing.ga = row.ga;
         updateStandingsPromises.push(
             sbPatch('standings', { id: existing.id }, {
                 p: row.p,
                 w: row.w,
                 d: row.d,
                 l: row.l,
+                gf: row.gf,
+                ga: row.ga,
                 pts: row.pts
             }).catch(err => console.error('Failed to update standings:', err))
         );
@@ -2871,11 +2881,11 @@ if (loginBtn) {
 }
 
 if (passInput) {
-    passInput.addEventListener('keydown', (e) => {
+    passInput.addEventListener('keydown', async (e) => {
         if (e.key === 'Enter') {
             const username = document.getElementById('admin-user').value;
             const password = document.getElementById('admin-pass').value;
-            adminLogin(username, password);
+            await adminLogin(username, password);
         }
     });
 }
