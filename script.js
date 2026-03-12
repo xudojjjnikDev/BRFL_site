@@ -365,10 +365,10 @@ tbody.innerHTML = sorted.map((s, i) => {
             <td>${pos}</td>
             <td class="team-col"><strong>${s.team}</strong></td>
             <td>${s.p}</td>
-            <td class="hide-mobile">${s.w}</td>
-            <td class="hide-mobile">${s.d}</td>
-            <td class="hide-mobile">${s.l}</td>
-            <td class="hide-mobile">${gf}:${ga}</td>
+            <td>${s.w}</td>
+            <td>${s.d}</td>
+            <td>${s.l}</td>
+            <td>${gf}:${ga}</td>
             <td class="pts-col">${s.pts}</td>
         </tr>
     `;
@@ -2072,7 +2072,7 @@ try {
     showError('Ошибка: ' + e.message);
 }
 
-hideLoader()
+hideLoader();
 ```
 
 }
