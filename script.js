@@ -122,11 +122,13 @@ reader.readAsDataURL(file);
 }
 
 function isAdminRoute() {
-return window.location.pathname === ‘/admin’ || window.location.pathname === ‘/admin/’;
+return window.location.pathname.endsWith(’/admin’) ||
+window.location.pathname.endsWith(’/admin/’) ||
+window.location.hash === ‘#admin’;
 }
 
 function showLoader(msg = ‘Загрузка…’) {
-if (!isAdminRoute()) return; // показываем только в админке
+if (!isAdminRoute()) return; // тихая загрузка для обычных пользователей
 let el = document.getElementById(‘sb-loader’);
 if (!el) {
 el = document.createElement(‘div’);
@@ -243,6 +245,8 @@ sbSetting(‘action_log’),
         w: s.w || 0,
         d: s.d || 0,
         l: s.l || 0,
+        gf: s.gf || 0,
+        ga: s.ga || 0,
         pts: s.pts || 0
     }));
 
@@ -913,8 +917,12 @@ openModal('protocol-modal');
 
 // ===================== NAVIGATION =====================
 function showAdmin() {
-if (!isAdminRoute()) {
-history.pushState({}, ‘’, ‘/admin’);
+// Меняем URL на /admin если возможно, иначе используем hash
+try {
+const base = window.location.pathname.replace(//admin/?$/, ‘’).replace(//$/, ‘’) || ‘’;
+history.pushState({}, ‘’, base + ‘/admin’);
+} catch(e) {
+window.location.hash = ‘admin’;
 }
 document.getElementById(‘main-site’).style.display = ‘none’;
 document.getElementById(‘admin-section’).style.display = ‘block’;
@@ -930,8 +938,11 @@ if (loggedIn) {
 }
 
 function showMain() {
-if (isAdminRoute()) {
-history.pushState({}, ‘’, ‘/’);
+try {
+const base = window.location.pathname.replace(//admin/?$/, ‘’) || ‘/’;
+history.pushState({}, ‘’, base);
+} catch(e) {
+window.location.hash = ‘’;
 }
 document.getElementById(‘admin-section’).style.display = ‘none’;
 document.getElementById(‘main-site’).style.display = ‘block’;
