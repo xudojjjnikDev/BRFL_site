@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <script>
+    // GitHub Pages SPA роутинг — сохраняем путь и редиректим на index.html
+    const path = window.location.pathname;
+    sessionStorage.setItem('spa_redirect', path);
+    window.location.replace('/');
+  </script>
+</head>
+<body></body>
+</html>
