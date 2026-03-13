@@ -2370,6 +2370,15 @@ function applyLeagueLogo() {
         img.style.display = 'block';
         em.style.display = 'none';
 
+        // Обновляем фавикон динамически
+        let favicon = document.querySelector("link[rel='icon']");
+        if (!favicon) {
+            favicon = document.createElement('link');
+            favicon.rel = 'icon';
+            document.head.appendChild(favicon);
+        }
+        favicon.href = leagueLogo;
+
         const previewImg = document.getElementById('league-logo-img');
         if (previewImg) {
             previewImg.src = leagueLogo;
