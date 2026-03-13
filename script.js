@@ -913,7 +913,7 @@ function showMain() {
 // ===================== ADMIN =====================
 async function adminLogin(username, password) {
     try {
-        const rows = await sbGet('settings?key=eq.admin_credentials&select=value');
+        const rows = await sbGet('settings', 'key=eq.admin_credentials');
         if (!rows || !rows.length) {
             // Записи нет  -  доступ запрещён
             document.getElementById('login-error').style.display = 'block';
