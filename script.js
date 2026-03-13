@@ -915,7 +915,7 @@ async function adminLogin(username, password) {
     try {
         const rows = await sbGet('settings?key=eq.admin_credentials&select=value');
         if (!rows || !rows.length) {
-            // Записи нет — доступ запрещён
+            // Записи нет  -  доступ запрещён
             document.getElementById('login-error').style.display = 'block';
             return false;
         } else {
@@ -1477,11 +1477,11 @@ function onEvTeamChange() {
     const team = teams.find(t => t.name === teamName);
 
     const playerOpts = team
-        ? ['<option value="">— выбрать —</option>', ...team.players.map(p => `<option value="${p.name}">${p.name}</option>`)].join('')
+        ? ['<option value=""> -  выбрать  - </option>', ...team.players.map(p => `<option value="${p.name}">${p.name}</option>`)].join('')
         : '<option>Нет игроков</option>';
 
     document.getElementById('ev-player').innerHTML = playerOpts;
-    document.getElementById('ev-assist').innerHTML = '<option value="">— нет —</option>' + (team ? team.players.map(p => `<option value="${p.name}">${p.name}</option>`).join('') : '');
+    document.getElementById('ev-assist').innerHTML = '<option value=""> -  нет  - </option>' + (team ? team.players.map(p => `<option value="${p.name}">${p.name}</option>`).join('') : '');
     document.getElementById('ev-subout').innerHTML = playerOpts;
 }
 
@@ -2733,7 +2733,7 @@ function initEventListeners() {
         });
     }
 
-    // Logo click — всегда возвращает на главную
+    // Logo click  -  всегда возвращает на главную
     const logoLink = document.getElementById('logo-link');
     if (logoLink) {
         logoLink.addEventListener('click', (e) => {
@@ -3258,7 +3258,7 @@ async function init() {
     applyLeagueLogo();
     renderActionLog();
 
-    // Если уже залогинен — показываем панель
+    // Если уже залогинен  -  показываем панель
     if (isAdminRoute() && sessionStorage.getItem('bfl_admin')) {
         showAdminPanel();
     }
